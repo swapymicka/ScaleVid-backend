@@ -1783,8 +1783,14 @@ async function syncWithBackend(email, password, name) {
       const data = await res.json();
       backendToken = data.token;
       localStorage.setItem('sv_backend_token', data.token);
+      console.log('[ScaleVid] ✅ Backend token set');
+    } else {
+      const status = res ? res.status : 'no response';
+      console.warn('[ScaleVid] ❌ syncWithBackend failed, status:', status);
     }
-  } catch { /* serveur non démarré → mode simulation uniquement */ }
+  } catch (e) {
+    console.warn('[ScaleVid] ❌ syncWithBackend fetch error:', e.message);
+  }
 }
 
 // Charge les comptes réellement connectés via OAuth (YouTube / TikTok).
@@ -1823,13 +1829,24 @@ async function searchYoutube(q) {
 
 // Lance le flux OAuth réel (redirige vers le backend → Google / TikTok).
 // Le backend requiert une session (cookie), qui est posée par syncWithBackend.
-function connectOAuth(platform) {
+async function connectOAuth(platform) {
+  if (!checkTrialLimit('connect')) return;
+
+  // Si le token est absent, tenter une re-synchronisation avec les identifiants stockés
   if (!backendToken) {
-    showToast("Démarrez le backend (`npm run dev`) et reconnectez-vous d'abord.", true);
+    const session = getSession();
+    const pw = sessionStorage.getItem('sv_tmp_pw');
+    if (session && pw) {
+      console.log('[ScaleVid] backendToken absent — tentative de re-sync...');
+      await syncWithBackend(session.email, pw, session.name);
+    }
+  }
+
+  if (!backendToken) {
+    showToast("Reconnectez-vous pour activer la connexion TikTok/YouTube.", true);
     return;
   }
-  if (!checkTrialLimit('connect')) return;
-  // Le backend gère la redirection OAuth; le cookie est posé sur localhost:4000.
+  // Le backend gère la redirection OAuth; le cookie scalevid_token est posé lors du syncWithBackend.
   window.location.href = BACKEND + '/auth/' + platform;
 }
 
@@ -1925,6 +1942,8 @@ async function apiSignup({name, email, password}){
   saveDB(db);
   const session = { id: user.id, name: user.name, email: user.email };
   setSession(session);
+  // Garde le mot de passe en session pour pouvoir re-syncer si besoin (ex : clic TikTok)
+  sessionStorage.setItem('sv_tmp_pw', password);
   // Synchronisation silencieuse avec le backend réel (si démarré)
   syncWithBackend(emailNorm, password, name);
   return session;
@@ -1938,6 +1957,8 @@ async function apiLogin({email, password}){
   if (!user || user.passwordHash !== passwordHash) throw new Error('Email ou mot de passe incorrect.');
   const session = { id: user.id, name: user.name, email: user.email };
   setSession(session);
+  // Garde le mot de passe en session pour pouvoir re-syncer si besoin (ex : clic TikTok)
+  sessionStorage.setItem('sv_tmp_pw', password);
   // Synchronisation silencieuse avec le backend réel (si démarré)
   syncWithBackend(email.toLowerCase().trim(), password, user.name);
   return session;
