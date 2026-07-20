@@ -1750,7 +1750,7 @@ footer{
    Si le serveur n'est pas démarré, toutes les fonctions ci-dessous
    échouent silencieusement et le mode simulation prend le relais.
 ===================================================================== */
-const BACKEND = 'http://localhost:4000';
+const BACKEND = window.location.hostname === 'localhost' ? 'http://localhost:4000' : 'https://scalevid-backend-production.up.railway.app';
 let backendToken = localStorage.getItem('sv_backend_token') || null;
 // Cache des comptes OAuth réels, mis à jour par renderRealAccounts()
 let cachedRealAccounts = [];
