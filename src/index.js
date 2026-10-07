@@ -31,6 +31,11 @@ app.get('/legal/privacy', (_req, res) => {
   res.send(`<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><title>Politique de confidentialité — ScaleVid</title><style>body{font-family:sans-serif;max-width:800px;margin:40px auto;padding:0 20px;color:#222}h1{color:#f97316}</style></head><body><h1>Politique de confidentialité</h1><p>Dernière mise à jour : juillet 2026</p><p>ScaleVid collecte uniquement les informations nécessaires au fonctionnement du service : votre adresse e-mail, et les tokens d'accès OAuth à vos comptes YouTube et TikTok.</p><h2>Données collectées</h2><p>Adresse e-mail, tokens OAuth YouTube/TikTok, métadonnées de vos vidéos.</p><h2>Utilisation des données</h2><p>Vos données sont utilisées exclusivement pour publier vos vidéos selon votre planning. Elles ne sont jamais vendues à des tiers.</p><h2>Suppression des données</h2><p>Vous pouvez demander la suppression de votre compte et de toutes vos données à tout moment en contactant scalevid.app@gmail.com.</p><h2>Contact</h2><p>scalevid.app@gmail.com</p></body></html>`);
 });
 
+
+app.get('/privacy-policy.html', (req, res) => res.sendFile(path.join(__dirname, '../public/privacy-policy.html')));
+app.get('/terms-of-service.html', (req, res) => res.sendFile(path.join(__dirname, '../public/terms-of-service.html')));
+app.get('/privacy-policy', (req, res) => res.sendFile(path.join(__dirname, '../public/privacy-policy.html')));
+app.get('/terms-of-service', (req, res) => res.sendFile(path.join(__dirname, '../public/terms-of-service.html')));
 app.use('/auth', authRoutes);
 app.use('/', socialRoutes); // expose /auth/youtube, /auth/tiktok, /accounts
 app.use('/', videoRoutes); // expose /videos, /clips/:id/schedule
