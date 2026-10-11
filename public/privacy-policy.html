@@ -3,435 +3,626 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Politique de Confidentialité — ScaleVid</title>
+  <title>Politique de confidentialité — ScaleVid</title>
+  <meta name="description" content="Politique de confidentialité de ScaleVid. Comment nous collectons, utilisons et protégeons vos données personnelles, conformément au RGPD.">
   <link rel="icon" type="image/png" href="/favicon.png">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8f9fa; color: #1a1a2e; line-height: 1.7; }
-
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d0d1a;
+      --surface: #13132a;
+      --border: rgba(255,255,255,0.08);
+      --text: #e8e8f0;
+      --muted: #9090aa;
+      --orange: #f97316;
+      --orange-dim: rgba(249,115,22,0.15);
+      --green: #22c55e;
+      --green-dim: rgba(34,197,94,0.12);
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
     header {
-      background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 50%, #ffa533 100%);
-      padding: 28px 40px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 24px;
       display: flex;
       align-items: center;
-      gap: 18px;
-      box-shadow: 0 2px 12px rgba(255,107,53,0.3);
+      gap: 14px;
     }
-    .logo-circle {
-      width: 56px; height: 56px;
-      background: rgba(255,255,255,0.2);
-      border-radius: 14px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 30px; font-weight: 900; color: #fff;
-      border: 2px solid rgba(255,255,255,0.4);
-      flex-shrink: 0;
+    header img {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      object-fit: cover;
     }
-    header h1 { color: #fff; font-size: 22px; font-weight: 700; }
-    header p { color: rgba(255,255,255,0.85); font-size: 13px; margin-top: 2px; }
-
-    nav-back {
-      display: block;
-      background: #fff;
-      border-bottom: 1px solid #e8e8e8;
-      padding: 12px 40px;
-      font-size: 13px;
+    header .brand {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.4px;
     }
-    nav-back a { color: #ff6b35; text-decoration: none; font-weight: 600; }
-    nav-back a:hover { text-decoration: underline; }
-
+    header .brand span { color: var(--orange); }
     main {
-      max-width: 860px;
-      margin: 36px auto;
-      padding: 0 24px 60px;
+      max-width: 780px;
+      margin: 48px auto;
+      padding: 0 24px 80px;
     }
-
-    .meta-info {
-      background: #fff3ee;
-      border-left: 4px solid #ff6b35;
-      padding: 14px 20px;
-      border-radius: 0 8px 8px 0;
-      margin-bottom: 36px;
-      font-size: 13.5px;
-      color: #555;
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--orange-dim);
+      color: var(--orange);
+      border: 1px solid var(--orange);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 20px;
     }
-    .meta-info strong { color: #ff6b35; }
-
-    .card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 32px 36px;
-      margin-bottom: 24px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    h1 {
+      font-size: clamp(28px, 5vw, 40px);
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.8px;
+      margin-bottom: 8px;
     }
-
+    .meta {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 48px;
+    }
     h2 {
       font-size: 18px;
       font-weight: 700;
-      color: #1a1a2e;
-      margin-bottom: 16px;
-      padding-bottom: 10px;
-      border-bottom: 2px solid #ff6b35;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    h2 .num {
-      background: #ff6b35;
       color: #fff;
-      width: 28px; height: 28px;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 13px;
-      flex-shrink: 0;
+      margin: 40px 0 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
     }
-
-    h3 { font-size: 15px; font-weight: 600; color: #333; margin: 18px 0 8px; }
-    p { margin-bottom: 12px; font-size: 14.5px; color: #444; }
-    ul { margin: 8px 0 14px 20px; }
-    li { font-size: 14.5px; color: #444; margin-bottom: 6px; }
-
-    table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13.5px; }
-    th { background: #fff3ee; color: #ff6b35; font-weight: 600; padding: 10px 14px; text-align: left; border: 1px solid #ffe0d0; }
-    td { padding: 10px 14px; border: 1px solid #eee; color: #444; vertical-align: top; }
-    tr:nth-child(even) td { background: #fafafa; }
-
-    .highlight-box {
-      background: #f0f7ff;
-      border: 1px solid #b3d4f5;
-      border-radius: 8px;
-      padding: 14px 18px;
-      margin: 14px 0;
-      font-size: 13.5px;
-      color: #2c5282;
+    h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      margin: 20px 0 8px;
     }
-
-    .contact-box {
-      background: linear-gradient(135deg, #fff3ee, #fff8f5);
-      border: 1px solid #ffcdb3;
+    p { color: var(--text); margin-bottom: 14px; font-size: 15px; }
+    a { color: var(--orange); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 28px;
+      margin: 16px 0;
+    }
+    .card p { margin-bottom: 8px; }
+    .card p:last-child { margin-bottom: 0; }
+    .info-box {
+      background: var(--green-dim);
+      border: 1px solid rgba(34,197,94,0.25);
       border-radius: 10px;
-      padding: 20px 24px;
-      margin-top: 8px;
+      padding: 16px 20px;
+      margin: 20px 0;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
     }
-    .contact-box p { margin: 4px 0; font-size: 14px; }
-
+    .info-box-icon { font-size: 20px; flex-shrink: 0; }
+    .info-box p { margin: 0; color: var(--text); font-size: 14px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 14px;
+    }
+    th {
+      background: rgba(249,115,22,0.1);
+      color: var(--orange);
+      font-weight: 600;
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+    ul { padding-left: 20px; margin-bottom: 14px; }
+    li { color: var(--text); font-size: 15px; margin-bottom: 6px; }
     footer {
       text-align: center;
-      padding: 24px;
-      font-size: 12px;
-      color: #999;
-      border-top: 1px solid #eee;
-      margin-top: 20px;
+      padding: 32px 24px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
     }
-    footer a { color: #ff6b35; text-decoration: none; }
+    footer a { color: var(--orange); }
+    nav.breadcrumb {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+    nav.breadcrumb a { color: var(--muted); }
+    nav.breadcrumb a:hover { color: var(--orange); }
+    nav.breadcrumb span { color: var(--text); }
+    .toc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin: 0 0 40px;
+    }
+    .toc h3 { margin: 0 0 12px; font-size: 14px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .toc ol { padding-left: 20px; }
+    .toc li { margin-bottom: 6px; }
+    .toc a { color: var(--text); font-size: 14px; }
+    .toc a:hover { color: var(--orange); }
   </style>
 </head>
 <body>
 
 <header>
-  <img src="/favicon.png" alt="ScaleVid logo" style="width:56px;height:56px;border-radius:14px;object-fit:cover;border:2px solid rgba(255,255,255,0.4);">
-  <div>
-    <h1>ScaleVid</h1>
-    <p>Politique de Confidentialité</p>
-  </div>
+  <img src="/favicon.png" alt="Logo ScaleVid — application d'automatisation de vidéos courts">
+  <div class="brand">Scale<span>Vid</span></div>
 </header>
 
-<nav-back>
-  <a href="/">← Retour à ScaleVid</a>
-</nav-back>
-
 <main>
-  <div class="meta-info">
-    <strong>Dernière mise à jour :</strong> 7 octobre 2026 &nbsp;|&nbsp;
-    <strong>Applicable à :</strong> scalevid-backend-production.up.railway.app &nbsp;|&nbsp;
-    <strong>Langue :</strong> Français
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="/">Accueil</a>
+    <span aria-hidden="true">›</span>
+    <span>Politique de confidentialité</span>
+  </nav>
+
+  <div class="badge">🔒 Confidentialité</div>
+  <h1>Politique de confidentialité</h1>
+  <p class="meta">Dernière mise à jour : octobre 2026 · Applicable sur scalevid-backend-production.up.railway.app · Conforme RGPD (UE) 2016/679</p>
+
+  <div class="info-box">
+    <span class="info-box-icon" aria-hidden="true">🛡️</span>
+    <p><strong>L'essentiel :</strong> ScaleVid collecte uniquement les données nécessaires au fonctionnement du service. Nous ne vendons jamais vos données. Nous n'utilisons aucun outil de tracking publicitaire. Vos tokens OAuth sont chiffrés avant stockage. Vous pouvez demander la suppression complète de votre compte à tout moment.</p>
   </div>
 
-  <!-- 1 -->
-  <div class="card">
-    <h2><span class="num">1</span> Présentation et responsable du traitement</h2>
-    <p>
-      La présente politique de confidentialité décrit comment <strong>ScaleVid</strong> collecte, utilise et protège vos données personnelles lorsque vous utilisez notre service de publication automatisée de vidéos sur TikTok et d'autres plateformes.
-    </p>
-    <p>
-      Le responsable du traitement des données est le propriétaire et exploitant de ScaleVid, joignable à l'adresse e-mail : <strong>scalevid.app@gmail.com</strong>. Les coordonnées postales complètes seront publiées dès l'immatriculation de l'entreprise.
-    </p>
-    <div class="highlight-box">
-      ScaleVid est hébergé sur Railway (San Francisco, CA, USA). Le service est accessible à l'adresse : <strong>https://scalevid-backend-production.up.railway.app</strong>
-    </div>
+  <div class="toc" role="navigation" aria-label="Sommaire">
+    <h3>Sommaire</h3>
+    <ol>
+      <li><a href="#responsable">Responsable du traitement</a></li>
+      <li><a href="#donnees">Données collectées</a></li>
+      <li><a href="#bases">Bases légales du traitement</a></li>
+      <li><a href="#tiktok">Accès aux API TikTok et YouTube</a></li>
+      <li><a href="#tiers">Services tiers</a></li>
+      <li><a href="#conservation">Durée de conservation</a></li>
+      <li><a href="#droits">Vos droits (RGPD)</a></li>
+      <li><a href="#cookies">Cookies et stockage local</a></li>
+      <li><a href="#securite">Sécurité</a></li>
+      <li><a href="#mineurs">Mineurs</a></li>
+      <li><a href="#modifications">Modifications</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ol>
   </div>
 
-  <!-- 2 -->
+  <h2 id="responsable">Article 1 — Responsable du traitement</h2>
   <div class="card">
-    <h2><span class="num">2</span> Données collectées</h2>
-    <p>Nous collectons uniquement les données strictement nécessaires au fonctionnement du service :</p>
+    <p><strong>Nom :</strong> [À COMPLÉTER — Prénom NOM]</p>
+    <p><strong>Statut :</strong> Micro-entrepreneur (entrepreneur individuel)</p>
+    <p><strong>SIRET :</strong> [À COMPLÉTER après immatriculation]</p>
+    <p><strong>Adresse :</strong> [À COMPLÉTER]</p>
+    <p><strong>E-mail :</strong> <a href="mailto:scalevid.app@gmail.com">scalevid.app@gmail.com</a></p>
+    <p><strong>Site web :</strong> <a href="https://scalevid-backend-production.up.railway.app">scalevid-backend-production.up.railway.app</a></p>
+  </div>
+  <p>Pour toute question relative à la protection de vos données personnelles, contactez-nous à l'adresse e-mail ci-dessus.</p>
 
-    <table>
+  <h2 id="donnees">Article 2 — Données collectées</h2>
+  <p>ScaleVid collecte uniquement les données <strong>strictement nécessaires</strong> au fonctionnement du service :</p>
+
+  <h3>2.1 Données de compte</h3>
+  <div class="card">
+    <table role="table" aria-label="Données de compte collectées">
       <thead>
         <tr>
-          <th>Catégorie</th>
-          <th>Données</th>
-          <th>Source</th>
+          <th scope="col">Donnée</th>
+          <th scope="col">Finalité</th>
+          <th scope="col">Obligatoire</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><strong>Compte TikTok</strong></td>
-          <td>Identifiant open_id, display_name, token d'accès OAuth</td>
-          <td>API TikTok (via OAuth 2.0)</td>
+          <td>Nom affiché</td>
+          <td>Personnalisation de l'interface et des e-mails</td>
+          <td>Oui</td>
         </tr>
         <tr>
-          <td><strong>Compte Google/YouTube</strong></td>
-          <td>Identifiant Google, adresse e-mail, token d'accès OAuth YouTube</td>
-          <td>API Google (via OAuth 2.0)</td>
+          <td>Adresse e-mail</td>
+          <td>Identification du compte, envoi d'e-mails transactionnels</td>
+          <td>Oui</td>
         </tr>
         <tr>
-          <td><strong>Vidéos & métadonnées</strong></td>
-          <td>Fichiers vidéo soumis, titres, descriptions, hashtags</td>
-          <td>Fournis par l'utilisateur</td>
+          <td>Mot de passe (haché)</td>
+          <td>Authentification — jamais stocké en clair (bcrypt, facteur 10)</td>
+          <td>Oui (sauf connexion OAuth)</td>
         </tr>
         <tr>
-          <td><strong>Données techniques</strong></td>
-          <td>Adresse IP, user-agent, logs de requêtes, horodatages</td>
-          <td>Automatique (serveur)</td>
+          <td>Date de création du compte</td>
+          <td>Gestion du service et support</td>
+          <td>Automatique</td>
         </tr>
         <tr>
-          <td><strong>Données de session</strong></td>
-          <td>Tokens de session chiffrés</td>
-          <td>Automatique (cookies)</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <p><strong>Nous ne collectons pas</strong> : données bancaires, données sensibles au sens de l'article 9 du RGPD, ni données de mineurs de moins de 13 ans.</p>
-  </div>
-
-  <!-- 3 -->
-  <div class="card">
-    <h2><span class="num">3</span> Finalités et bases légales du traitement</h2>
-
-    <table>
-      <thead>
-        <tr>
-          <th>Finalité</th>
-          <th>Base légale (RGPD)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Connexion et authentification via TikTok / Google</td>
-          <td>Exécution du contrat (Art. 6.1.b)</td>
-        </tr>
-        <tr>
-          <td>Publication de vidéos sur TikTok via l'API</td>
-          <td>Exécution du contrat (Art. 6.1.b)</td>
-        </tr>
-        <tr>
-          <td>Publication de vidéos sur YouTube via l'API</td>
-          <td>Exécution du contrat (Art. 6.1.b)</td>
-        </tr>
-        <tr>
-          <td>Sécurité, prévention des abus et journaux d'erreurs</td>
-          <td>Intérêt légitime (Art. 6.1.f)</td>
-        </tr>
-        <tr>
-          <td>Amélioration du service (analytics anonymisés)</td>
-          <td>Intérêt légitime (Art. 6.1.f)</td>
-        </tr>
-        <tr>
-          <td>Respect des obligations légales</td>
-          <td>Obligation légale (Art. 6.1.c)</td>
+          <td>Plan d'abonnement</td>
+          <td>Contrôle d'accès aux fonctionnalités</td>
+          <td>Automatique</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- 4 -->
+  <h3>2.2 Données de connexion aux réseaux sociaux (OAuth)</h3>
   <div class="card">
-    <h2><span class="num">4</span> Accès à vos données — API TikTok</h2>
-    <p>
-      ScaleVid utilise l'<strong>API TikTok for Developers</strong> pour publier des vidéos en votre nom. Lors de la connexion via TikTok OAuth, nous accédons aux données suivantes de votre compte TikTok, conformément aux permissions accordées :
-    </p>
-    <ul>
-      <li><strong>user.info.basic</strong> : identifiant, nom d'affichage, URL de l'avatar (pour identifier votre compte)</li>
-      <li><strong>video.publish</strong> : permission de publier des vidéos sur votre compte TikTok</li>
-      <li><strong>video.upload</strong> : permission d'envoyer des fichiers vidéo via l'API TikTok</li>
+    <table role="table" aria-label="Données OAuth collectées">
+      <thead>
+        <tr>
+          <th scope="col">Donnée</th>
+          <th scope="col">Finalité</th>
+          <th scope="col">Stockage</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Token d'accès YouTube</td>
+          <td>Publier des vidéos sur votre chaîne YouTube</td>
+          <td>Chiffré en base (AES-256)</td>
+        </tr>
+        <tr>
+          <td>Token de rafraîchissement YouTube</td>
+          <td>Renouveler l'accès sans vous demander de vous reconnecter</td>
+          <td>Chiffré en base (AES-256)</td>
+        </tr>
+        <tr>
+          <td>Identifiant chaîne YouTube</td>
+          <td>Associer la chaîne à votre compte ScaleVid</td>
+          <td>Base de données</td>
+        </tr>
+        <tr>
+          <td>Handle chaîne YouTube (@nom)</td>
+          <td>Affichage dans l'interface</td>
+          <td>Base de données</td>
+        </tr>
+        <tr>
+          <td>Token d'accès TikTok</td>
+          <td>Publier des vidéos sur votre compte TikTok</td>
+          <td>Chiffré en base (AES-256)</td>
+        </tr>
+        <tr>
+          <td>Token de rafraîchissement TikTok</td>
+          <td>Renouveler l'accès automatiquement</td>
+          <td>Chiffré en base (AES-256)</td>
+        </tr>
+        <tr>
+          <td>Identifiant compte TikTok</td>
+          <td>Associer le compte à votre profil ScaleVid</td>
+          <td>Base de données</td>
+        </tr>
+        <tr>
+          <td>Handle TikTok (@nom)</td>
+          <td>Affichage dans l'interface</td>
+          <td>Base de données</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>2.3 Données vidéo</h3>
+  <div class="card">
+    <table role="table" aria-label="Données vidéo collectées">
+      <thead>
+        <tr>
+          <th scope="col">Donnée</th>
+          <th scope="col">Finalité</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Fichier vidéo source uploadé</td>
+          <td>Analyse IA et génération de clips courts</td>
+        </tr>
+        <tr>
+          <td>Durée de la vidéo</td>
+          <td>Découpage en clips pertinents</td>
+        </tr>
+        <tr>
+          <td>Transcription audio (texte)</td>
+          <td>Analyse du contenu pour identifier les meilleurs moments</td>
+        </tr>
+        <tr>
+          <td>Clips générés et leur chemin de stockage</td>
+          <td>Publication sur YouTube et TikTok</td>
+        </tr>
+        <tr>
+          <td>Titres, captions et score viral (générés par IA)</td>
+          <td>Optimisation des publications</td>
+        </tr>
+        <tr>
+          <td>Horaire de publication programmé</td>
+          <td>Publication automatique à l'heure choisie</td>
+        </tr>
+        <tr>
+          <td>ID de post sur YouTube/TikTok</td>
+          <td>Suivi du statut de publication</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>2.4 Ce que nous ne collectons PAS</h3>
+  <div class="card">
+    <ul style="list-style:none;padding:0;display:grid;gap:6px;">
+      <li>❌ Données de géolocalisation</li>
+      <li>❌ Données biométriques</li>
+      <li>❌ Données de navigation (aucun outil analytics actif)</li>
+      <li>❌ Informations de paiement (gérées directement par Payhip)</li>
+      <li>❌ Contacts ou listes de diffusion</li>
+      <li>❌ Contenu de vos messages privés sur les plateformes</li>
     </ul>
-    <p>
-      Ces permissions sont utilisées <strong>exclusivement</strong> pour les actions que vous initiez dans ScaleVid. Nous ne publions aucun contenu sans votre autorisation explicite.
-    </p>
-    <div class="highlight-box">
-      Conformément à la politique d'utilisation des données de TikTok, nous ne revendons pas, ne louons pas et ne transférons pas vos données TikTok à des tiers. Vos tokens d'accès sont chiffrés au repos et révocables à tout moment depuis les paramètres de votre compte TikTok.
-    </div>
   </div>
 
-  <!-- 5 -->
+  <h2 id="bases">Article 3 — Bases légales du traitement</h2>
   <div class="card">
-    <h2><span class="num">5</span> Partage et destinataires des données</h2>
-    <p>Vos données peuvent être transmises aux tiers suivants, dans le strict cadre du service :</p>
-
-    <table>
+    <table role="table" aria-label="Bases légales des traitements">
       <thead>
         <tr>
-          <th>Destinataire</th>
-          <th>Données transmises</th>
-          <th>Pays</th>
+          <th scope="col">Traitement</th>
+          <th scope="col">Base légale (Art. 6 RGPD)</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><strong>TikTok Inc.</strong></td>
-          <td>Vidéos, métadonnées de publication, token OAuth</td>
-          <td>États-Unis / Singapour</td>
+          <td>Création et gestion de votre compte</td>
+          <td>Exécution du contrat (Art. 6(1)(b))</td>
         </tr>
         <tr>
-          <td><strong>Google LLC (YouTube)</strong></td>
-          <td>Vidéos, métadonnées de publication, token OAuth</td>
-          <td>États-Unis</td>
+          <td>Authentification et sécurité de la session</td>
+          <td>Exécution du contrat (Art. 6(1)(b))</td>
         </tr>
         <tr>
-          <td><strong>Railway (hébergeur)</strong></td>
-          <td>Logs serveur, fichiers vidéo en transit</td>
-          <td>États-Unis</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <p>
-      Ces transferts hors UE sont encadrés par les <strong>Clauses Contractuelles Types (CCT)</strong> de la Commission Européenne et/ou par l'adhésion de ces entreprises au <strong>Data Privacy Framework UE-États-Unis</strong>.
-    </p>
-    <p>Nous ne vendons jamais vos données personnelles à des tiers.</p>
-  </div>
-
-  <!-- 6 -->
-  <div class="card">
-    <h2><span class="num">6</span> Durée de conservation</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Type de donnée</th>
-          <th>Durée de conservation</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Tokens OAuth TikTok / Google</td>
-          <td>Jusqu'à révocation ou déconnexion explicite</td>
+          <td>Connexion OAuth YouTube / TikTok</td>
+          <td>Consentement explicite (Art. 6(1)(a)) — vous autorisez expressément lors de la connexion OAuth</td>
         </tr>
         <tr>
-          <td>Fichiers vidéo soumis</td>
-          <td>Supprimés immédiatement après publication réussie</td>
+          <td>Publication automatique de vos vidéos</td>
+          <td>Exécution du contrat (Art. 6(1)(b))</td>
         </tr>
         <tr>
-          <td>Logs techniques (accès, erreurs)</td>
-          <td>90 jours maximum</td>
+          <td>Analyse IA de vos vidéos</td>
+          <td>Exécution du contrat (Art. 6(1)(b))</td>
         </tr>
         <tr>
-          <td>Données de session</td>
-          <td>24 heures d'inactivité</td>
+          <td>Envoi d'e-mails transactionnels (bienvenue)</td>
+          <td>Intérêt légitime (Art. 6(1)(f)) — vous informer de votre compte</td>
         </tr>
         <tr>
-          <td>Données comptables (si applicable)</td>
-          <td>10 ans (obligation légale française)</td>
+          <td>Conservation des logs d'erreurs</td>
+          <td>Intérêt légitime (Art. 6(1)(f)) — sécurité et débogage du service</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- 7 -->
+  <h2 id="tiktok">Article 4 — Accès aux API TikTok et YouTube</h2>
+  <p>ScaleVid utilise les API officielles de TikTok et YouTube pour publier des vidéos en votre nom, <strong>uniquement avec votre autorisation explicite</strong> via le processus OAuth.</p>
+
+  <h3>Données accédées via l'API TikTok :</h3>
+  <ul>
+    <li>Informations basiques de votre profil (identifiant, nom d'affichage)</li>
+    <li>Permission de publier des vidéos sur votre compte</li>
+  </ul>
+  <p>ScaleVid accède à votre compte TikTok <strong>uniquement</strong> pour publier des vidéos que vous avez explicitement programmées. Nous n'accédons pas à vos messages privés, followers, statistiques détaillées ou autres données.</p>
+
+  <h3>Données accédées via l'API YouTube :</h3>
+  <ul>
+    <li>Informations de votre chaîne (identifiant, nom, handle)</li>
+    <li>Permission de téléverser des vidéos sur votre chaîne</li>
+  </ul>
+  <p>L'utilisation des API YouTube est soumise aux <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener noreferrer">Conditions d'utilisation de YouTube</a> et à la <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Politique de confidentialité Google</a>.</p>
+
+  <p>Vous pouvez révoquer l'accès de ScaleVid à votre compte à tout moment :</p>
   <div class="card">
-    <h2><span class="num">7</span> Vos droits (RGPD)</h2>
-    <p>Conformément au Règlement Général sur la Protection des Données (RGPD – Règlement UE 2016/679), vous disposez des droits suivants :</p>
-    <ul>
-      <li><strong>Droit d'accès</strong> (Art. 15) : obtenir une copie de vos données personnelles</li>
-      <li><strong>Droit de rectification</strong> (Art. 16) : corriger des données inexactes</li>
-      <li><strong>Droit à l'effacement</strong> (Art. 17) : demander la suppression de vos données</li>
-      <li><strong>Droit à la limitation</strong> (Art. 18) : restreindre certains traitements</li>
-      <li><strong>Droit à la portabilité</strong> (Art. 20) : recevoir vos données dans un format structuré</li>
-      <li><strong>Droit d'opposition</strong> (Art. 21) : vous opposer à un traitement basé sur l'intérêt légitime</li>
-      <li><strong>Retrait du consentement</strong> : à tout moment, sans affecter les traitements antérieurs</li>
+    <p><strong>TikTok :</strong> Paramètres → Confidentialité → Autorisations des applications → ScaleVid → Révoquer</p>
+    <p><strong>YouTube :</strong> <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener noreferrer">myaccount.google.com/permissions</a> → ScaleVid → Supprimer l'accès</p>
+    <p><strong>Via ScaleVid :</strong> Dashboard → Comptes connectés → Déconnecter</p>
+  </div>
+
+  <h2 id="tiers">Article 5 — Partage avec des tiers</h2>
+  <p>ScaleVid ne vend, ne loue et ne partage jamais vos données personnelles avec des tiers à des fins commerciales.</p>
+  <p>Vos données sont partagées uniquement dans les cas suivants :</p>
+  <div class="card">
+    <table role="table" aria-label="Partage des données avec des tiers">
+      <thead>
+        <tr>
+          <th scope="col">Tiers</th>
+          <th scope="col">Données transmises</th>
+          <th scope="col">Raison</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>YouTube / Google</td>
+          <td>Fichier vidéo, titre, description, catégorie</td>
+          <td>Publication de votre vidéo sur votre chaîne</td>
+        </tr>
+        <tr>
+          <td>TikTok Inc.</td>
+          <td>Fichier vidéo, titre, paramètres de publication</td>
+          <td>Publication de votre vidéo sur votre compte TikTok</td>
+        </tr>
+        <tr>
+          <td>OpenAI</td>
+          <td>Transcription texte de vos vidéos (anonymisée)</td>
+          <td>Génération de titres et analyse du potentiel viral</td>
+        </tr>
+        <tr>
+          <td>Payhip</td>
+          <td>Adresse e-mail (pour lier l'abonnement)</td>
+          <td>Gestion de votre abonnement et paiement</td>
+        </tr>
+        <tr>
+          <td>Railway Corp. (hébergeur)</td>
+          <td>Toutes les données (base de données + fichiers)</td>
+          <td>Hébergement du service</td>
+        </tr>
+        <tr>
+          <td>Google (Gmail SMTP)</td>
+          <td>Votre adresse e-mail et prénom</td>
+          <td>Envoi d'e-mails transactionnels</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Tous nos prestataires sont tenus par contrat de respecter la confidentialité de vos données et de ne pas les utiliser à d'autres fins que celles prévues.</p>
+
+  <h2 id="conservation">Article 6 — Durée de conservation</h2>
+  <div class="card">
+    <table role="table" aria-label="Durées de conservation des données">
+      <thead>
+        <tr>
+          <th scope="col">Donnée</th>
+          <th scope="col">Durée de conservation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Données de compte (nom, email, hash mot de passe)</td>
+          <td>Durée de vie du compte + 3 ans (obligations légales)</td>
+        </tr>
+        <tr>
+          <td>Tokens OAuth YouTube / TikTok</td>
+          <td>Jusqu'à déconnexion du compte OU expiration du token</td>
+        </tr>
+        <tr>
+          <td>Vidéos sources uploadées</td>
+          <td>Jusqu'à suppression par l'utilisateur ou résiliation du compte</td>
+        </tr>
+        <tr>
+          <td>Clips générés et données IA</td>
+          <td>Jusqu'à suppression par l'utilisateur ou résiliation du compte</td>
+        </tr>
+        <tr>
+          <td>Historique des publications programmées</td>
+          <td>3 ans après la publication (traçabilité)</td>
+        </tr>
+        <tr>
+          <td>Données de facturation (logs Payhip)</td>
+          <td>10 ans (obligation comptable française)</td>
+        </tr>
+        <tr>
+          <td>Logs d'erreurs serveur</td>
+          <td>90 jours (sécurité)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="droits">Article 7 — Vos droits (RGPD)</h2>
+  <p>Conformément au Règlement Général sur la Protection des Données (RGPD) et à la loi Informatique et Libertés modifiée, vous disposez des droits suivants :</p>
+  <div class="card">
+    <table role="table" aria-label="Droits RGPD">
+      <thead>
+        <tr>
+          <th scope="col">Droit</th>
+          <th scope="col">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Accès (Art. 15)</strong></td>
+          <td>Obtenir une copie de toutes vos données personnelles que nous détenons</td>
+        </tr>
+        <tr>
+          <td><strong>Rectification (Art. 16)</strong></td>
+          <td>Corriger des données inexactes ou incomplètes vous concernant</td>
+        </tr>
+        <tr>
+          <td><strong>Suppression (Art. 17)</strong></td>
+          <td>Demander la suppression de votre compte et de toutes vos données</td>
+        </tr>
+        <tr>
+          <td><strong>Portabilité (Art. 20)</strong></td>
+          <td>Recevoir vos données dans un format structuré et lisible par machine (JSON)</td>
+        </tr>
+        <tr>
+          <td><strong>Opposition (Art. 21)</strong></td>
+          <td>Vous opposer à un traitement fondé sur l'intérêt légitime</td>
+        </tr>
+        <tr>
+          <td><strong>Limitation (Art. 18)</strong></td>
+          <td>Suspendre temporairement un traitement en cas de contestation</td>
+        </tr>
+        <tr>
+          <td><strong>Retrait du consentement</strong></td>
+          <td>Révoquer à tout moment un consentement précédemment donné (ex : OAuth)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Pour exercer vos droits, envoyez un e-mail à <a href="mailto:scalevid.app@gmail.com">scalevid.app@gmail.com</a> avec l'objet "Exercice de droits RGPD" et une pièce d'identité. Délai de réponse : 30 jours calendaires.</p>
+  <p>Si vous estimez que vos droits ne sont pas respectés, vous pouvez déposer une réclamation auprès de la <strong>CNIL</strong> : <a href="https://www.cnil.fr/fr/plaintes" target="_blank" rel="noopener noreferrer">www.cnil.fr/fr/plaintes</a></p>
+
+  <h2 id="cookies">Article 8 — Cookies et stockage local</h2>
+  <p>ScaleVid n'utilise qu'un seul cookie : <code>scalevid_token</code>, un cookie httpOnly de session (JWT, 30 jours). Aucun cookie publicitaire ou analytics n'est utilisé.</p>
+  <p>Pour plus de détails, consultez notre <a href="/cookie-policy.html">Politique des cookies</a>.</p>
+
+  <h2 id="securite">Article 9 — Sécurité des données</h2>
+  <p>ScaleVid met en place les mesures de sécurité suivantes :</p>
+  <div class="card">
+    <ul style="list-style:none;padding:0;display:grid;gap:8px;">
+      <li>🔐 <strong>Chiffrement des tokens OAuth</strong> : AES-256 avant stockage en base de données</li>
+      <li>🔐 <strong>Hachage des mots de passe</strong> : bcrypt avec facteur de coût 10</li>
+      <li>🔐 <strong>Cookie httpOnly</strong> : inaccessible au JavaScript, protégé contre les attaques XSS</li>
+      <li>🔐 <strong>JWT signé</strong> : tokens d'authentification signés et vérifiés côté serveur</li>
+      <li>🔐 <strong>HTTPS</strong> : toutes les communications chiffrées via TLS</li>
+      <li>🔐 <strong>Hébergement Railway</strong> : infrastructure en datacenter sécurisé</li>
+      <li>🔐 <strong>Variables d'environnement</strong> : clés secrètes jamais exposées dans le code source</li>
     </ul>
-    <p>Pour exercer ces droits, contactez-nous à : <strong>scalevid.app@gmail.com</strong>. Nous répondrons dans un délai maximum de <strong>30 jours</strong>.</p>
-    <p>Vous disposez également du droit d'introduire une réclamation auprès de la <strong>CNIL</strong> (Commission Nationale de l'Informatique et des Libertés) : <a href="https://www.cnil.fr" target="_blank">www.cnil.fr</a>.</p>
   </div>
+  <p>En cas de violation de données personnelles, ScaleVid s'engage à notifier la CNIL dans les 72 heures et les personnes concernées sans délai injustifié, conformément à l'article 33 du RGPD.</p>
 
-  <!-- 8 -->
-  <div class="card">
-    <h2><span class="num">8</span> Cookies et traceurs</h2>
-    <p>ScaleVid utilise uniquement des cookies <strong>strictement nécessaires</strong> au fonctionnement du service :</p>
-    <table>
-      <thead>
-        <tr>
-          <th>Cookie</th>
-          <th>Finalité</th>
-          <th>Durée</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><code>session</code></td>
-          <td>Maintien de la session utilisateur authentifiée</td>
-          <td>Session (fermée à la déconnexion)</td>
-        </tr>
-        <tr>
-          <td><code>oauth_state</code></td>
-          <td>Protection CSRF lors des flux OAuth</td>
-          <td>10 minutes</td>
-        </tr>
-      </tbody>
-    </table>
-    <p>Nous n'utilisons pas de cookies publicitaires, de cookies de pistage, ni de services d'analyse tiers comme Google Analytics.</p>
-  </div>
+  <h2 id="mineurs">Article 10 — Mineurs</h2>
+  <p>ScaleVid est destiné aux personnes de <strong>18 ans et plus</strong>. Nous ne collectons pas sciemment de données personnelles de mineurs. Si vous êtes parent ou tuteur et pensez que votre enfant nous a fourni des informations, contactez-nous immédiatement à <a href="mailto:scalevid.app@gmail.com">scalevid.app@gmail.com</a> pour suppression immédiate.</p>
 
-  <!-- 9 -->
-  <div class="card">
-    <h2><span class="num">9</span> Sécurité des données</h2>
-    <p>Nous mettons en œuvre les mesures techniques et organisationnelles suivantes pour protéger vos données :</p>
-    <ul>
-      <li>Chiffrement des communications via <strong>HTTPS/TLS 1.3</strong></li>
-      <li>Chiffrement des tokens OAuth au repos</li>
-      <li>Variables d'environnement sécurisées (aucune clé en clair dans le code)</li>
-      <li>Accès restreint aux données de production (principe du moindre privilège)</li>
-      <li>Mises à jour régulières des dépendances et correctifs de sécurité</li>
-      <li>Hébergement sur infrastructure Railway avec isolation des environnements</li>
-    </ul>
-    <p>En cas de violation de données susceptible d'affecter vos droits, nous vous en informerons dans les <strong>72 heures</strong> suivant la découverte, conformément à l'Art. 33 du RGPD.</p>
-  </div>
+  <h2 id="modifications">Article 11 — Modifications de cette politique</h2>
+  <p>Nous pouvons mettre à jour cette politique périodiquement pour refléter des changements dans nos pratiques ou la réglementation. La date de "Dernière mise à jour" en haut de page sera modifiée en conséquence.</p>
+  <p>Pour les modifications substantielles affectant vos droits, nous vous informerons par e-mail au moins 30 jours avant l'entrée en vigueur de ces changements. La poursuite de l'utilisation du service après cette période vaut acceptation.</p>
 
-  <!-- 10 -->
+  <h2 id="contact">Article 12 — Contact</h2>
   <div class="card">
-    <h2><span class="num">10</span> Mineurs</h2>
-    <p>
-      ScaleVid est destiné à des utilisateurs âgés d'au moins <strong>18 ans</strong>, ou de l'âge légal de majorité dans leur pays de résidence. Nous ne collectons pas sciemment de données personnelles relatives à des mineurs. Si vous êtes parent ou tuteur légal et suspectez que votre enfant nous a fourni des données, contactez-nous immédiatement à <strong>scalevid.app@gmail.com</strong> pour que nous procédions à leur suppression.
-    </p>
-  </div>
-
-  <!-- 11 -->
-  <div class="card">
-    <h2><span class="num">11</span> Modifications de cette politique</h2>
-    <p>
-      Nous nous réservons le droit de modifier cette politique de confidentialité à tout moment. En cas de modification substantielle, nous vous en informerons via une notification sur le service ou par e-mail (si vous nous avez fourni cette information). La date de "dernière mise à jour" en haut de cette page indique la version en vigueur.
-    </p>
-    <p>Votre utilisation continue du service après modification vaut acceptation de la nouvelle politique.</p>
-  </div>
-
-  <!-- 12 -->
-  <div class="card">
-    <h2><span class="num">12</span> Contact</h2>
-    <div class="contact-box">
-      <p><strong>ScaleVid</strong></p>
-      <p>Responsable du traitement des données personnelles</p>
-      <p>📧 E-mail : <a href="mailto:scalevid.app@gmail.com" style="color:#ff6b35;">scalevid.app@gmail.com</a></p>
-      <p>🌐 Site web : <a href="https://scalevid-backend-production.up.railway.app" style="color:#ff6b35;">scalevid-backend-production.up.railway.app</a></p>
-      <p style="margin-top:10px; font-size:13px; color:#888;">Pour toute question relative à la protection de vos données personnelles, nous nous engageons à vous répondre dans un délai maximum de 30 jours ouvrés.</p>
-    </div>
+    <p><strong>Responsable du traitement :</strong> [À COMPLÉTER — Prénom NOM], ScaleVid</p>
+    <p><strong>E-mail :</strong> <a href="mailto:scalevid.app@gmail.com">scalevid.app@gmail.com</a></p>
+    <p><strong>Objet à utiliser :</strong> "Protection des données — [votre demande]"</p>
+    <p><strong>Délai de réponse :</strong> 30 jours calendaires (obligation RGPD)</p>
+    <p><strong>CNIL :</strong> <a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer">www.cnil.fr</a> — 3 place de Fontenoy, TSA 80715, 75334 Paris Cedex 07</p>
   </div>
 
 </main>
 
 <footer>
-  &copy; 2026 ScaleVid — Tous droits réservés &nbsp;|&nbsp;
-  <a href="/privacy-policy.html">Politique de confidentialité</a> &nbsp;|&nbsp;
-  <a href="/terms-of-service.html">Conditions d'utilisation</a>
+  <p>
+    <a href="/terms-of-service.html">CGU / CGV</a> ·
+    <a href="/cookie-policy.html">Politique des cookies</a> ·
+    <a href="/mentions-legales.html">Mentions légales</a> ·
+    <a href="/">ScaleVid</a>
+  </p>
+  <p style="margin-top:10px;">© 2026 ScaleVid — Tous droits réservés</p>
 </footer>
 
 </body>

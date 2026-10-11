@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Politique des cookies — ScaleVid</title>
+  <meta name="description" content="Politique d'utilisation des cookies de ScaleVid. Découvrez quels cookies nous utilisons et pourquoi.">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d0d1a;
+      --surface: #13132a;
+      --border: rgba(255,255,255,0.08);
+      --text: #e8e8f0;
+      --muted: #9090aa;
+      --orange: #f97316;
+      --orange-dim: rgba(249,115,22,0.15);
+      --green: #22c55e;
+      --green-dim: rgba(34,197,94,0.12);
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    header img {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+    header .brand {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.4px;
+    }
+    header .brand span { color: var(--orange); }
+    main {
+      max-width: 780px;
+      margin: 48px auto;
+      padding: 0 24px 80px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--orange-dim);
+      color: var(--orange);
+      border: 1px solid var(--orange);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-size: clamp(28px, 5vw, 40px);
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.8px;
+      margin-bottom: 8px;
+    }
+    .meta {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 48px;
+    }
+    h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin: 40px 0 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      margin: 24px 0 8px;
+    }
+    p { color: var(--text); margin-bottom: 14px; font-size: 15px; }
+    a { color: var(--orange); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      margin: 20px 0;
+    }
+    .cookie-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 14px;
+    }
+    .cookie-table th {
+      background: rgba(249,115,22,0.1);
+      color: var(--orange);
+      font-weight: 600;
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .cookie-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: top;
+    }
+    .cookie-table tr:last-child td { border-bottom: none; }
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .tag-essential { background: var(--green-dim); color: var(--green); }
+    .tag-functional { background: rgba(99,102,241,0.15); color: #818cf8; }
+    .info-box {
+      background: var(--green-dim);
+      border: 1px solid rgba(34,197,94,0.25);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin: 20px 0;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .info-box-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+    .info-box p { margin: 0; color: var(--text); font-size: 14px; }
+    footer {
+      text-align: center;
+      padding: 32px 24px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
+    }
+    footer a { color: var(--orange); }
+    nav.breadcrumb {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+    nav.breadcrumb a { color: var(--muted); }
+    nav.breadcrumb a:hover { color: var(--orange); }
+    nav.breadcrumb span { color: var(--text); }
+  </style>
+</head>
+<body>
+
+<header>
+  <img src="/favicon.png" alt="Logo ScaleVid — application d'automatisation de vidéos courts">
+  <div class="brand">Scale<span>Vid</span></div>
+</header>
+
+<main>
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="/">Accueil</a>
+    <span aria-hidden="true">›</span>
+    <span>Politique des cookies</span>
+  </nav>
+
+  <div class="badge">🍪 Cookies</div>
+  <h1>Politique des cookies</h1>
+  <p class="meta">Dernière mise à jour : octobre 2026 · Applicable sur scalevid-backend-production.up.railway.app</p>
+
+  <div class="info-box">
+    <span class="info-box-icon" aria-hidden="true">✅</span>
+    <p><strong>Bonne nouvelle :</strong> ScaleVid n'utilise <strong>aucun cookie publicitaire, ni de suivi tiers</strong>. Nous utilisons uniquement un cookie essentiel au fonctionnement du service (votre session de connexion). Aucun outil d'analytics n'est actif sur notre site.</p>
+  </div>
+
+  <h2>Article 1 — Qu'est-ce qu'un cookie ?</h2>
+  <p>Un cookie est un petit fichier texte déposé sur votre appareil (ordinateur, smartphone, tablette) lorsque vous visitez un site web. Il permet au site de mémoriser des informations vous concernant lors de visites ultérieures ou pour maintenir votre session active.</p>
+  <p>En vertu du Règlement général sur la protection des données (RGPD) et de la directive ePrivacy, les cookies non essentiels nécessitent votre consentement préalable. Les cookies <strong>strictement nécessaires</strong> au fonctionnement du service peuvent être déposés sans consentement.</p>
+
+  <h2>Article 2 — Les cookies que nous utilisons</h2>
+  <p>ScaleVid utilise un seul cookie :</p>
+
+  <div class="card">
+    <table class="cookie-table" role="table" aria-label="Liste des cookies ScaleVid">
+      <thead>
+        <tr>
+          <th scope="col">Nom du cookie</th>
+          <th scope="col">Type</th>
+          <th scope="col">Durée</th>
+          <th scope="col">Finalité</th>
+          <th scope="col">Tiers ?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>scalevid_token</code></td>
+          <td><span class="tag tag-essential">Essentiel</span></td>
+          <td>30 jours</td>
+          <td>Maintenir votre session de connexion. Ce cookie contient un token JWT signé (aucune donnée personnelle en clair). Sans ce cookie, vous seriez déconnecté à chaque chargement de page.</td>
+          <td>Non — ScaleVid uniquement</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Ce cookie est <strong>httpOnly</strong> (inaccessible au JavaScript de la page), ce qui le protège contre les attaques XSS. Il est également protégé par l'attribut <code>sameSite: lax</code> contre les attaques CSRF.</p>
+
+  <h2>Article 3 — Ce que nous n'utilisons PAS</h2>
+  <div class="card">
+    <p style="margin-bottom:10px;">ScaleVid n'utilise <strong>aucun</strong> des éléments suivants :</p>
+    <ul style="list-style:none;padding:0;display:grid;gap:6px;">
+      <li>❌ Google Analytics ou tout autre outil d'analyse d'audience</li>
+      <li>❌ Pixel Facebook / Meta Pixel</li>
+      <li>❌ TikTok Pixel</li>
+      <li>❌ Hotjar, Heap, Mixpanel, Amplitude, Segment</li>
+      <li>❌ Cookies publicitaires ou de reciblage (retargeting)</li>
+      <li>❌ Cookies de partage sur les réseaux sociaux</li>
+      <li>❌ Fingerprinting ou tout autre technologie de traçage sans cookie</li>
+    </ul>
+  </div>
+
+  <h2>Article 4 — Stockage local (localStorage)</h2>
+  <p>Outre le cookie de session, ScaleVid utilise le <strong>stockage local</strong> de votre navigateur (localStorage) — une technologie distincte des cookies — pour conserver :</p>
+  <div class="card">
+    <table class="cookie-table" role="table" aria-label="Données stockées en localStorage">
+      <thead>
+        <tr>
+          <th scope="col">Clé</th>
+          <th scope="col">Type</th>
+          <th scope="col">Contenu</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>sv_backend_token</code></td>
+          <td><span class="tag tag-essential">Essentiel</span></td>
+          <td>Token JWT d'authentification pour les appels API</td>
+        </tr>
+        <tr>
+          <td><code>cookie_consent_sv</code></td>
+          <td><span class="tag tag-functional">Fonctionnel</span></td>
+          <td>Vos préférences de consentement (date et choix)</td>
+        </tr>
+        <tr>
+          <td><code>onair_session_v1</code></td>
+          <td><span class="tag tag-functional">Fonctionnel</span></td>
+          <td>Session de démonstration locale (si mode démo activé)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Le localStorage est stocké exclusivement dans votre navigateur, sur votre appareil. ScaleVid n'y accède pas depuis ses serveurs. Ces données persistent jusqu'à ce que vous les effaciez ou vous déconnectiez.</p>
+
+  <h2>Article 5 — Consentement et gestion de vos préférences</h2>
+  <p>Conformément aux recommandations de la CNIL, les <strong>cookies strictement nécessaires</strong> (comme notre cookie de session) ne requièrent pas votre consentement. Ils sont déposés automatiquement dès lors que vous utilisez le service.</p>
+  <p>Pour les données de localStorage liées aux préférences, vous pouvez les effacer à tout moment :</p>
+  <div class="card">
+    <h3 style="margin-top:0">Comment effacer vos données locales :</h3>
+    <p style="margin-bottom:8px;"><strong>Chrome :</strong> F12 → Application → Storage → Local Storage → Clic droit → Clear</p>
+    <p style="margin-bottom:8px;"><strong>Firefox :</strong> F12 → Stockage → Stockage local → Clic droit → Supprimer tout</p>
+    <p style="margin-bottom:8px;"><strong>Safari :</strong> Développer → Afficher les ressources web → Stockage local → Effacer</p>
+    <p style="margin-bottom:0;"><strong>Tous navigateurs :</strong> Paramètres → Confidentialité → Effacer les données du site</p>
+  </div>
+
+  <h2>Article 6 — Paramètres de votre navigateur</h2>
+  <p>Vous pouvez configurer votre navigateur pour accepter, refuser ou être notifié lors du dépôt de cookies. Attention : si vous bloquez le cookie <code>scalevid_token</code>, vous ne pourrez pas vous connecter à ScaleVid.</p>
+  <p>Liens vers les paramètres de gestion des cookies des principaux navigateurs :</p>
+  <div class="card">
+    <ul style="list-style:none;padding:0;display:grid;gap:8px;">
+      <li>🌐 <a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener noreferrer">Google Chrome</a></li>
+      <li>🦊 <a href="https://support.mozilla.org/fr/kb/cookies-informations-sites-enregistrent" target="_blank" rel="noopener noreferrer">Mozilla Firefox</a></li>
+      <li>🧭 <a href="https://support.apple.com/fr-fr/guide/safari/sfri11471/mac" target="_blank" rel="noopener noreferrer">Apple Safari</a></li>
+      <li>🔷 <a href="https://support.microsoft.com/fr-fr/windows/supprimer-et-g%C3%A9rer-les-cookies-168dab11-0753-043d-7c16-ede5947fc64d" target="_blank" rel="noopener noreferrer">Microsoft Edge</a></li>
+    </ul>
+  </div>
+
+  <h2>Article 7 — Durée de conservation</h2>
+  <p>Conformément aux recommandations de la CNIL, votre consentement ou refus est valable pendant <strong>13 mois maximum</strong>. À l'issue de cette période, nous vous demandons à nouveau vos préférences.</p>
+  <p>Le cookie de session <code>scalevid_token</code> expire automatiquement après <strong>30 jours</strong>.</p>
+
+  <h2>Article 8 — Contact et réclamations</h2>
+  <p>Pour toute question relative à notre utilisation des cookies ou pour exercer vos droits, contactez-nous :</p>
+  <div class="card">
+    <p style="margin-bottom:6px;"><strong>E-mail :</strong> <a href="mailto:scalevid.app@gmail.com">scalevid.app@gmail.com</a></p>
+    <p style="margin-bottom:6px;"><strong>CNIL :</strong> Vous pouvez déposer une plainte auprès de la CNIL sur <a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer">www.cnil.fr</a></p>
+    <p style="margin-bottom:0;"><strong>Délai de réponse :</strong> Nous nous engageons à répondre dans un délai de 30 jours ouvrés.</p>
+  </div>
+
+  <h2>Article 9 — Modifications de cette politique</h2>
+  <p>ScaleVid se réserve le droit de modifier cette politique des cookies à tout moment, notamment pour se conformer à de nouvelles réglementations. Toute modification sera publiée sur cette page avec une nouvelle date de mise à jour. Nous vous informerons par e-mail des changements substantiels.</p>
+
+</main>
+
+<footer>
+  <p>
+    <a href="/privacy-policy.html">Politique de confidentialité</a> ·
+    <a href="/terms-of-service.html">CGU / CGV</a> ·
+    <a href="/mentions-legales.html">Mentions légales</a> ·
+    <a href="/">ScaleVid</a>
+  </p>
+  <p style="margin-top:10px;">© 2026 ScaleVid — Tous droits réservés</p>
+</footer>
+
+</body>
+</html>

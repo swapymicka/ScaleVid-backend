@@ -3,386 +3,469 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Conditions d'utilisation — ScaleVid</title>
+  <title>CGU / CGV — Conditions Générales d'Utilisation et de Vente — ScaleVid</title>
+  <meta name="description" content="Conditions générales d'utilisation et de vente de ScaleVid. Abonnements, remboursement, droit de rétractation.">
   <link rel="icon" type="image/png" href="/favicon.png">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8f9fa; color: #1a1a2e; line-height: 1.7; }
-
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d0d1a;
+      --surface: #13132a;
+      --border: rgba(255,255,255,0.08);
+      --text: #e8e8f0;
+      --muted: #9090aa;
+      --orange: #f97316;
+      --orange-dim: rgba(249,115,22,0.15);
+      --green: #22c55e;
+      --green-dim: rgba(34,197,94,0.12);
+      --blue-dim: rgba(99,102,241,0.15);
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
     header {
-      background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 50%, #ffa533 100%);
-      padding: 28px 40px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 24px;
       display: flex;
       align-items: center;
-      gap: 18px;
-      box-shadow: 0 2px 12px rgba(255,107,53,0.3);
+      gap: 14px;
     }
-    .logo-circle {
-      width: 56px; height: 56px;
-      background: rgba(255,255,255,0.2);
-      border-radius: 14px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 30px; font-weight: 900; color: #fff;
-      border: 2px solid rgba(255,255,255,0.4);
-      flex-shrink: 0;
+    header img {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      object-fit: cover;
     }
-    header h1 { color: #fff; font-size: 22px; font-weight: 700; }
-    header p { color: rgba(255,255,255,0.85); font-size: 13px; margin-top: 2px; }
-
-    nav-back {
-      display: block;
-      background: #fff;
-      border-bottom: 1px solid #e8e8e8;
-      padding: 12px 40px;
-      font-size: 13px;
+    header .brand {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.4px;
     }
-    nav-back a { color: #ff6b35; text-decoration: none; font-weight: 600; }
-    nav-back a:hover { text-decoration: underline; }
-
+    header .brand span { color: var(--orange); }
     main {
-      max-width: 860px;
-      margin: 36px auto;
-      padding: 0 24px 60px;
+      max-width: 780px;
+      margin: 48px auto;
+      padding: 0 24px 80px;
     }
-
-    .meta-info {
-      background: #fff3ee;
-      border-left: 4px solid #ff6b35;
-      padding: 14px 20px;
-      border-radius: 0 8px 8px 0;
-      margin-bottom: 36px;
-      font-size: 13.5px;
-      color: #555;
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--orange-dim);
+      color: var(--orange);
+      border: 1px solid var(--orange);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 20px;
     }
-    .meta-info strong { color: #ff6b35; }
-
-    .card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 32px 36px;
-      margin-bottom: 24px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    h1 {
+      font-size: clamp(26px, 5vw, 38px);
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.8px;
+      margin-bottom: 8px;
     }
-
+    .meta {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 48px;
+    }
     h2 {
       font-size: 18px;
       font-weight: 700;
-      color: #1a1a2e;
-      margin-bottom: 16px;
-      padding-bottom: 10px;
-      border-bottom: 2px solid #ff6b35;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    h2 .num {
-      background: #ff6b35;
       color: #fff;
-      width: 28px; height: 28px;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 13px;
-      flex-shrink: 0;
+      margin: 40px 0 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
     }
-
-    h3 { font-size: 15px; font-weight: 600; color: #333; margin: 18px 0 8px; }
-    p { margin-bottom: 12px; font-size: 14.5px; color: #444; }
-    ul { margin: 8px 0 14px 20px; }
-    li { font-size: 14.5px; color: #444; margin-bottom: 6px; }
-
-    .warning-box {
-      background: #fff8e1;
-      border: 1px solid #ffe082;
-      border-radius: 8px;
-      padding: 14px 18px;
-      margin: 14px 0;
-      font-size: 13.5px;
-      color: #5d4037;
+    h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      margin: 20px 0 8px;
     }
-
-    .highlight-box {
-      background: #f0f7ff;
-      border: 1px solid #b3d4f5;
-      border-radius: 8px;
-      padding: 14px 18px;
-      margin: 14px 0;
-      font-size: 13.5px;
-      color: #2c5282;
+    p { color: var(--text); margin-bottom: 14px; font-size: 15px; }
+    a { color: var(--orange); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 28px;
+      margin: 16px 0;
     }
-
-    .contact-box {
-      background: linear-gradient(135deg, #fff3ee, #fff8f5);
-      border: 1px solid #ffcdb3;
+    .card p { margin-bottom: 8px; }
+    .card p:last-child { margin-bottom: 0; }
+    ul { padding-left: 20px; margin-bottom: 14px; }
+    li { color: var(--text); font-size: 15px; margin-bottom: 6px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 14px;
+    }
+    th {
+      background: rgba(249,115,22,0.1);
+      color: var(--orange);
+      font-weight: 600;
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+    .plan-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 20px 0;
+    }
+    @media (max-width: 600px) { .plan-grid { grid-template-columns: 1fr; } }
+    .plan-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 22px;
+    }
+    .plan-card.popular { border-color: var(--orange); }
+    .plan-name { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .plan-price { font-size: 28px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+    .plan-price small { font-size: 13px; color: var(--muted); font-weight: 400; }
+    .plan-features { list-style: none; padding: 0; margin: 14px 0 0; }
+    .plan-features li { font-size: 13px; color: var(--text); margin-bottom: 6px; padding-left: 0; }
+    .info-box {
+      background: var(--green-dim);
+      border: 1px solid rgba(34,197,94,0.25);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin: 20px 0;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .info-box-icon { font-size: 20px; flex-shrink: 0; }
+    .info-box p { margin: 0; color: var(--text); font-size: 14px; }
+    .warn-box {
+      background: rgba(249,115,22,0.08);
+      border: 1px solid rgba(249,115,22,0.3);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin: 20px 0;
+    }
+    .warn-box p { margin: 0; color: var(--text); font-size: 14px; }
+    .retractation-box {
+      background: rgba(99,102,241,0.1);
+      border: 1px solid rgba(99,102,241,0.3);
       border-radius: 10px;
       padding: 20px 24px;
-      margin-top: 8px;
+      margin: 20px 0;
     }
-    .contact-box p { margin: 4px 0; font-size: 14px; }
-
+    .retractation-box h3 { color: #818cf8; margin-top: 0; }
+    .retractation-box p { font-size: 14px; margin-bottom: 10px; }
+    .retractation-box p:last-child { margin-bottom: 0; }
     footer {
       text-align: center;
-      padding: 24px;
-      font-size: 12px;
-      color: #999;
-      border-top: 1px solid #eee;
-      margin-top: 20px;
+      padding: 32px 24px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
     }
-    footer a { color: #ff6b35; text-decoration: none; }
+    footer a { color: var(--orange); }
+    nav.breadcrumb {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+    nav.breadcrumb a { color: var(--muted); }
+    nav.breadcrumb a:hover { color: var(--orange); }
+    nav.breadcrumb span { color: var(--text); }
+    .toc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin: 0 0 40px;
+    }
+    .toc h3 { margin: 0 0 12px; font-size: 14px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .toc ol { padding-left: 20px; }
+    .toc li { margin-bottom: 6px; }
+    .toc a { color: var(--text); font-size: 14px; }
+    .toc a:hover { color: var(--orange); }
   </style>
 </head>
 <body>
 
 <header>
-  <img src="/favicon.png" alt="ScaleVid logo" style="width:56px;height:56px;border-radius:14px;object-fit:cover;border:2px solid rgba(255,255,255,0.4);">
-  <div>
-    <h1>ScaleVid</h1>
-    <p>Conditions d'utilisation</p>
-  </div>
+  <img src="/favicon.png" alt="Logo ScaleVid — application d'automatisation de vidéos courts">
+  <div class="brand">Scale<span>Vid</span></div>
 </header>
 
-<nav-back>
-  <a href="/">← Retour à ScaleVid</a>
-</nav-back>
-
 <main>
-  <div class="meta-info">
-    <strong>Dernière mise à jour :</strong> 7 octobre 2026 &nbsp;|&nbsp;
-    <strong>Applicable à :</strong> scalevid-backend-production.up.railway.app &nbsp;|&nbsp;
-    <strong>Version :</strong> 1.0
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="/">Accueil</a>
+    <span aria-hidden="true">›</span>
+    <span>CGU / CGV</span>
+  </nav>
+
+  <div class="badge">📋 CGU / CGV</div>
+  <h1>Conditions Générales d'Utilisation et de Vente</h1>
+  <p class="meta">Dernière mise à jour : octobre 2026 · Applicable sur scalevid-backend-production.up.railway.app</p>
+
+  <div class="info-box">
+    <span class="info-box-icon" aria-hidden="true">📌</span>
+    <p>En accédant à ScaleVid et en créant un compte, vous acceptez sans réserve les présentes Conditions Générales. Si vous n'acceptez pas ces conditions, vous ne devez pas utiliser le service.</p>
   </div>
 
-  <!-- 1 -->
-  <div class="card">
-    <h2><span class="num">1</span> Acceptation des conditions</h2>
-    <p>
-      Bienvenue sur <strong>ScaleVid</strong>, un service de publication automatisée de vidéos sur des plateformes tierces telles que TikTok et YouTube.
-    </p>
-    <p>
-      En accédant à ScaleVid et en utilisant ses fonctionnalités, vous acceptez d'être lié par les présentes Conditions d'utilisation (ci-après « les Conditions »). Si vous n'acceptez pas ces Conditions en tout ou en partie, vous ne devez pas utiliser le service.
-    </p>
-    <p>
-      Ces Conditions constituent un accord légalement contraignant entre vous (« l'Utilisateur ») et l'exploitant de ScaleVid (ci-après « ScaleVid », « nous » ou « notre »).
-    </p>
-    <div class="warning-box">
-      ⚠️ Vous devez avoir au moins <strong>18 ans</strong> (ou l'âge légal de majorité dans votre pays) pour utiliser ScaleVid. En utilisant le service, vous déclarez avoir l'âge requis.
+  <div class="toc" role="navigation" aria-label="Sommaire">
+    <h3>Sommaire</h3>
+    <ol>
+      <li><a href="#acceptation">Acceptation des conditions</a></li>
+      <li><a href="#service">Description du service</a></li>
+      <li><a href="#compte">Compte utilisateur</a></li>
+      <li><a href="#abonnements">Abonnements et tarifs</a></li>
+      <li><a href="#paiement">Conditions de paiement</a></li>
+      <li><a href="#retractation">Droit de rétractation (UE)</a></li>
+      <li><a href="#remboursement">Politique de remboursement</a></li>
+      <li><a href="#contenu">Contenu utilisateur</a></li>
+      <li><a href="#obligations">Obligations et comportement</a></li>
+      <li><a href="#pi">Propriété intellectuelle</a></li>
+      <li><a href="#tiers">Services tiers</a></li>
+      <li><a href="#responsabilite">Limitation de responsabilité</a></li>
+      <li><a href="#disponibilite">Disponibilité du service</a></li>
+      <li><a href="#resiliation">Résiliation</a></li>
+      <li><a href="#modifications">Modifications</a></li>
+      <li><a href="#droit">Droit applicable</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ol>
+  </div>
+
+  <h2 id="acceptation">Article 1 — Acceptation des conditions</h2>
+  <p>Les présentes Conditions Générales d'Utilisation et de Vente (ci-après "CGU/CGV") régissent l'accès et l'utilisation du service ScaleVid, accessible à l'adresse <a href="https://scalevid-backend-production.up.railway.app">scalevid-backend-production.up.railway.app</a>, édité par [À COMPLÉTER — Prénom NOM], micro-entrepreneur.</p>
+  <p>Toute utilisation du service implique l'acceptation pleine et entière des présentes CGU/CGV. Ces conditions prévalent sur toute autre version ou tout autre document contradictoire. L'acceptation des CGU/CGV est matérialisée par la création d'un compte ou l'utilisation du service.</p>
+
+  <h2 id="service">Article 2 — Description du service</h2>
+  <p>ScaleVid est un service SaaS (Software as a Service) d'automatisation de publication de vidéos courtes sur les plateformes YouTube et TikTok. Le service comprend :</p>
+  <ul>
+    <li>Import et analyse automatique de vidéos longues par intelligence artificielle</li>
+    <li>Découpage automatique en clips courts (Shorts, Reels, TikTok)</li>
+    <li>Génération de titres, hashtags et descriptions optimisés par IA</li>
+    <li>Score de potentiel viral pour chaque clip</li>
+    <li>Publication programmée automatique sur YouTube et/ou TikTok</li>
+    <li>Dashboard de gestion des publications</li>
+  </ul>
+  <p>ScaleVid agit en tant qu'outil technique. L'utilisateur reste seul responsable du contenu qu'il publie.</p>
+
+  <h2 id="compte">Article 3 — Compte utilisateur</h2>
+  <p>Pour utiliser ScaleVid, vous devez créer un compte en fournissant une adresse e-mail valide et un mot de passe (minimum 6 caractères), ou vous connecter via OAuth (TikTok, YouTube).</p>
+  <p>Vous êtes responsable de la confidentialité de vos identifiants et de toutes les actions effectuées depuis votre compte. Vous devez :</p>
+  <ul>
+    <li>Avoir au minimum <strong>18 ans</strong></li>
+    <li>Fournir des informations exactes et à jour</li>
+    <li>Nous signaler immédiatement toute utilisation non autorisée de votre compte</li>
+  </ul>
+  <p>ScaleVid se réserve le droit de suspendre ou supprimer tout compte en cas de violation des présentes CGU/CGV.</p>
+
+  <h2 id="abonnements">Article 4 — Abonnements et tarifs</h2>
+  <p>ScaleVid propose les plans d'abonnement suivants :</p>
+  <div class="plan-grid">
+    <div class="plan-card">
+      <div class="plan-name">Créateur Solo</div>
+      <div class="plan-price">7,99 € <small>/ mois</small></div>
+      <ul class="plan-features">
+        <li>✅ 1 compte YouTube <strong>ou</strong> TikTok</li>
+        <li>✅ Publications illimitées</li>
+        <li>✅ Titres &amp; hashtags IA</li>
+        <li>✅ Planification automatique</li>
+        <li>✅ Score viral par clip</li>
+      </ul>
+    </div>
+    <div class="plan-card popular">
+      <div class="plan-name">Agence ⭐ Populaire</div>
+      <div class="plan-price">28,99 € <small>/ mois</small></div>
+      <ul class="plan-features">
+        <li>✅ 4 comptes simultanés (YouTube + TikTok)</li>
+        <li>✅ Publications illimitées</li>
+        <li>✅ Titres &amp; hashtags IA</li>
+        <li>✅ Dashboard multi-clients</li>
+        <li>✅ Support prioritaire</li>
+      </ul>
     </div>
   </div>
-
-  <!-- 2 -->
   <div class="card">
-    <h2><span class="num">2</span> Description du service</h2>
-    <p>ScaleVid est une application web permettant aux utilisateurs de :</p>
-    <ul>
-      <li>Se connecter à leurs comptes TikTok et/ou YouTube via OAuth 2.0</li>
-      <li>Télécharger des fichiers vidéo et renseigner leurs métadonnées (titre, description, hashtags)</li>
-      <li>Publier automatiquement des vidéos sur les plateformes sélectionnées via leurs API officielles</li>
-      <li>Gérer le statut de leurs publications (en attente, publiée, erreur)</li>
-    </ul>
-    <p>
-      ScaleVid agit en tant qu'<strong>intermédiaire technique</strong> entre vous et les plateformes tierces. ScaleVid n'est pas affilié à TikTok, ByteDance, YouTube, Google, ou toute autre plateforme tierce.
-    </p>
-    <p>
-      Le service est fourni <strong>tel quel</strong>, à titre expérimental. Aucune garantie de disponibilité continue n'est offerte.
-    </p>
+    <p><strong>Essai gratuit :</strong> Un essai gratuit est proposé à la création du compte, permettant de connecter un compte et de publier une vidéo test. Aucun moyen de paiement n'est requis pour l'essai.</p>
+    <p><strong>TVA :</strong> Les prix sont indiqués en euros TTC. La TVA applicable (20% en France) est incluse dans les tarifs affichés.</p>
+    <p><strong>Facturation :</strong> La facturation est mensuelle, prélevée à la date anniversaire de la souscription via Payhip.</p>
   </div>
 
-  <!-- 3 -->
+  <h2 id="paiement">Article 5 — Conditions de paiement</h2>
+  <p>Les paiements sont traités exclusivement par <strong>Payhip Ltd.</strong> (payhip.com), un prestataire de services de paiement sécurisé. ScaleVid n'a pas accès à vos données de carte bancaire.</p>
   <div class="card">
-    <h2><span class="num">3</span> Compte utilisateur et accès</h2>
-    <h3>3.1 Création de compte</h3>
-    <p>
-      L'accès à ScaleVid se fait exclusivement via l'authentification OAuth auprès de TikTok et/ou Google. Vous n'avez pas de compte ScaleVid distinct — votre identité est vérifiée par les plateformes tierces.
-    </p>
-    <h3>3.2 Sécurité de votre accès</h3>
-    <p>
-      Vous êtes responsable de la sécurité de vos comptes TikTok et Google, et de toutes les actions effectuées depuis ces comptes via ScaleVid. Signalez-nous immédiatement tout accès non autorisé à <strong>scalevid.app@gmail.com</strong>.
-    </p>
-    <h3>3.3 Révocation d'accès</h3>
-    <p>
-      Vous pouvez révoquer à tout moment les permissions accordées à ScaleVid depuis les paramètres de sécurité de votre compte TikTok et/ou Google. La révocation met fin à la capacité de ScaleVid d'agir en votre nom sur ces plateformes.
-    </p>
+    <p><strong>Modes de paiement acceptés :</strong> Carte bancaire (Visa, Mastercard, American Express), PayPal — selon les options disponibles sur Payhip.</p>
+    <p><strong>Cycle de facturation :</strong> Mensuel, reconduit automatiquement.</p>
+    <p><strong>Renouvellement automatique :</strong> Votre abonnement se renouvelle automatiquement. Vous recevrez un e-mail de rappel avant chaque renouvellement.</p>
+    <p><strong>Échec de paiement :</strong> En cas d'échec de paiement, l'accès au service peut être suspendu jusqu'à régularisation.</p>
   </div>
 
-  <!-- 4 -->
-  <div class="card">
-    <h2><span class="num">4</span> Obligations de l'utilisateur</h2>
-    <p>En utilisant ScaleVid, vous vous engagez à :</p>
-    <ul>
-      <li>Respecter les <a href="https://www.tiktok.com/legal/page/global/terms-of-service/fr" target="_blank" style="color:#ff6b35;">Conditions d'utilisation de TikTok</a> et les <a href="https://www.youtube.com/t/terms" target="_blank" style="color:#ff6b35;">Conditions d'utilisation de YouTube</a></li>
-      <li>Ne publier que du contenu dont vous détenez les droits ou pour lequel vous avez les autorisations nécessaires</li>
-      <li>Ne pas utiliser ScaleVid pour diffuser du contenu illégal, haineux, violateur des droits d'autrui ou contraire aux règles des plateformes</li>
-      <li>Ne pas tenter de contourner les limitations techniques ou de sécurité de ScaleVid</li>
-      <li>Ne pas utiliser le service de manière automatisée (bots) sans notre accord préalable écrit</li>
-      <li>Ne pas utiliser ScaleVid pour publier du spam ou du contenu trompeur</li>
-      <li>Vous conformer à la législation applicable dans votre pays, notamment en matière de droit d'auteur (DADVSI, LCEN en France, DMCA aux États-Unis)</li>
-    </ul>
+  <h2 id="retractation">Article 6 — Droit de rétractation (consommateurs UE)</h2>
+  <div class="retractation-box">
+    <h3>⚠️ Droit de rétractation — Article L. 221-18 du Code de la consommation</h3>
+    <p>Conformément à l'article L. 221-18 du Code de la consommation, vous disposez d'un délai de <strong>14 jours calendaires</strong> à compter de la souscription de votre abonnement pour exercer votre droit de rétractation, sans avoir à justifier de motifs.</p>
+    <p><strong>Exception importante :</strong> En vertu de l'article L. 221-28 12° du Code de la consommation, le droit de rétractation ne peut pas être exercé pour les contenus numériques dont l'exécution a commencé avant l'expiration du délai de 14 jours, <strong>avec votre accord préalable exprès et renonciation à votre droit de rétractation</strong>.</p>
+    <p>Lors de la souscription, si vous demandez l'accès immédiat au service (avant expiration du délai de 14 jours), vous acceptez de renoncer à votre droit de rétractation pour la partie du service déjà exécutée.</p>
+    <p><strong>Pour exercer votre droit de rétractation</strong> (dans les 14 jours, si non waivé) : envoyez un e-mail à <a href="mailto:scalevid.app@gmail.com">scalevid.app@gmail.com</a> avec l'objet "Rétractation" et vos coordonnées. Nous vous rembourserons dans les 14 jours suivant réception de votre demande.</p>
   </div>
 
-  <!-- 5 -->
+  <h2 id="remboursement">Article 7 — Politique de remboursement</h2>
+  <p>En dehors du droit légal de rétractation, voici notre politique de remboursement :</p>
   <div class="card">
-    <h2><span class="num">5</span> Contenu utilisateur</h2>
-    <h3>5.1 Propriété du contenu</h3>
-    <p>
-      Vous conservez l'intégralité des droits sur les vidéos et métadonnées que vous soumettez via ScaleVid. ScaleVid ne revendique aucun droit de propriété sur votre contenu.
-    </p>
-    <h3>5.2 Licence d'utilisation</h3>
-    <p>
-      En soumettant du contenu via ScaleVid, vous nous accordez une licence limitée, non exclusive et temporaire pour traiter et transmettre ce contenu aux plateformes tierces désignées, dans le seul but d'exécuter la publication demandée.
-    </p>
-    <h3>5.3 Responsabilité du contenu</h3>
-    <p>
-      Vous êtes seul responsable du contenu que vous publiez via ScaleVid. ScaleVid ne modère pas le contenu avant publication et ne saurait être tenu responsable des contenus publiés par les utilisateurs.
-    </p>
-    <div class="warning-box">
-      ⚠️ ScaleVid se réserve le droit de suspendre ou supprimer tout compte dont l'utilisation serait manifestement illégale ou contraire aux présentes Conditions, sans préavis.
-    </div>
+    <table role="table" aria-label="Politique de remboursement">
+      <thead>
+        <tr>
+          <th scope="col">Situation</th>
+          <th scope="col">Remboursement</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Rétractation dans les 14 jours (sans utilisation du service)</td>
+          <td>✅ Remboursement intégral</td>
+        </tr>
+        <tr>
+          <td>Défaillance technique majeure imputable à ScaleVid (indisponibilité &gt;72h consécutives)</td>
+          <td>✅ Remboursement au prorata de la période d'indisponibilité</td>
+        </tr>
+        <tr>
+          <td>Résiliation en cours de période</td>
+          <td>❌ Pas de remboursement (accès maintenu jusqu'à fin de période)</td>
+        </tr>
+        <tr>
+          <td>Insatisfaction générale après utilisation</td>
+          <td>Cas par cas — contactez-nous</td>
+        </tr>
+        <tr>
+          <td>Suspension pour violation des CGU</td>
+          <td>❌ Aucun remboursement</td>
+        </tr>
+        <tr>
+          <td>Refus par TikTok/YouTube de votre compte (non imputable à ScaleVid)</td>
+          <td>Cas par cas — contactez-nous</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="margin-top:14px;"><strong>Pour toute demande de remboursement :</strong> <a href="mailto:scalevid.app@gmail.com">scalevid.app@gmail.com</a> — Délai de traitement : 14 jours ouvrés.</p>
   </div>
 
-  <!-- 6 -->
-  <div class="card">
-    <h2><span class="num">6</span> Propriété intellectuelle</h2>
-    <h3>6.1 Propriété de ScaleVid</h3>
-    <p>
-      Le nom « ScaleVid », le logo (lettre « S » orange), l'interface, le code source, et tous les éléments graphiques du service sont la propriété exclusive de l'exploitant de ScaleVid et sont protégés par les lois relatives à la propriété intellectuelle.
-    </p>
-    <h3>6.2 Restrictions</h3>
-    <p>Il vous est interdit de :</p>
-    <ul>
-      <li>Reproduire, copier ou distribuer tout ou partie du service sans autorisation écrite préalable</li>
-      <li>Effectuer de l'ingénierie inverse du code source ou tenter de décompiler le service</li>
-      <li>Utiliser les marques, logos ou noms de ScaleVid sans autorisation expresse</li>
-    </ul>
-  </div>
+  <h2 id="contenu">Article 8 — Contenu utilisateur</h2>
+  <p>Vous conservez l'intégralité des droits de propriété intellectuelle sur les vidéos que vous uploadez et publiez via ScaleVid. ScaleVid n'acquiert aucun droit sur votre contenu.</p>
+  <p>En utilisant ScaleVid, vous accordez à ScaleVid une licence limitée, non exclusive, gratuite, pour traiter vos vidéos dans le seul but d'exécuter le service (analyse IA, découpage, publication).</p>
+  <p>Vous déclarez et garantissez que :</p>
+  <ul>
+    <li>Vous êtes titulaire des droits sur les vidéos uploadées ou avez les autorisations nécessaires</li>
+    <li>Votre contenu ne viole pas les droits d'auteur, marques ou droits de propriété intellectuelle de tiers</li>
+    <li>Votre contenu respecte les Conditions d'utilisation de YouTube et TikTok</li>
+    <li>Votre contenu n'est pas illégal, diffamatoire, obscène, ou préjudiciable</li>
+  </ul>
 
-  <!-- 7 -->
-  <div class="card">
-    <h2><span class="num">7</span> Plateformes tierces</h2>
-    <p>
-      ScaleVid interagit avec des services tiers (TikTok, YouTube/Google) via leurs API officielles. ScaleVid n'est pas responsable de :
-    </p>
-    <ul>
-      <li>La disponibilité, les performances ou les modifications apportées aux API tierces</li>
-      <li>Les décisions de modération prises par TikTok ou YouTube sur vos publications</li>
-      <li>Les changements dans les politiques d'utilisation des plateformes tierces susceptibles d'affecter le service ScaleVid</li>
-      <li>Les pannes ou interruptions des services tiers</li>
-    </ul>
-    <div class="highlight-box">
-      📌 L'utilisation de ScaleVid est conditionnée au respect des conditions d'utilisation des plateformes tierces. La violation des règles de TikTok ou YouTube peut entraîner la suspension de votre compte sur ces plateformes, indépendamment de ScaleVid.
-    </div>
-  </div>
+  <h2 id="obligations">Article 9 — Obligations et comportement</h2>
+  <p>Il est formellement interdit d'utiliser ScaleVid pour :</p>
+  <ul>
+    <li>Publier des contenus violant la loi française ou internationale</li>
+    <li>Publier des contenus haineux, discriminatoires, violents ou à caractère pornographique</li>
+    <li>Violer les droits d'auteur ou droits voisins de tiers</li>
+    <li>Tromper, manipuler ou harceler d'autres utilisateurs ou tiers</li>
+    <li>Tenter de contourner les limitations techniques du service</li>
+    <li>Utiliser des bots ou scripts automatisés non autorisés pour accéder au service</li>
+    <li>Revendre ou redistribuer l'accès au service sans autorisation</li>
+    <li>Utiliser le service à des fins illégales, notamment de blanchiment d'argent</li>
+  </ul>
 
-  <!-- 8 -->
-  <div class="card">
-    <h2><span class="num">8</span> Limitation de responsabilité</h2>
-    <p>
-      Dans toute la mesure permise par la loi applicable, ScaleVid ne saurait être tenu responsable :
-    </p>
-    <ul>
-      <li>Des pertes ou dommages directs, indirects, accidentels, spéciaux ou consécutifs résultant de l'utilisation ou de l'impossibilité d'utiliser le service</li>
-      <li>Des échecs de publication dus à des limitations ou modifications des API tierces</li>
-      <li>De la perte de données liée à des défaillances techniques imprévues</li>
-      <li>Des actes ou omissions des plateformes tierces (TikTok, YouTube, etc.)</li>
-      <li>De tout préjudice lié à l'utilisation du service à des fins commerciales</li>
-    </ul>
-    <p>
-      ScaleVid est un service fourni <strong>à titre gratuit</strong>, sans garantie de résultat ni d'adéquation à un usage particulier. La responsabilité totale de ScaleVid ne saurait dépasser le montant éventuellement payé par l'utilisateur pour accéder au service.
-    </p>
-  </div>
+  <h2 id="pi">Article 10 — Propriété intellectuelle</h2>
+  <p>Le service ScaleVid, son code source, son interface, ses algorithmes, son logo et sa marque sont la propriété exclusive de leur créateur. Toute reproduction, modification ou distribution sans autorisation écrite préalable est interdite.</p>
+  <p>Les modèles d'IA utilisés sont soumis aux conditions des fournisseurs tiers (OpenAI notamment).</p>
 
-  <!-- 9 -->
-  <div class="card">
-    <h2><span class="num">9</span> Disponibilité et maintenance</h2>
-    <p>
-      ScaleVid s'efforce d'assurer la disponibilité du service mais ne garantit pas une disponibilité ininterrompue. Des interruptions peuvent survenir pour :
-    </p>
-    <ul>
-      <li>Opérations de maintenance préventive ou corrective</li>
-      <li>Mises à jour du service ou de ses dépendances</li>
-      <li>Événements imprévus (pannes d'infrastructure, cyberattaques, force majeure)</li>
-      <li>Modifications des API tierces nécessitant une adaptation du service</li>
-    </ul>
-    <p>Nous nous engageons à minimiser les interruptions et à communiquer, dans la mesure du possible, sur les maintenances planifiées.</p>
+  <h2 id="tiers">Article 11 — Services tiers et plateformes</h2>
+  <p>ScaleVid est un outil d'automatisation qui dépend des API de YouTube (Google LLC) et TikTok Inc. Ces plateformes peuvent modifier, restreindre ou supprimer leur accès API à tout moment, ce qui pourrait affecter la disponibilité de certaines fonctionnalités de ScaleVid.</p>
+  <div class="warn-box">
+    <p>⚠️ <strong>Important :</strong> ScaleVid n'est pas affilié à YouTube, Google ou TikTok. Le respect des Conditions d'utilisation de ces plateformes est de votre responsabilité. Une violation de leurs règles peut entraîner la suspension de votre compte sur ces plateformes, indépendamment de votre abonnement ScaleVid.</p>
   </div>
+  <p>Les paiements sont gérés par <strong>Payhip Ltd.</strong>, soumis à ses propres conditions d'utilisation disponibles sur <a href="https://payhip.com/terms" target="_blank" rel="noopener noreferrer">payhip.com/terms</a>.</p>
 
-  <!-- 10 -->
-  <div class="card">
-    <h2><span class="num">10</span> Résiliation</h2>
-    <h3>10.1 Résiliation par l'utilisateur</h3>
-    <p>
-      Vous pouvez cesser d'utiliser ScaleVid à tout moment et révoquer les permissions OAuth accordées depuis les paramètres de vos comptes TikTok et Google.
-    </p>
-    <h3>10.2 Résiliation par ScaleVid</h3>
-    <p>
-      ScaleVid se réserve le droit de suspendre ou de mettre fin à votre accès au service, avec ou sans préavis, en cas de :
-    </p>
-    <ul>
-      <li>Violation des présentes Conditions</li>
-      <li>Utilisation abusive du service ou des API tierces</li>
-      <li>Comportement susceptible de nuire à d'autres utilisateurs ou à l'intégrité du service</li>
-      <li>Demande légale ou réglementaire</li>
-    </ul>
-    <h3>10.3 Arrêt du service</h3>
-    <p>
-      ScaleVid se réserve le droit d'interrompre définitivement le service. En cas d'arrêt prévu, nous vous en informerons avec un préavis raisonnable.
-    </p>
-  </div>
+  <h2 id="responsabilite">Article 12 — Limitation de responsabilité</h2>
+  <p>ScaleVid est fourni "en l'état". Dans les limites permises par la loi applicable :</p>
+  <ul>
+    <li>ScaleVid ne garantit pas que le service sera ininterrompu, exempt d'erreurs ou que les résultats obtenus via l'IA seront satisfaisants</li>
+    <li>ScaleVid n'est pas responsable des décisions prises par YouTube ou TikTok concernant votre contenu (suppression, demonetisation, suspension)</li>
+    <li>ScaleVid n'est pas responsable de la perte de données résultant d'une défaillance technique, sauf faute lourde ou dol de notre part</li>
+    <li>La responsabilité totale de ScaleVid ne saurait excéder le montant payé par l'utilisateur au cours des 3 derniers mois</li>
+  </ul>
+  <p>Ces limitations ne s'appliquent pas en cas de dommages corporels, de faute lourde ou de dol, ni aux droits légaux des consommateurs que la loi applicable ne permet pas d'exclure.</p>
 
-  <!-- 11 -->
-  <div class="card">
-    <h2><span class="num">11</span> Modifications des Conditions</h2>
-    <p>
-      ScaleVid se réserve le droit de modifier les présentes Conditions à tout moment. Les modifications prennent effet dès leur publication sur cette page. En cas de modification substantielle, nous vous en informerons via une notification sur le service.
-    </p>
-    <p>
-      Votre utilisation continue du service après la publication des modifications constitue votre acceptation des nouvelles Conditions. Si vous n'acceptez pas les nouvelles Conditions, vous devez cesser d'utiliser le service.
-    </p>
-  </div>
+  <h2 id="disponibilite">Article 13 — Disponibilité du service</h2>
+  <p>ScaleVid s'efforce de maintenir une disponibilité maximale du service. Des interruptions ponctuelles peuvent survenir pour maintenance, mises à jour, ou pour des raisons indépendantes de notre volonté (panne d'hébergeur, coupure réseau, etc.).</p>
+  <p>En cas d'indisponibilité planifiée, nous nous efforcerons de vous prévenir 48h à l'avance par e-mail.</p>
 
-  <!-- 12 -->
-  <div class="card">
-    <h2><span class="num">12</span> Droit applicable et juridiction</h2>
-    <p>
-      Les présentes Conditions sont régies par le <strong>droit français</strong>. En cas de litige relatif à l'interprétation ou à l'exécution des présentes Conditions, les parties s'engagent à rechercher une solution amiable avant tout recours judiciaire.
-    </p>
-    <p>
-      À défaut d'accord amiable, tout litige sera soumis à la compétence exclusive des <strong>tribunaux compétents du ressort du domicile du défendeur</strong>, sous réserve des règles impératives du droit de la consommation applicables aux consommateurs résidant dans l'Union Européenne.
-    </p>
-    <div class="highlight-box">
-      📋 Conformément à l'article L.612-1 du Code de la Consommation, les consommateurs résidant en France ont le droit de recourir gratuitement à un médiateur de la consommation en cas de litige non résolu.
-    </div>
-  </div>
+  <h2 id="resiliation">Article 14 — Résiliation</h2>
+  <h3>Résiliation par l'utilisateur</h3>
+  <p>Vous pouvez résilier votre abonnement à tout moment depuis votre espace Payhip ou en contactant <a href="mailto:scalevid.app@gmail.com">scalevid.app@gmail.com</a>. La résiliation prend effet à la fin de la période de facturation en cours. Aucun remboursement ne sera effectué pour la période restante.</p>
 
-  <!-- 13 -->
-  <div class="card">
-    <h2><span class="num">13</span> Dispositions diverses</h2>
-    <h3>13.1 Intégralité de l'accord</h3>
-    <p>Les présentes Conditions, combinées à la Politique de Confidentialité, constituent l'intégralité de l'accord entre vous et ScaleVid concernant l'utilisation du service.</p>
-    <h3>13.2 Divisibilité</h3>
-    <p>Si une disposition des présentes Conditions est déclarée invalide ou inapplicable, les autres dispositions restent en vigueur.</p>
-    <h3>13.3 Non-renonciation</h3>
-    <p>Le fait pour ScaleVid de ne pas exercer un droit prévu par les présentes Conditions ne constitue pas une renonciation à ce droit.</p>
-    <h3>13.4 Langue</h3>
-    <p>Les présentes Conditions sont rédigées en français. En cas de traduction dans une autre langue, la version française prévaut.</p>
-  </div>
+  <h3>Résiliation par ScaleVid</h3>
+  <p>ScaleVid se réserve le droit de suspendre ou résilier votre compte, avec ou sans préavis, en cas de :</p>
+  <ul>
+    <li>Violation grave ou répétée des présentes CGU/CGV</li>
+    <li>Utilisation du service à des fins illégales</li>
+    <li>Non-paiement</li>
+    <li>Cessation d'activité de ScaleVid</li>
+  </ul>
+  <p>En cas de cessation d'activité de ScaleVid, les utilisateurs seront informés 30 jours à l'avance et remboursés au prorata de la période non utilisée.</p>
 
-  <!-- 14 -->
+  <h3>Conséquences de la résiliation</h3>
+  <p>Après résiliation, vos données seront supprimées conformément à notre <a href="/privacy-policy.html">Politique de confidentialité</a>. Vous perdrez l'accès au service et à vos données stockées sur ScaleVid (vidéos, clips, historique).</p>
+
+  <h2 id="modifications">Article 15 — Modifications des CGU/CGV</h2>
+  <p>ScaleVid se réserve le droit de modifier les présentes CGU/CGV à tout moment. Les modifications entrent en vigueur 30 jours après leur publication, sauf urgence réglementaire. Vous serez informé par e-mail des modifications substantielles.</p>
+  <p>La poursuite de l'utilisation du service après le délai de 30 jours vaut acceptation des nouvelles conditions. Si vous refusez les nouvelles conditions, vous pouvez résilier votre compte avant l'entrée en vigueur des modifications.</p>
+
+  <h2 id="droit">Article 16 — Droit applicable et juridiction</h2>
+  <p>Les présentes CGU/CGV sont soumises au <strong>droit français</strong>. En cas de litige, et après tentative de résolution amiable, les tribunaux compétents seront ceux du ressort du domicile du défendeur ou du lieu d'exécution du service.</p>
+  <p><strong>Médiation :</strong> Conformément à l'article L. 612-1 du Code de la consommation, vous pouvez recourir gratuitement à un médiateur de la consommation. Plateforme européenne de résolution en ligne des litiges : <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer">ec.europa.eu/consumers/odr</a></p>
+
+  <h2 id="contact">Article 17 — Contact</h2>
   <div class="card">
-    <h2><span class="num">14</span> Contact</h2>
-    <p>Pour toute question relative aux présentes Conditions d'utilisation :</p>
-    <div class="contact-box">
-      <p><strong>ScaleVid</strong></p>
-      <p>📧 E-mail : <a href="mailto:scalevid.app@gmail.com" style="color:#ff6b35;">scalevid.app@gmail.com</a></p>
-      <p>🌐 Site web : <a href="https://scalevid-backend-production.up.railway.app" style="color:#ff6b35;">scalevid-backend-production.up.railway.app</a></p>
-      <p>🔒 Politique de confidentialité : <a href="/privacy-policy.html" style="color:#ff6b35;">Voir la politique de confidentialité</a></p>
-    </div>
+    <p><strong>Service client ScaleVid</strong></p>
+    <p><strong>E-mail :</strong> <a href="mailto:scalevid.app@gmail.com">scalevid.app@gmail.com</a></p>
+    <p><strong>Délai de réponse :</strong> 5 jours ouvrés</p>
+    <p><strong>Éditeur :</strong> [À COMPLÉTER — Prénom NOM] — Micro-entrepreneur</p>
+    <p><strong>Mentions légales complètes :</strong> <a href="/mentions-legales.html">Voir nos mentions légales</a></p>
   </div>
 
 </main>
 
 <footer>
-  &copy; 2026 ScaleVid — Tous droits réservés &nbsp;|&nbsp;
-  <a href="/privacy-policy.html">Politique de confidentialité</a> &nbsp;|&nbsp;
-  <a href="/terms-of-service.html">Conditions d'utilisation</a>
+  <p>
+    <a href="/privacy-policy.html">Politique de confidentialité</a> ·
+    <a href="/cookie-policy.html">Cookies</a> ·
+    <a href="/mentions-legales.html">Mentions légales</a> ·
+    <a href="/">ScaleVid</a>
+  </p>
+  <p style="margin-top:10px;">© 2026 ScaleVid — Tous droits réservés</p>
 </footer>
 
 </body>

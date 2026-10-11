@@ -1057,7 +1057,7 @@ footer{
             <li>Programmation automatique des publications</li>
             <li>Support par email</li>
           </ul>
-          <button class="btn btn-ghost checkout-btn" style="width:100%;" data-plan="creator">Commencer — <span class="total">7,99€</span>/mois</button>
+          <button class="btn btn-primary checkout-btn" style="width:100%;" data-plan="creator">Commencer — <span class="total">7,99€</span>/mois</button>
         </div>
 
         <div class="price__card is-pro" data-plan="agency">
@@ -1488,7 +1488,7 @@ footer{
           <li>✅ Titres & hashtags IA</li>
           <li>✅ Planification automatique</li>
         </ul>
-        <a href="https://payhip.com/b/scalevid-creator" target="_blank" class="btn btn-primary" style="display:block;text-align:center;width:100%;box-sizing:border-box;text-decoration:none;">Choisir ce plan</a>
+        <a href="https://payhip.com/b/nFreq" target="_blank" class="btn btn-primary" style="display:block;text-align:center;width:100%;box-sizing:border-box;text-decoration:none;background:var(--pink);">Choisir ce plan</a>
       </div>
       <!-- Agence -->
       <div style="background:var(--surface-2);border:2px solid var(--pink);border-radius:14px;padding:16px;position:relative;">
@@ -1501,10 +1501,29 @@ footer{
           <li>✅ Titres & hashtags IA</li>
           <li>✅ Dashboard multi-comptes</li>
         </ul>
-        <a href="https://payhip.com/b/scalevid-agency" target="_blank" class="btn btn-primary" style="display:block;text-align:center;width:100%;box-sizing:border-box;text-decoration:none;">Choisir ce plan</a>
+        <a href="https://payhip.com/b/x4Zqa" target="_blank" class="btn btn-primary" style="display:block;text-align:center;width:100%;box-sizing:border-box;text-decoration:none;">Choisir ce plan</a>
       </div>
     </div>
     <button class="btn btn-ghost" style="font-size:12px;" id="trialEndedClose">Continuer en lecture seule</button>
+  </div>
+</div>
+
+<!-- ============ MODALE MOT DE PASSE OAUTH ============ -->
+<div class="modal-overlay" id="oauthPwOverlay">
+  <div class="modal" style="max-width:400px;">
+    <button class="modal__close" id="oauthPwClose" aria-label="Fermer">×</button>
+    <h3 style="margin-bottom:6px;">Confirmer votre identité</h3>
+    <p class="sub" style="margin-bottom:20px;font-size:14px;color:var(--muted);">Entrez votre mot de passe ScaleVid pour autoriser la connexion.</p>
+    <div class="field">
+      <label style="font-size:13px;color:var(--muted);display:block;margin-bottom:6px;">Email</label>
+      <input type="email" id="oauthPwEmail" readonly style="background:var(--surface-2);width:100%;box-sizing:border-box;">
+    </div>
+    <div class="field">
+      <label style="font-size:13px;color:var(--muted);display:block;margin-bottom:6px;">Mot de passe</label>
+      <input type="password" id="oauthPwInput" placeholder="Votre mot de passe" style="width:100%;box-sizing:border-box;" autocomplete="current-password">
+    </div>
+    <button class="btn btn-primary" style="width:100%;" id="oauthPwSubmit">Connecter →</button>
+    <p id="oauthPwError" style="color:#f87171;font-size:13px;margin-top:10px;display:none;"></p>
   </div>
 </div>
 
@@ -1750,10 +1769,25 @@ footer{
    Si le serveur n'est pas démarré, toutes les fonctions ci-dessous
    échouent silencieusement et le mode simulation prend le relais.
 ===================================================================== */
-const BACKEND = 'http://localhost:4000';
+const BACKEND = window.location.hostname === 'localhost' ? 'http://localhost:4000' : 'https://scalevid-backend-production.up.railway.app';
 let backendToken = localStorage.getItem('sv_backend_token') || null;
 // Cache des comptes OAuth réels, mis à jour par renderRealAccounts()
 let cachedRealAccounts = [];
+
+// Tente de renouveler le JWT via le cookie httpOnly (posé lors du login ou d'un callback OAuth).
+// Appelé au démarrage si backendToken est absent de localStorage.
+async function tryRefreshToken() {
+  if (backendToken) return; // déjà dispo, rien à faire
+  try {
+    const res = await fetch(BACKEND + '/auth/refresh', { credentials: 'include' });
+    if (res.ok) {
+      const data = await res.json();
+      backendToken = data.token;
+      localStorage.setItem('sv_backend_token', data.token);
+      console.log('[ScaleVid] ✅ Token rafraîchi via cookie');
+    }
+  } catch { /* silencieux */ }
+}
 
 async function backendFetch(path, opts = {}) {
   const { noJson, ...fetchOpts } = opts;
@@ -1783,13 +1817,20 @@ async function syncWithBackend(email, password, name) {
       const data = await res.json();
       backendToken = data.token;
       localStorage.setItem('sv_backend_token', data.token);
+      console.log('[ScaleVid] ✅ Backend token set');
+    } else {
+      const status = res ? res.status : 'no response';
+      console.warn('[ScaleVid] ❌ syncWithBackend failed, status:', status);
     }
-  } catch { /* serveur non démarré → mode simulation uniquement */ }
+  } catch (e) {
+    console.warn('[ScaleVid] ❌ syncWithBackend fetch error:', e.message);
+  }
 }
 
 // Charge les comptes réellement connectés via OAuth (YouTube / TikTok).
 async function loadRealAccounts() {
-  if (!backendToken) return [];
+  // On tente toujours l'appel : soit le Bearer token est dispo, soit le cookie
+  // httpOnly (posé par le callback OAuth) authentifiera la requête.
   try {
     const res = await backendFetch('/accounts');
     if (!res.ok) return [];
@@ -1821,16 +1862,30 @@ async function searchYoutube(q) {
   } catch { return []; }
 }
 
-// Lance le flux OAuth réel (redirige vers le backend → Google / TikTok).
-// Le backend requiert une session (cookie), qui est posée par syncWithBackend.
-function connectOAuth(platform) {
-  if (!backendToken) {
-    showToast("Démarrez le backend (`npm run dev`) et reconnectez-vous d'abord.", true);
-    return;
-  }
+// Lance le flux OAuth réel — redirige directement vers TikTok/Google.
+// Le backend identifie l'utilisateur par email uniquement (TikTok/Google authentifient eux-mêmes).
+async function connectOAuth(platform) {
   if (!checkTrialLimit('connect')) return;
-  // Le backend gère la redirection OAuth; le cookie est posé sur localhost:4000.
-  window.location.href = BACKEND + '/auth/' + platform;
+  const session = getSession();
+  if (!session) { showToast("Connectez-vous d'abord.", true); return; }
+
+  try {
+    showToast("Redirection vers " + (platform === 'tiktok' ? 'TikTok' : 'Google') + "…", false);
+    const res = await fetch(BACKEND + '/auth/' + platform + '-start', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: session.email }),
+    });
+    const data = await res.json();
+    if (!res.ok || !data.url) {
+      showToast(data.error || "Erreur de connexion.", true);
+      return;
+    }
+    window.location.href = data.url;
+  } catch (e) {
+    showToast("Impossible de joindre le serveur.", true);
+  }
 }
 
 // Affiche les comptes OAuth réels dans le panneau dédié.
@@ -1875,13 +1930,21 @@ function checkOAuthCallback() {
   const params = new URLSearchParams(window.location.search);
   const connect = params.get('connect');
   if (!connect) return;
+  // Récupère et stocke le JWT backend renvoyé par le callback OAuth
+  const bt = params.get('bt');
+  if (bt) {
+    backendToken = bt;
+    localStorage.setItem('sv_backend_token', bt);
+    console.log('[ScaleVid] ✅ Backend token récupéré via callback OAuth');
+  }
   history.replaceState({}, '', window.location.pathname);
   if (connect === 'youtube_ok') {
     showToast('✓ YouTube connecté avec succès !');
   } else if (connect === 'tiktok_ok') {
     showToast('✓ TikTok connecté avec succès !');
   } else if (connect === 'error') {
-    showToast('Erreur lors de la connexion — vérifiez les logs du serveur.', true);
+    const msg = params.get('msg');
+    showToast('Erreur TikTok : ' + (msg || 'vérifiez les logs Railway.'), true);
   }
 }
 
@@ -1925,6 +1988,8 @@ async function apiSignup({name, email, password}){
   saveDB(db);
   const session = { id: user.id, name: user.name, email: user.email };
   setSession(session);
+  // Garde le mot de passe en session pour pouvoir re-syncer si besoin (ex : clic TikTok)
+  sessionStorage.setItem('sv_tmp_pw', password);
   // Synchronisation silencieuse avec le backend réel (si démarré)
   syncWithBackend(emailNorm, password, name);
   return session;
@@ -1938,6 +2003,8 @@ async function apiLogin({email, password}){
   if (!user || user.passwordHash !== passwordHash) throw new Error('Email ou mot de passe incorrect.');
   const session = { id: user.id, name: user.name, email: user.email };
   setSession(session);
+  // Garde le mot de passe en session pour pouvoir re-syncer si besoin (ex : clic TikTok)
+  sessionStorage.setItem('sv_tmp_pw', password);
   // Synchronisation silencieuse avec le backend réel (si démarré)
   syncWithBackend(email.toLowerCase().trim(), password, user.name);
   return session;
@@ -2505,7 +2572,7 @@ function loadDashboardClipsOnly(){
   try { renderClips(apiGetClips()); } catch(e){ showToast(e.message, true); }
 }
 
-function loadDashboard(){
+async function loadDashboard(){
   const user = currentDbUser();
   if (!user) { showLanding(); return; }
   document.getElementById('userName').textContent = user.name;
@@ -2518,20 +2585,24 @@ function loadDashboard(){
       : `${s.account_count} compte(s) · ${s.total_price}€/mois`;
   } else {
     document.getElementById('subPlan').textContent = 'Essai gratuit';
-    document.getElementById('subDetail').textContent = 'Choisissez un plan sur la page tarifs.';
+    document.getElementById('subDetail').innerHTML = 'Choisissez un plan sur la page tarifs. &nbsp;<button onclick="resetTrial()" style="font-size:11px;color:var(--muted);background:none;border:1px solid var(--line);border-radius:6px;padding:2px 8px;cursor:pointer;">🔄 Réinitialiser l\'essai</button>';
   }
   try { renderClips(apiGetClips()); } catch(e){ showToast(e.message, true); }
   renderShortsGrid();
   renderQueue();
   checkScheduledPublishes();
-  // Charger les comptes OAuth réels + gérer le retour après OAuth
+  // Gérer le retour après OAuth (peut mettre à jour backendToken via ?bt=)
   checkOAuthCallback();
+  // Si toujours pas de token, essayer de le renouveler via le cookie
+  await tryRefreshToken();
+  // Charger les comptes OAuth réels
   renderRealAccounts();
 }
 
 // --- Connexion OAuth réelle via le backend ---
 document.getElementById('connectYt').addEventListener('click', () => connectOAuth('youtube'));
 document.getElementById('connectTt').addEventListener('click', () => connectOAuth('tiktok'));
+
 
 // --- Recherche YouTube ---
 let ytSelected = null; // chaîne sélectionnée dans les résultats
@@ -2890,6 +2961,8 @@ document.getElementById('analyzeBtn').addEventListener('click', async () => {
     }
 
     generatedShorts.sort((a, b) => b.score - a.score);
+    // Assigner une plateforme cible à chaque short (alternance YouTube / TikTok par score)
+    generatedShorts.forEach((s, i) => { s.platform = i % 2 === 0 ? 'youtube' : 'tiktok'; });
     renderShortsGrid();
     showToast(`${generatedShorts.length} short(s) généré(s) à partir de votre vidéo.`);
   } catch (err) {
@@ -3110,13 +3183,34 @@ function renderShortsGrid(){
     })),
   ];
 
-  // Pour un compte déjà programmé, afficher la confirmation
+  const ytAccounts = allAccounts.filter(a => a.platform === 'youtube');
+  const ttAccounts = allAccounts.filter(a => a.platform === 'tiktok');
+
   const scheduledShorts = new Set((user?.scheduledPosts || []).map(p => p.shortId));
 
-  grid.innerHTML = generatedShorts.map((s, idx) => {
+  // Réassigner les plateformes en fonction des comptes disponibles :
+  // si l'utilisateur n'a que TikTok → tous les shorts vont dans TikTok,
+  // si seulement YouTube → tous dans YouTube, sinon on alterne.
+  const hasYT = ytAccounts.length > 0;
+  const hasTT = ttAccounts.length > 0;
+  if (hasYT || hasTT) {
+    generatedShorts.forEach((s, i) => {
+      if (hasYT && hasTT) {
+        s.platform = i % 2 === 0 ? 'youtube' : 'tiktok';
+      } else if (hasTT) {
+        s.platform = 'tiktok';
+      } else {
+        s.platform = 'youtube';
+      }
+    });
+  }
+
+  const ytShorts = generatedShorts.filter(s => s.platform === 'youtube');
+  const ttShorts = generatedShorts.filter(s => s.platform === 'tiktok');
+
+  function makeShortCard(s, idx, platformAccounts, platform) {
     const alreadyScheduled = scheduledShorts.has(s.id);
     const platformIcon = p => p === 'youtube' ? '▶ YouTube' : '♪ TikTok';
-    const firstPlatform = allAccounts[0]?.platform || 'youtube';
     return `
     <div class="short-card" data-short="${s.id}">
       <video src="${s.url}" controls muted playsinline></video>
@@ -3130,18 +3224,17 @@ function renderShortsGrid(){
         <div class="row"><span>Durée</span><span class="bar"><i style="width:${s.sub.durationScore}%"></i></span><span>${s.sub.durationScore}</span></div>
       </div>
       <div class="advice-list">${s.advice.map(t => `<div class="tip">${t}</div>`).join('')}</div>
-
       <div class="sc-schedule">
         <div class="sc-schedule__label">Planifier la publication</div>
         ${alreadyScheduled
           ? `<div class="sc-scheduled-ok">✓ Programmé — visible dans la section Planification IA</div>`
-          : allAccounts.length === 0
-            ? `<div style="font-size:12px;color:var(--muted);padding:6px 0;">Connectez un compte YouTube ou TikTok (étape 01) pour programmer ce short.</div>`
+          : platformAccounts.length === 0
+            ? `<div style="font-size:12px;color:var(--muted);padding:6px 0;">Connectez un compte ${platform === 'youtube' ? 'YouTube' : 'TikTok'} (étape 01) pour programmer ce short.</div>`
             : `<div class="schedule-row">
               <select data-account-for="${s.id}">
-                ${allAccounts.map(a => `<option value="${a.uid}">${platformIcon(a.platform)} — ${a.handle}${a.isReal ? ' ✓' : ''}</option>`).join('')}
+                ${platformAccounts.map(a => `<option value="${a.uid}">${platformIcon(a.platform)} — ${a.handle}${a.isReal ? ' ✓' : ''}</option>`).join('')}
               </select>
-              <input type="datetime-local" data-when-for="${s.id}" value="${toLocalInputValue(recommendSlot(firstPlatform, idx))}">
+              <input type="datetime-local" data-when-for="${s.id}" value="${toLocalInputValue(recommendSlot(platform, idx))}">
               <div style="margin-top:8px;">
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">
                   <label style="font-size:11px;color:var(--muted);">✏️ Titre</label>
@@ -3154,7 +3247,7 @@ function renderShortsGrid(){
                   <label style="font-size:11px;color:var(--muted);">🏷️ Hashtags</label>
                   <span data-tags-counter="${s.id}" style="font-size:10px;color:var(--muted);transition:color .2s;">0/500</span>
                 </div>
-                <input type="text" data-tags-for="${s.id}" value="${suggestHashtags(s, firstPlatform)}" style="width:100%;box-sizing:border-box;background:var(--surface-2,#1a1a2e);border:1px solid var(--border,#333);color:var(--text,#fff);border-radius:8px;padding:7px 10px;font-size:13px;">
+                <input type="text" data-tags-for="${s.id}" value="${suggestHashtags(s, platform)}" style="width:100%;box-sizing:border-box;background:var(--surface-2,#1a1a2e);border:1px solid var(--border,#333);color:var(--text,#fff);border-radius:8px;padding:7px 10px;font-size:13px;">
                 <div data-tags-hint="${s.id}" style="font-size:10px;color:var(--muted);margin-top:2px;min-height:14px;"></div>
               </div>
               <button class="btn btn-primary" data-schedule="${s.id}" style="width:100%;margin-top:8px;">Programmer ce short →</button>
@@ -3162,7 +3255,29 @@ function renderShortsGrid(){
         }
       </div>
     </div>`;
-  }).join('');
+  }
+
+  grid.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;">
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;padding:10px 14px;border-radius:10px;margin-bottom:14px;background:rgba(255,70,70,0.08);border:1px solid rgba(255,80,80,0.25);color:#ff6060;">
+          ▶ YouTube Shorts
+          <span style="margin-left:auto;font-size:11px;font-weight:400;color:var(--muted);">${ytShorts.length} clip${ytShorts.length !== 1 ? 's' : ''}</span>
+        </div>
+        ${ytShorts.length === 0
+          ? `<div style="text-align:center;padding:32px 16px;color:var(--muted);font-size:13px;border:1px dashed var(--line);border-radius:10px;">Analysez une vidéo pour générer des clips YouTube.</div>`
+          : ytShorts.map((s, i) => makeShortCard(s, i, ytAccounts, 'youtube')).join('')}
+      </div>
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;padding:10px 14px;border-radius:10px;margin-bottom:14px;background:rgba(105,201,208,0.08);border:1px solid rgba(105,201,208,0.25);color:#69c9d0;">
+          ♪ TikTok
+          <span style="margin-left:auto;font-size:11px;font-weight:400;color:var(--muted);">${ttShorts.length} clip${ttShorts.length !== 1 ? 's' : ''}</span>
+        </div>
+        ${ttShorts.length === 0
+          ? `<div style="text-align:center;padding:32px 16px;color:var(--muted);font-size:13px;border:1px dashed var(--line);border-radius:10px;">Analysez une vidéo pour générer des clips TikTok.</div>`
+          : ttShorts.map((s, i) => makeShortCard(s, i, ttAccounts, 'tiktok')).join('')}
+      </div>
+    </div>`;
 
   // Limite combinée titre + hashtags : 100 caractères (YouTube & TikTok Shorts)
   const COMBINED_MAX = 100;
@@ -3195,10 +3310,9 @@ function renderShortsGrid(){
     if (!titleEl || !tagsEl) return;
 
     const titleLen = titleEl.value.length;
-    const remaining = COMBINED_MAX - titleLen - (titleLen > 0 ? 1 : 0); // 1 espace entre titre et tags
+    const remaining = COMBINED_MAX - titleLen - (titleLen > 0 ? 1 : 0);
     const tagsMax = Math.max(0, remaining);
 
-    // Auto-trim les hashtags si le titre a grandi
     if (tagsEl.value.length > tagsMax) {
       tagsEl.value = trimHashtagsToLimit(tagsEl.value, tagsMax);
     }
@@ -3227,7 +3341,8 @@ function renderShortsGrid(){
   grid.querySelectorAll('[data-account-for]').forEach(sel => {
     sel.addEventListener('change', () => {
       const id = sel.dataset.accountFor;
-      const acc = allAccounts.find(a => a.uid === sel.value);
+      const platformAccounts = [...ytAccounts, ...ttAccounts];
+      const acc = platformAccounts.find(a => a.uid === sel.value);
       const whenInput = grid.querySelector(`[data-when-for="${id}"]`);
       const tagsInput = grid.querySelector(`[data-tags-for="${id}"]`);
       const short = generatedShorts.find(s => String(s.id) === id);
@@ -3260,6 +3375,21 @@ function toLocalInputValue(date){
   return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
 }
 
+// Réinitialise le compteur d'essai (publications + clips) sans supprimer le compte
+function resetTrial() {
+  if (!confirm('Remettre le compteur d\'essai à zéro ? (publications et clips supprimés)')) return;
+  const user = currentDbUser();
+  if (!user) return;
+  user.scheduledPosts = [];
+  user.clips = [];
+  persistUser(user);
+  showToast('Compteur d\'essai réinitialisé.');
+  renderClips(apiGetClips());
+  renderQueue();
+  renderShortsGrid();
+  loadDashboard();
+}
+
 /* ===== GESTION DE L'ESSAI GRATUIT ===== */
 
 // Retourne true si l'utilisateur est en essai gratuit (pas d'abonnement)
@@ -3287,16 +3417,28 @@ function showTrialEndedModal() {
   document.getElementById('trialEndedOverlay').classList.add('open');
 }
 
-// Vérifie les limites de l'essai avant une action — retourne false si bloqué
+// Vérifie les limites avant une action — retourne false si bloqué
 function checkTrialLimit(action) {
-  if (!isTrialUser()) return true; // abonné → toujours autorisé
-
   if (action === 'connect') {
-    if (trialTotalAccounts() >= 1) {
-      showToast('Essai gratuit : 1 compte maximum. Abonnez-vous pour en connecter plusieurs.', true);
-      return false;
+    const total = trialTotalAccounts();
+    if (isTrialUser()) {
+      if (total >= 1) {
+        showToast('Essai gratuit : 1 compte maximum. Abonnez-vous pour en connecter plusieurs.', true);
+        return false;
+      }
+    } else {
+      // Abonné : vérifier la limite du plan (creator = 1, agency = 4)
+      const user = currentDbUser();
+      const limit = TIERS[user?.subscription?.plan]?.accounts || 1;
+      if (total >= limit) {
+        const planName = user?.subscription?.plan === 'agency' ? 'Agence (4 comptes)' : 'Créateur solo (1 compte)';
+        showToast(`Limite ${planName} atteinte. Passez au plan Agence pour en connecter davantage.`, true);
+        return false;
+      }
     }
   }
+
+  if (!isTrialUser()) return true; // abonné → les autres actions sont libres
 
   if (action === 'schedule') {
     if (trialPostsUsed() >= 1) {
@@ -3330,7 +3472,7 @@ async function scheduleShort(shortId){
   const tagsInput = document.querySelector(`[data-tags-for="${shortId}"]`);
   if (!sel || !whenInput || !whenInput.value) { showToast('Choisissez un compte et une date.', true); return; }
   const customTitle = titleInput?.value?.trim() || suggestTitle(short);
-  const customTags = tagsInput?.value?.trim() || suggestHashtags(short, 'youtube');
+  const customTags = tagsInput?.value?.trim() || suggestHashtags(short, short.platform || 'youtube');
 
   const uid = sel.value;
   let account;
@@ -3339,11 +3481,30 @@ async function scheduleShort(shortId){
     const realId = uid.replace('real_', '');
     const real = cachedRealAccounts.find(a => String(a.id) === realId);
     if (real) account = { id: real.id, platform: real.provider, handle: real.handle };
+    else {
+      console.warn('[ScaleVid] lookup raté — uid:', uid, '| realId:', realId, '| cachedRealAccounts:', cachedRealAccounts);
+    }
   } else {
     const sim = user.accounts.find(a => String(a.id) === uid);
     if (sim) account = { id: sim.id, platform: sim.platform, handle: sim.handle };
   }
-  if (!account) { showToast('Compte introuvable.', true); return; }
+  if (!account) {
+    // Re-charger les comptes et réessayer avant d'abandonner
+    const freshAccounts = await loadRealAccounts();
+    if (freshAccounts.length > 0) {
+      cachedRealAccounts = freshAccounts;
+      if (isReal) {
+        const realId = uid.replace('real_', '');
+        const real = freshAccounts.find(a => String(a.id) === realId);
+        if (real) account = { id: real.id, platform: real.provider, handle: real.handle };
+      }
+    }
+  }
+  if (!account) {
+    console.error('[ScaleVid] compte introuvable — uid:', uid, '| backendToken:', !!backendToken, '| cachedRealAccounts:', cachedRealAccounts);
+    showToast('Compte introuvable — reconnectez votre compte.', true);
+    return;
+  }
 
   const when = new Date(whenInput.value);
   if (isNaN(when.getTime())) { showToast('Date invalide.', true); return; }
@@ -3364,7 +3525,8 @@ async function scheduleShort(shortId){
       if (!res.ok) throw new Error((await res.json()).error || 'Erreur serveur');
       const data = await res.json();
       account._backendPostId = data.postId || null; // on stocke pour l'édition ultérieure
-      showToast(`✓ Programmé sur YouTube le ${when.toLocaleString('fr-FR')} — publication réelle !`);
+      const platformLabel = account.platform === 'tiktok' ? 'TikTok (brouillon)' : 'YouTube';
+      showToast(`✓ Programmé sur ${platformLabel} le ${when.toLocaleString('fr-FR')} — publication réelle !`);
     } catch (e) {
       showToast('Erreur : ' + e.message, true);
       if (btn) { btn.disabled = false; btn.textContent = 'Programmer ce short →'; }

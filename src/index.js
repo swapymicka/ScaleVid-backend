@@ -34,8 +34,13 @@ app.get('/legal/privacy', (_req, res) => {
 
 app.get('/privacy-policy.html', (_req, res) => res.sendFile(path.join(__dirname, '../public/privacy-policy.html')));
 app.get('/terms-of-service.html', (_req, res) => res.sendFile(path.join(__dirname, '../public/terms-of-service.html')));
+app.get('/cookie-policy.html', (_req, res) => res.sendFile(path.join(__dirname, '../public/cookie-policy.html')));
+app.get('/mentions-legales.html', (_req, res) => res.sendFile(path.join(__dirname, '../public/mentions-legales.html')));
 app.get('/privacy-policy', (_req, res) => res.sendFile(path.join(__dirname, '../public/privacy-policy.html')));
 app.get('/terms-of-service', (_req, res) => res.sendFile(path.join(__dirname, '../public/terms-of-service.html')));
+app.get('/cookie-policy', (_req, res) => res.sendFile(path.join(__dirname, '../public/cookie-policy.html')));
+app.get('/mentions-legales', (_req, res) => res.sendFile(path.join(__dirname, '../public/mentions-legales.html')));
+app.get('/sitemap.xml', (_req, res) => res.sendFile(path.join(__dirname, '../public/sitemap.xml')));
 app.use('/auth', authRoutes);
 app.use('/', socialRoutes); // expose /auth/youtube, /auth/tiktok, /accounts
 app.use('/', videoRoutes); // expose /videos, /clips/:id/schedule

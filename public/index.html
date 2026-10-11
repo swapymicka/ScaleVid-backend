@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ScaleVid — Automatisez vos publications YouTube & TikTok</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
+<link rel="shortcut icon" href="/favicon.png">
 <meta name="description" content="ScaleVid repère vos meilleurs moments, les reformate et les publie automatiquement sur YouTube et TikTok. Conçu pour les créateurs et les agences.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1230,10 +1233,10 @@ footer{
     <div class="foot__bottom">
       <span>© 2026 ScaleVid. Tous droits réservés.</span>
       <ul class="foot__legal">
-        <li><a href="#" data-legal="mentions">Mentions légales</a></li>
-        <li><a href="#" data-legal="privacy">Politique de confidentialité</a></li>
-        <li><a href="#" data-legal="cookies">Gestion des cookies</a></li>
-        <li><a href="#" data-legal="cgv">CGV</a></li>
+        <li><a href="/mentions-legales.html">Mentions légales</a></li>
+        <li><a href="/privacy-policy.html">Politique de confidentialité</a></li>
+        <li><a href="/cookie-policy.html">Gestion des cookies</a></li>
+        <li><a href="/terms-of-service.html">CGU / CGV</a></li>
       </ul>
     </div>
   </div>
@@ -1508,10 +1511,29 @@ footer{
   </div>
 </div>
 
+<!-- ============ MODALE MOT DE PASSE OAUTH ============ -->
+<div class="modal-overlay" id="oauthPwOverlay">
+  <div class="modal" style="max-width:400px;">
+    <button class="modal__close" id="oauthPwClose" aria-label="Fermer">×</button>
+    <h3 style="margin-bottom:6px;">Confirmer votre identité</h3>
+    <p class="sub" style="margin-bottom:20px;font-size:14px;color:var(--muted);">Entrez votre mot de passe ScaleVid pour autoriser la connexion.</p>
+    <div class="field">
+      <label style="font-size:13px;color:var(--muted);display:block;margin-bottom:6px;">Email</label>
+      <input type="email" id="oauthPwEmail" readonly style="background:var(--surface-2);width:100%;box-sizing:border-box;">
+    </div>
+    <div class="field">
+      <label style="font-size:13px;color:var(--muted);display:block;margin-bottom:6px;">Mot de passe</label>
+      <input type="password" id="oauthPwInput" placeholder="Votre mot de passe" style="width:100%;box-sizing:border-box;" autocomplete="current-password">
+    </div>
+    <button class="btn btn-primary" style="width:100%;" id="oauthPwSubmit">Connecter →</button>
+    <p id="oauthPwError" style="color:#f87171;font-size:13px;margin-top:10px;display:none;"></p>
+  </div>
+</div>
+
 <!-- ============ BANNIÈRE DE CONSENTEMENT COOKIES ============ -->
 <div class="cookie-banner" id="cookieBanner">
   <div class="cookie-banner__text">
-    ScaleVid utilise des cookies essentiels au fonctionnement du site, ainsi que des cookies de mesure d'audience et de personnalisation (désactivés par défaut). Vous pouvez accepter, refuser, ou personnaliser vos choix à tout moment. Pour en savoir plus, consultez notre <a href="#" id="cookieBannerLink">politique de gestion des cookies</a>.
+    ScaleVid utilise uniquement un cookie essentiel pour votre session de connexion. Aucun cookie publicitaire ni analytics. Pour en savoir plus, consultez notre <a href="/cookie-policy.html">politique de gestion des cookies</a>.
   </div>
   <div class="cookie-banner__actions">
     <button class="btn btn-ghost" id="cookieCustomize">Personnaliser</button>
@@ -1523,23 +1545,28 @@ footer{
 <!-- ============ CONTENUS LÉGAUX (templates, clonés dans #legalContent à l'ouverture) ============ -->
 <template id="tmpl-mentions">
   <h3>Mentions légales</h3>
-  <div class="legal-updated">Dernière mise à jour : 25 juin 2026</div>
+  <div class="legal-updated">Dernière mise à jour : 19 août 2026</div>
 
   <h4>Éditeur du site</h4>
   <p>
-    Le site ScaleVid est édité par <strong>ScaleVid SAS</strong> (à constituer / forme juridique indicative pour cette démonstration),
-    société par actions simplifiée, dont le siège social est situé en France [adresse à compléter].
-    Capital social, numéro SIRET et numéro RCS à compléter avant mise en production réelle.<br>
-    Directeur de la publication : <strong>Mickael Vitry</strong>, fondateur de ScaleVid.<br>
+    Le site ScaleVid (accessible à l'adresse <strong>scalevid-backend-production.up.railway.app</strong>) est édité par :<br><br>
+    <strong>ScaleVid</strong><br>
+    Micro-entreprise individuelle<br>
+    Propriétaire : <strong>[À COMPLÉTER — prénom nom]</strong><br>
+    Adresse : <strong>[À COMPLÉTER — adresse, code postal, ville]</strong><br>
+    SIRET : <strong>[À COMPLÉTER]</strong><br>
+    Code APE / NAF : <strong>[À COMPLÉTER]</strong><br>
+    Non assujetti à la TVA (franchise en base, art. 293 B du CGI)<br><br>
+    Directeur de la publication : <strong>[À COMPLÉTER — prénom nom]</strong><br>
     Contact : <strong>contact@scalevid.fr</strong>
   </p>
 
   <h4>Hébergement</h4>
   <p>
-    Dans sa version de démonstration, ScaleVid fonctionne entièrement dans le navigateur de l'utilisateur : aucune donnée n'est envoyée
-    à un serveur applicatif et aucun hébergeur tiers ne traite vos données. Ce fichier statique (HTML/CSS/JavaScript) peut être servi
-    par n'importe quel hébergeur web standard. En cas de mise en production avec un backend réel, les coordonnées de l'hébergeur
-    (raison sociale, adresse, contact) seront indiquées ici.
+    Le site et le service ScaleVid sont hébergés par :<br><br>
+    <strong>Railway Corp.</strong><br>
+    340 S Lemon Ave #4133, Walnut, CA 91789, États-Unis<br>
+    Site : <a href="https://railway.app" target="_blank" rel="noopener">railway.app</a>
   </p>
 
   <h4>Propriété intellectuelle</h4>
@@ -1552,8 +1579,8 @@ footer{
   <h4>Limitation de responsabilité</h4>
   <p>
     ScaleVid met tout en œuvre pour assurer l'exactitude des informations diffusées sur le site, sans garantir l'absence d'erreur
-    ou d'interruption. L'utilisateur reconnaît utiliser les fonctionnalités de découpage vidéo et de scoring viral à titre
-    indicatif : il s'agit d'heuristiques de démonstration, non d'un modèle prédictif validé.
+    ou d'interruption. Les fonctionnalités de découpage vidéo et de scoring viral sont fournies à titre indicatif : le score
+    « potentiel viral » est une heuristique et non une prédiction garantie.
   </p>
 
   <h4>Droit applicable</h4>
@@ -1562,24 +1589,17 @@ footer{
 
 <template id="tmpl-privacy">
   <h3>Politique de confidentialité</h3>
-  <div class="legal-updated">Dernière mise à jour : 25 juin 2026 — Conforme RGPD (Règlement (UE) 2016/679)</div>
+  <div class="legal-updated">Dernière mise à jour : 19 août 2026 — Conforme RGPD (Règlement (UE) 2016/679)</div>
 
   <h4>1. Responsable du traitement</h4>
   <p>
-    Le responsable du traitement des données est <strong>ScaleVid SAS</strong>, représentée par Mickael Vitry, fondateur.
+    Le responsable du traitement des données est <strong>ScaleVid</strong>, micro-entreprise individuelle représentée par
+    <strong>[À COMPLÉTER — prénom nom]</strong>.<br>
     Pour toute question relative à vos données personnelles : <strong>privacy@scalevid.fr</strong>.
   </p>
 
-  <h4>2. Ce que fait cette démonstration</h4>
-  <p>
-    Important : dans cette version de démonstration, <strong>ScaleVid fonctionne intégralement dans votre navigateur</strong>.
-    Votre compte, vos comptes connectés (simulés), votre abonnement (simulé) et les vidéos que vous importez sont stockés
-    uniquement en local (<em>localStorage</em>) sur votre appareil. Rien n'est transmis à un serveur ScaleVid : nous n'avons
-    techniquement pas accès à ces données. Elles disparaissent si vous videz le stockage de votre navigateur.
-  </p>
-
-  <h4>3. Données traitées en version production</h4>
-  <p>Lorsque ScaleVid sera connecté à de vrais comptes YouTube/TikTok et à un prestataire de paiement, les catégories de données suivantes seront traitées :</p>
+  <h4>2. Données traitées</h4>
+  <p>ScaleVid collecte et traite les catégories de données suivantes :</p>
   <ul>
     <li><strong>Données de compte</strong> : nom, adresse email, mot de passe (haché, jamais en clair).</li>
     <li><strong>Données de connexion aux plateformes</strong> : jetons d'autorisation OAuth YouTube/TikTok, identifiants de comptes connectés.</li>
@@ -1649,7 +1669,7 @@ footer{
 
 <template id="tmpl-cookies">
   <h3>Gestion des cookies</h3>
-  <div class="legal-updated">Dernière mise à jour : 25 juin 2026</div>
+  <div class="legal-updated">Dernière mise à jour : 19 août 2026</div>
 
   <h4>1. Qu'est-ce qu'un cookie ?</h4>
   <p>
@@ -1665,9 +1685,8 @@ footer{
     <tr><td>Personnalisation &amp; marketing</td><td>Adaptation du contenu, mesure de l'efficacité des campagnes</td><td>13 mois maximum</td><td>Soumis à consentement</td></tr>
   </table>
   <p>
-    Note sur cette démonstration : ScaleVid utilise ici principalement le <em>localStorage</em> de votre navigateur (technique
-    similaire à un cookie) pour faire fonctionner la démo entièrement côté client — aucun cookie de mesure d'audience ou
-    publicitaire tiers n'est réellement déposé dans cette version.
+    ScaleVid utilise le <em>localStorage</em> de votre navigateur pour conserver votre session côté client. <a href="/cookie-policy.html">En savoir plus</a>
+    Aucun cookie publicitaire tiers n'est déposé sur ce site.
   </p>
 
   <h4>3. Gérer vos préférences</h4>
@@ -1684,12 +1703,12 @@ footer{
 
 <template id="tmpl-cgv">
   <h3>Conditions générales de vente (CGV)</h3>
-  <div class="legal-updated">Dernière mise à jour : 25 juin 2026</div>
+  <div class="legal-updated">Dernière mise à jour : 19 août 2026</div>
 
   <h4>1. Objet</h4>
   <p>
     Les présentes CGV régissent les conditions de souscription et d'utilisation des abonnements payants ScaleVid (plans
-    « Créateur solo » et « Agence »), proposés par ScaleVid SAS.
+    « Créateur solo » et « Agence »), proposés par ScaleVid, micro-entreprise individuelle.
   </p>
 
   <h4>2. Description des services</h4>
@@ -1755,6 +1774,21 @@ let backendToken = localStorage.getItem('sv_backend_token') || null;
 // Cache des comptes OAuth réels, mis à jour par renderRealAccounts()
 let cachedRealAccounts = [];
 
+// Tente de renouveler le JWT via le cookie httpOnly (posé lors du login ou d'un callback OAuth).
+// Appelé au démarrage si backendToken est absent de localStorage.
+async function tryRefreshToken() {
+  if (backendToken) return; // déjà dispo, rien à faire
+  try {
+    const res = await fetch(BACKEND + '/auth/refresh', { credentials: 'include' });
+    if (res.ok) {
+      const data = await res.json();
+      backendToken = data.token;
+      localStorage.setItem('sv_backend_token', data.token);
+      console.log('[ScaleVid] ✅ Token rafraîchi via cookie');
+    }
+  } catch { /* silencieux */ }
+}
+
 async function backendFetch(path, opts = {}) {
   const { noJson, ...fetchOpts } = opts;
   const headers = {};
@@ -1795,7 +1829,8 @@ async function syncWithBackend(email, password, name) {
 
 // Charge les comptes réellement connectés via OAuth (YouTube / TikTok).
 async function loadRealAccounts() {
-  if (!backendToken) return [];
+  // On tente toujours l'appel : soit le Bearer token est dispo, soit le cookie
+  // httpOnly (posé par le callback OAuth) authentifiera la requête.
   try {
     const res = await backendFetch('/accounts');
     if (!res.ok) return [];
@@ -1827,27 +1862,30 @@ async function searchYoutube(q) {
   } catch { return []; }
 }
 
-// Lance le flux OAuth réel (redirige vers le backend → Google / TikTok).
-// Le backend requiert une session (cookie), qui est posée par syncWithBackend.
+// Lance le flux OAuth réel — redirige directement vers TikTok/Google.
+// Le backend identifie l'utilisateur par email uniquement (TikTok/Google authentifient eux-mêmes).
 async function connectOAuth(platform) {
   if (!checkTrialLimit('connect')) return;
+  const session = getSession();
+  if (!session) { showToast("Connectez-vous d'abord.", true); return; }
 
-  // Si le token est absent, tenter une re-synchronisation avec les identifiants stockés
-  if (!backendToken) {
-    const session = getSession();
-    const pw = sessionStorage.getItem('sv_tmp_pw');
-    if (session && pw) {
-      console.log('[ScaleVid] backendToken absent — tentative de re-sync...');
-      await syncWithBackend(session.email, pw, session.name);
+  try {
+    showToast("Redirection vers " + (platform === 'tiktok' ? 'TikTok' : 'Google') + "…", false);
+    const res = await fetch(BACKEND + '/auth/' + platform + '-start', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: session.email }),
+    });
+    const data = await res.json();
+    if (!res.ok || !data.url) {
+      showToast(data.error || "Erreur de connexion.", true);
+      return;
     }
+    window.location.href = data.url;
+  } catch (e) {
+    showToast("Impossible de joindre le serveur.", true);
   }
-
-  if (!backendToken) {
-    showToast("Reconnectez-vous pour activer la connexion TikTok/YouTube.", true);
-    return;
-  }
-  // Le backend gère la redirection OAuth; le cookie scalevid_token est posé lors du syncWithBackend.
-  window.location.href = BACKEND + '/auth/' + platform;
 }
 
 // Affiche les comptes OAuth réels dans le panneau dédié.
@@ -1892,13 +1930,21 @@ function checkOAuthCallback() {
   const params = new URLSearchParams(window.location.search);
   const connect = params.get('connect');
   if (!connect) return;
+  // Récupère et stocke le JWT backend renvoyé par le callback OAuth
+  const bt = params.get('bt');
+  if (bt) {
+    backendToken = bt;
+    localStorage.setItem('sv_backend_token', bt);
+    console.log('[ScaleVid] ✅ Backend token récupéré via callback OAuth');
+  }
   history.replaceState({}, '', window.location.pathname);
   if (connect === 'youtube_ok') {
     showToast('✓ YouTube connecté avec succès !');
   } else if (connect === 'tiktok_ok') {
     showToast('✓ TikTok connecté avec succès !');
   } else if (connect === 'error') {
-    showToast('Erreur lors de la connexion — vérifiez les logs du serveur.', true);
+    const msg = params.get('msg');
+    showToast('Erreur TikTok : ' + (msg || 'vérifiez les logs Railway.'), true);
   }
 }
 
@@ -2526,7 +2572,7 @@ function loadDashboardClipsOnly(){
   try { renderClips(apiGetClips()); } catch(e){ showToast(e.message, true); }
 }
 
-function loadDashboard(){
+async function loadDashboard(){
   const user = currentDbUser();
   if (!user) { showLanding(); return; }
   document.getElementById('userName').textContent = user.name;
@@ -2545,14 +2591,18 @@ function loadDashboard(){
   renderShortsGrid();
   renderQueue();
   checkScheduledPublishes();
-  // Charger les comptes OAuth réels + gérer le retour après OAuth
+  // Gérer le retour après OAuth (peut mettre à jour backendToken via ?bt=)
   checkOAuthCallback();
+  // Si toujours pas de token, essayer de le renouveler via le cookie
+  await tryRefreshToken();
+  // Charger les comptes OAuth réels
   renderRealAccounts();
 }
 
 // --- Connexion OAuth réelle via le backend ---
 document.getElementById('connectYt').addEventListener('click', () => connectOAuth('youtube'));
 document.getElementById('connectTt').addEventListener('click', () => connectOAuth('tiktok'));
+
 
 // --- Recherche YouTube ---
 let ytSelected = null; // chaîne sélectionnée dans les résultats
@@ -2911,6 +2961,8 @@ document.getElementById('analyzeBtn').addEventListener('click', async () => {
     }
 
     generatedShorts.sort((a, b) => b.score - a.score);
+    // Assigner une plateforme cible à chaque short (alternance YouTube / TikTok par score)
+    generatedShorts.forEach((s, i) => { s.platform = i % 2 === 0 ? 'youtube' : 'tiktok'; });
     renderShortsGrid();
     showToast(`${generatedShorts.length} short(s) généré(s) à partir de votre vidéo.`);
   } catch (err) {
@@ -3131,13 +3183,34 @@ function renderShortsGrid(){
     })),
   ];
 
-  // Pour un compte déjà programmé, afficher la confirmation
+  const ytAccounts = allAccounts.filter(a => a.platform === 'youtube');
+  const ttAccounts = allAccounts.filter(a => a.platform === 'tiktok');
+
   const scheduledShorts = new Set((user?.scheduledPosts || []).map(p => p.shortId));
 
-  grid.innerHTML = generatedShorts.map((s, idx) => {
+  // Réassigner les plateformes en fonction des comptes disponibles :
+  // si l'utilisateur n'a que TikTok → tous les shorts vont dans TikTok,
+  // si seulement YouTube → tous dans YouTube, sinon on alterne.
+  const hasYT = ytAccounts.length > 0;
+  const hasTT = ttAccounts.length > 0;
+  if (hasYT || hasTT) {
+    generatedShorts.forEach((s, i) => {
+      if (hasYT && hasTT) {
+        s.platform = i % 2 === 0 ? 'youtube' : 'tiktok';
+      } else if (hasTT) {
+        s.platform = 'tiktok';
+      } else {
+        s.platform = 'youtube';
+      }
+    });
+  }
+
+  const ytShorts = generatedShorts.filter(s => s.platform === 'youtube');
+  const ttShorts = generatedShorts.filter(s => s.platform === 'tiktok');
+
+  function makeShortCard(s, idx, platformAccounts, platform) {
     const alreadyScheduled = scheduledShorts.has(s.id);
     const platformIcon = p => p === 'youtube' ? '▶ YouTube' : '♪ TikTok';
-    const firstPlatform = allAccounts[0]?.platform || 'youtube';
     return `
     <div class="short-card" data-short="${s.id}">
       <video src="${s.url}" controls muted playsinline></video>
@@ -3151,18 +3224,17 @@ function renderShortsGrid(){
         <div class="row"><span>Durée</span><span class="bar"><i style="width:${s.sub.durationScore}%"></i></span><span>${s.sub.durationScore}</span></div>
       </div>
       <div class="advice-list">${s.advice.map(t => `<div class="tip">${t}</div>`).join('')}</div>
-
       <div class="sc-schedule">
         <div class="sc-schedule__label">Planifier la publication</div>
         ${alreadyScheduled
           ? `<div class="sc-scheduled-ok">✓ Programmé — visible dans la section Planification IA</div>`
-          : allAccounts.length === 0
-            ? `<div style="font-size:12px;color:var(--muted);padding:6px 0;">Connectez un compte YouTube ou TikTok (étape 01) pour programmer ce short.</div>`
+          : platformAccounts.length === 0
+            ? `<div style="font-size:12px;color:var(--muted);padding:6px 0;">Connectez un compte ${platform === 'youtube' ? 'YouTube' : 'TikTok'} (étape 01) pour programmer ce short.</div>`
             : `<div class="schedule-row">
               <select data-account-for="${s.id}">
-                ${allAccounts.map(a => `<option value="${a.uid}">${platformIcon(a.platform)} — ${a.handle}${a.isReal ? ' ✓' : ''}</option>`).join('')}
+                ${platformAccounts.map(a => `<option value="${a.uid}">${platformIcon(a.platform)} — ${a.handle}${a.isReal ? ' ✓' : ''}</option>`).join('')}
               </select>
-              <input type="datetime-local" data-when-for="${s.id}" value="${toLocalInputValue(recommendSlot(firstPlatform, idx))}">
+              <input type="datetime-local" data-when-for="${s.id}" value="${toLocalInputValue(recommendSlot(platform, idx))}">
               <div style="margin-top:8px;">
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">
                   <label style="font-size:11px;color:var(--muted);">✏️ Titre</label>
@@ -3175,7 +3247,7 @@ function renderShortsGrid(){
                   <label style="font-size:11px;color:var(--muted);">🏷️ Hashtags</label>
                   <span data-tags-counter="${s.id}" style="font-size:10px;color:var(--muted);transition:color .2s;">0/500</span>
                 </div>
-                <input type="text" data-tags-for="${s.id}" value="${suggestHashtags(s, firstPlatform)}" style="width:100%;box-sizing:border-box;background:var(--surface-2,#1a1a2e);border:1px solid var(--border,#333);color:var(--text,#fff);border-radius:8px;padding:7px 10px;font-size:13px;">
+                <input type="text" data-tags-for="${s.id}" value="${suggestHashtags(s, platform)}" style="width:100%;box-sizing:border-box;background:var(--surface-2,#1a1a2e);border:1px solid var(--border,#333);color:var(--text,#fff);border-radius:8px;padding:7px 10px;font-size:13px;">
                 <div data-tags-hint="${s.id}" style="font-size:10px;color:var(--muted);margin-top:2px;min-height:14px;"></div>
               </div>
               <button class="btn btn-primary" data-schedule="${s.id}" style="width:100%;margin-top:8px;">Programmer ce short →</button>
@@ -3183,7 +3255,29 @@ function renderShortsGrid(){
         }
       </div>
     </div>`;
-  }).join('');
+  }
+
+  grid.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;">
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;padding:10px 14px;border-radius:10px;margin-bottom:14px;background:rgba(255,70,70,0.08);border:1px solid rgba(255,80,80,0.25);color:#ff6060;">
+          ▶ YouTube Shorts
+          <span style="margin-left:auto;font-size:11px;font-weight:400;color:var(--muted);">${ytShorts.length} clip${ytShorts.length !== 1 ? 's' : ''}</span>
+        </div>
+        ${ytShorts.length === 0
+          ? `<div style="text-align:center;padding:32px 16px;color:var(--muted);font-size:13px;border:1px dashed var(--line);border-radius:10px;">Analysez une vidéo pour générer des clips YouTube.</div>`
+          : ytShorts.map((s, i) => makeShortCard(s, i, ytAccounts, 'youtube')).join('')}
+      </div>
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;padding:10px 14px;border-radius:10px;margin-bottom:14px;background:rgba(105,201,208,0.08);border:1px solid rgba(105,201,208,0.25);color:#69c9d0;">
+          ♪ TikTok
+          <span style="margin-left:auto;font-size:11px;font-weight:400;color:var(--muted);">${ttShorts.length} clip${ttShorts.length !== 1 ? 's' : ''}</span>
+        </div>
+        ${ttShorts.length === 0
+          ? `<div style="text-align:center;padding:32px 16px;color:var(--muted);font-size:13px;border:1px dashed var(--line);border-radius:10px;">Analysez une vidéo pour générer des clips TikTok.</div>`
+          : ttShorts.map((s, i) => makeShortCard(s, i, ttAccounts, 'tiktok')).join('')}
+      </div>
+    </div>`;
 
   // Limite combinée titre + hashtags : 100 caractères (YouTube & TikTok Shorts)
   const COMBINED_MAX = 100;
@@ -3216,10 +3310,9 @@ function renderShortsGrid(){
     if (!titleEl || !tagsEl) return;
 
     const titleLen = titleEl.value.length;
-    const remaining = COMBINED_MAX - titleLen - (titleLen > 0 ? 1 : 0); // 1 espace entre titre et tags
+    const remaining = COMBINED_MAX - titleLen - (titleLen > 0 ? 1 : 0);
     const tagsMax = Math.max(0, remaining);
 
-    // Auto-trim les hashtags si le titre a grandi
     if (tagsEl.value.length > tagsMax) {
       tagsEl.value = trimHashtagsToLimit(tagsEl.value, tagsMax);
     }
@@ -3248,7 +3341,8 @@ function renderShortsGrid(){
   grid.querySelectorAll('[data-account-for]').forEach(sel => {
     sel.addEventListener('change', () => {
       const id = sel.dataset.accountFor;
-      const acc = allAccounts.find(a => a.uid === sel.value);
+      const platformAccounts = [...ytAccounts, ...ttAccounts];
+      const acc = platformAccounts.find(a => a.uid === sel.value);
       const whenInput = grid.querySelector(`[data-when-for="${id}"]`);
       const tagsInput = grid.querySelector(`[data-tags-for="${id}"]`);
       const short = generatedShorts.find(s => String(s.id) === id);
@@ -3323,16 +3417,27 @@ function showTrialEndedModal() {
   document.getElementById('trialEndedOverlay').classList.add('open');
 }
 
-// Vérifie les limites de l'essai avant une action — retourne false si bloqué
+// Vérifie les limites avant une action — retourne false si bloqué
 function checkTrialLimit(action) {
-  if (!isTrialUser()) return true; // abonné → toujours autorisé
-
   if (action === 'connect') {
-    if (trialTotalAccounts() >= 1) {
-      showToast('Essai gratuit : 1 compte maximum. Abonnez-vous pour en connecter plusieurs.', true);
-      return false;
+    const total = trialTotalAccounts();
+    if (isTrialUser()) {
+      if (total >= 1) {
+        showToast('Essai gratuit : 1 compte maximum. Abonnez-vous pour en connecter plusieurs.', true);
+        return false;
+      }
+    } else {
+      const user = currentDbUser();
+      const limit = TIERS[user?.subscription?.plan]?.accounts || 1;
+      if (total >= limit) {
+        const planName = user?.subscription?.plan === 'agency' ? 'Agence (4 comptes)' : 'Créateur solo (1 compte)';
+        showToast(`Limite ${planName} atteinte. Passez au plan Agence pour en connecter davantage.`, true);
+        return false;
+      }
     }
   }
+
+  if (!isTrialUser()) return true; // abonné → les autres actions sont libres
 
   if (action === 'schedule') {
     if (trialPostsUsed() >= 1) {
@@ -3366,7 +3471,7 @@ async function scheduleShort(shortId){
   const tagsInput = document.querySelector(`[data-tags-for="${shortId}"]`);
   if (!sel || !whenInput || !whenInput.value) { showToast('Choisissez un compte et une date.', true); return; }
   const customTitle = titleInput?.value?.trim() || suggestTitle(short);
-  const customTags = tagsInput?.value?.trim() || suggestHashtags(short, 'youtube');
+  const customTags = tagsInput?.value?.trim() || suggestHashtags(short, short.platform || 'youtube');
 
   const uid = sel.value;
   let account;
@@ -3375,11 +3480,30 @@ async function scheduleShort(shortId){
     const realId = uid.replace('real_', '');
     const real = cachedRealAccounts.find(a => String(a.id) === realId);
     if (real) account = { id: real.id, platform: real.provider, handle: real.handle };
+    else {
+      console.warn('[ScaleVid] lookup raté — uid:', uid, '| realId:', realId, '| cachedRealAccounts:', cachedRealAccounts);
+    }
   } else {
     const sim = user.accounts.find(a => String(a.id) === uid);
     if (sim) account = { id: sim.id, platform: sim.platform, handle: sim.handle };
   }
-  if (!account) { showToast('Compte introuvable.', true); return; }
+  if (!account) {
+    // Re-charger les comptes et réessayer avant d'abandonner
+    const freshAccounts = await loadRealAccounts();
+    if (freshAccounts.length > 0) {
+      cachedRealAccounts = freshAccounts;
+      if (isReal) {
+        const realId = uid.replace('real_', '');
+        const real = freshAccounts.find(a => String(a.id) === realId);
+        if (real) account = { id: real.id, platform: real.provider, handle: real.handle };
+      }
+    }
+  }
+  if (!account) {
+    console.error('[ScaleVid] compte introuvable — uid:', uid, '| backendToken:', !!backendToken, '| cachedRealAccounts:', cachedRealAccounts);
+    showToast('Compte introuvable — reconnectez votre compte.', true);
+    return;
+  }
 
   const when = new Date(whenInput.value);
   if (isNaN(when.getTime())) { showToast('Date invalide.', true); return; }
@@ -3400,7 +3524,8 @@ async function scheduleShort(shortId){
       if (!res.ok) throw new Error((await res.json()).error || 'Erreur serveur');
       const data = await res.json();
       account._backendPostId = data.postId || null; // on stocke pour l'édition ultérieure
-      showToast(`✓ Programmé sur YouTube le ${when.toLocaleString('fr-FR')} — publication réelle !`);
+      const platformLabel = account.platform === 'tiktok' ? 'TikTok (brouillon)' : 'YouTube';
+      showToast(`✓ Programmé sur ${platformLabel} le ${when.toLocaleString('fr-FR')} — publication réelle !`);
     } catch (e) {
       showToast('Erreur : ' + e.message, true);
       if (btn) { btn.disabled = false; btn.textContent = 'Programmer ce short →'; }

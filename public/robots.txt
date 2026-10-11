@@ -1,0 +1,42 @@
+# robots.txt — ScaleVid
+# https://scalevid-backend-production.up.railway.app/robots.txt
+
+# Moteurs de recherche classiques : accès aux pages publiques
+User-agent: *
+Allow: /
+Allow: /index.html
+Allow: /privacy-policy.html
+Allow: /privacy-policy
+Allow: /terms-of-service.html
+Allow: /terms-of-service
+Allow: /cookie-policy.html
+Allow: /cookie-policy
+Allow: /mentions-legales.html
+Allow: /mentions-legales
+Allow: /favicon.png
+Allow: /favicon-32.png
+Allow: /favicon-192.png
+
+# Bloquer l'accès aux pages techniques et API
+Disallow: /auth/
+Disallow: /auth/youtube
+Disallow: /auth/youtube/callback
+Disallow: /auth/tiktok
+Disallow: /auth/tiktok/callback
+Disallow: /auth/tiktok-start
+Disallow: /auth/youtube-start
+Disallow: /auth/refresh
+Disallow: /accounts
+Disallow: /accounts/
+Disallow: /videos
+Disallow: /videos/
+Disallow: /clips/
+Disallow: /ai/
+Disallow: /health
+Disallow: /legal/terms
+Disallow: /legal/privacy
+Disallow: /search/youtube
+Disallow: /test.html
+
+# Sitemap
+Sitemap: https://scalevid-backend-production.up.railway.app/sitemap.xml
