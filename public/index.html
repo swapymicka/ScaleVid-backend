@@ -1884,7 +1884,7 @@ async function connectOAuth(platform) {
     }
     window.location.href = data.url;
   } catch (e) {
-    showToast("Impossible de joindre le serveur.", true);
+    showToast("Erreur: " + e.message + " | URL: " + (BACKEND + '/auth/' + 'tiktok-start'), true);
   }
 }
 
