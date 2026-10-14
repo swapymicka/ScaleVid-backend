@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tableau de bord — Onair</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A0D12; --surface:#12161D; --surface-2:#171C24; --line:#232A35;
+  --text:#F4F1EA; --muted:#8D94A3; --pink:#FF3B5C; --amber:#FFC247;
+  --pink-dim: rgba(255,59,92,.14); --amber-dim: rgba(255,194,71,.14);
+  --display:'Bricolage Grotesque', sans-serif; --body:'Space Grotesk', sans-serif;
+  --mono:'IBM Plex Mono', monospace; --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh;}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;cursor:pointer;}
+.container{max-width:1100px;margin:0 auto;padding:0 24px;}
+header{border-bottom:1px solid var(--line);padding:18px 0;position:sticky;top:0;background:rgba(10,13,18,.9);backdrop-filter:blur(8px);z-index:10;}
+.nav{display:flex;align-items:center;justify-content:space-between;}
+.logo{display:flex;align-items:center;gap:8px;font-family:var(--display);font-weight:800;font-size:18px;}
+.rec{width:8px;height:8px;border-radius:50%;background:var(--pink);}
+.userbox{display:flex;align-items:center;gap:14px;font-size:14px;color:var(--muted);}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:10px;font-weight:600;font-size:14px;border:1px solid var(--line);background:transparent;color:var(--text);transition:.2s;}
+.btn:hover{border-color:var(--pink);}
+.btn-primary{background:linear-gradient(135deg,var(--pink),#ff6b4e);color:#100406;border-color:transparent;}
+.btn[disabled]{opacity:.5;cursor:not-allowed;}
+
+main{padding:46px 0 80px;}
+.head{margin-bottom:36px;}
+.head h1{font-family:var(--display);font-size:30px;margin-bottom:6px;}
+.head p{color:var(--muted);font-size:14px;}
+
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:40px;}
+@media (max-width:880px){.grid{grid-template-columns:1fr;}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;}
+.card .label{font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
+.card .value{font-family:var(--display);font-size:28px;font-weight:800;}
+.card .note{color:var(--muted);font-size:12px;margin-top:6px;}
+
+section.block{margin-bottom:48px;}
+.block__head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
+.block__head h2{font-family:var(--display);font-size:20px;}
+
+.accounts{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+@media (max-width:700px){.accounts{grid-template-columns:1fr;}}
+.account-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.account-card .plat{display:flex;align-items:center;gap:12px;}
+.plat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.plat-icon.yt{background:var(--pink-dim);color:var(--pink);}
+.plat-icon.tt{background:var(--amber-dim);color:var(--amber);}
+.account-card .meta b{display:block;font-size:14px;}
+.account-card .meta span{font-size:12px;color:var(--muted);}
+.connect-empty{border:1px dashed var(--line);border-radius:14px;padding:24px;text-align:center;color:var(--muted);font-size:14px;}
+.connect-row{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap;}
+
+table{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;}
+th,td{padding:14px 16px;text-align:left;font-size:14px;border-bottom:1px solid var(--line);}
+th{font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;}
+tr:last-child td{border-bottom:none;}
+.score{font-family:var(--mono);font-weight:600;}
+.score.high{color:var(--amber);}
+.badge{font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:20px;border:1px solid var(--line);color:var(--muted);}
+.badge.published{color:#7CFFA0;border-color:rgba(124,255,160,.4);}
+.platform-pill{font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:20px;}
+.platform-pill.youtube{background:var(--pink-dim);color:var(--pink);}
+.platform-pill.tiktok{background:var(--amber-dim);color:var(--amber);}
+.publish-btn{padding:7px 14px;font-size:12px;}
+
+.empty-state{text-align:center;color:var(--muted);padding:60px 0;}
+.spinner{width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,.25);border-top-color:var(--text);animation:spin .7s linear infinite;display:inline-block;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+#toast-stack{position:fixed;top:70px;right:18px;z-index:3000;display:flex;flex-direction:column;gap:10px;}
+.app-toast{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 16px;font-size:13px;max-width:320px;box-shadow:0 12px 30px -10px rgba(0,0,0,.6);}
+.app-toast.err{border-color:rgba(255,59,92,.5);}
+</style>
+</head>
+<body>
+
+<div id="toast-stack"></div>
+
+<header>
+  <div class="container nav">
+    <div class="logo"><span class="rec"></span>ON AIR</div>
+    <div class="userbox">
+      <span id="userName">…</span>
+      <a href="/index.html" class="btn">Retour au site</a>
+      <button class="btn btn-primary" id="logoutBtn">Déconnexion</button>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <div class="head">
+    <h1>Tableau de bord</h1>
+    <p>Vue d'ensemble de vos comptes connectés, de votre abonnement et de vos clips détectés par l'IA.</p>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="label">Abonnement</div>
+      <div class="value" id="subPlan">—</div>
+      <div class="note" id="subDetail">Aucun abonnement actif.</div>
+    </div>
+    <div class="card">
+      <div class="label">Comptes connectés</div>
+      <div class="value" id="accountCount">0</div>
+      <div class="note">YouTube + TikTok</div>
+    </div>
+    <div class="card">
+      <div class="label">Clips détectés par l'IA</div>
+      <div class="value" id="clipCount">0</div>
+      <div class="note">Score viral moyen <span id="avgScore">—</span></div>
+    </div>
+  </div>
+
+  <section class="block">
+    <div class="block__head">
+      <h2>Comptes connectés</h2>
+    </div>
+    <div id="accountsWrap"></div>
+    <div class="connect-row">
+      <button class="btn" id="connectYt">+ Connecter YouTube</button>
+      <button class="btn" id="connectTt">+ Connecter TikTok</button>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block__head">
+      <h2>Clips détectés (IA)</h2>
+      <span style="font-family:var(--mono);font-size:11px;color:var(--muted);">simulation de démo</span>
+    </div>
+    <div id="clipsWrap"></div>
+  </section>
+</main>
+
+<script>
+function showToast(msg, isErr=false){
+  const stack = document.getElementById('toast-stack');
+  const el = document.createElement('div');
+  el.className = 'app-toast' + (isErr ? ' err' : '');
+  el.textContent = msg;
+  stack.appendChild(el);
+  setTimeout(()=> el.remove(), 5000);
+}
+
+async function api(path, opts={}){
+  const res = await fetch(path, {
+    method: opts.method || 'GET',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: opts.body ? JSON.stringify(opts.body) : undefined,
+  });
+  const data = await res.json().catch(()=>({}));
+  if (!res.ok) throw new Error(data.error || 'Erreur.');
+  return data;
+}
+
+function platIcon(p){ return p === 'youtube' ? '▶' : '♪'; }
+
+function renderAccounts(accounts){
+  const wrap = document.getElementById('accountsWrap');
+  document.getElementById('accountCount').textContent = accounts.length;
+  if (accounts.length === 0) {
+    wrap.innerHTML = '<div class="connect-empty">Aucun compte connecté pour le moment. Connectez YouTube ou TikTok ci-dessous (connexion simulée pour cette démo).</div>';
+    return;
+  }
+  wrap.innerHTML = '<div class="accounts">' + accounts.map(a => `
+    <div class="account-card">
+      <div class="plat">
+        <div class="plat-icon ${a.platform === 'youtube' ? 'yt' : 'tt'}">${platIcon(a.platform)}</div>
+        <div class="meta"><b>${a.handle}</b><span>${a.platform === 'youtube' ? 'YouTube' : 'TikTok'} · ${a.followers.toLocaleString('fr-FR')} abonnés</span></div>
+      </div>
+      <span class="badge published">Connecté</span>
+    </div>
+  `).join('') + '</div>';
+}
+
+function renderClips(clips){
+  const wrap = document.getElementById('clipsWrap');
+  document.getElementById('clipCount').textContent = clips.length;
+  const avg = clips.length ? Math.round(clips.reduce((s,c)=>s+c.score,0)/clips.length) : 0;
+  document.getElementById('avgScore').textContent = clips.length ? avg + '/100' : '—';
+  if (clips.length === 0) {
+    wrap.innerHTML = '<div class="empty-state">Aucun clip pour le moment.</div>';
+    return;
+  }
+  wrap.innerHTML = `<table>
+    <thead><tr><th>Titre</th><th>Plateforme</th><th>Durée</th><th>Score viral</th><th>Vues</th><th>Statut</th><th></th></tr></thead>
+    <tbody>${clips.map(c => `
+      <tr data-id="${c.id}">
+        <td>${c.title}</td>
+        <td><span class="platform-pill ${c.platform}">${c.platform === 'youtube' ? 'YouTube' : 'TikTok'}</span></td>
+        <td>${c.duration_s}s</td>
+        <td class="score ${c.score >= 85 ? 'high' : ''}">${c.score}/100</td>
+        <td>${c.views.toLocaleString('fr-FR')}</td>
+        <td><span class="badge ${c.status === 'published' ? 'published' : ''}">${c.status === 'published' ? 'Publié' : 'Brouillon'}</span></td>
+        <td>${c.status === 'published' ? '' : '<button class="btn publish-btn" data-publish="' + c.id + '">Publier</button>'}</td>
+      </tr>
+    `).join('')}</tbody>
+  </table>`;
+
+  wrap.querySelectorAll('[data-publish]').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const id = btn.dataset.publish;
+      btn.innerHTML = '<span class="spinner"></span>';
+      btn.disabled = true;
+      try {
+        await api(`/api/clips/${id}/publish`, { method:'POST' });
+        showToast('Clip publié (simulation).');
+        loadClips();
+      } catch (e) {
+        showToast(e.message, true);
+      }
+    });
+  });
+}
+
+async function loadMe(){
+  try {
+    const data = await api('/api/me');
+    document.getElementById('userName').textContent = data.user.name;
+    renderAccounts(data.accounts);
+    if (data.subscription) {
+      const s = data.subscription;
+      document.getElementById('subPlan').textContent = s.plan === 'agency' ? 'Agence' : 'Créateur solo';
+      document.getElementById('subDetail').textContent = `${s.account_count} compte(s) · ${s.total_price}€/mois · ${s.period === 'annual' ? 'facturé annuellement' : 'mensuel'}`;
+    } else {
+      document.getElementById('subPlan').textContent = 'Essai gratuit';
+      document.getElementById('subDetail').textContent = 'Choisissez un plan sur la page tarifs.';
+    }
+  } catch (e) {
+    window.location.href = '/index.html';
+  }
+}
+
+async function loadClips(){
+  try {
+    const data = await api('/api/clips');
+    renderClips(data.clips);
+  } catch (e) {
+    showToast(e.message, true);
+  }
+}
+
+async function connect(platform, btn){
+  btn.disabled = true;
+  const original = btn.textContent;
+  btn.innerHTML = '<span class="spinner"></span> Connexion…';
+  try {
+    const data = await api(`/api/connect/${platform}`, { method:'POST' });
+    showToast(`${platform === 'youtube' ? 'YouTube' : 'TikTok'} connecté : ${data.account.handle} (simulation).`);
+    loadMe();
+  } catch (e) {
+    showToast(e.message, true);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = original;
+  }
+}
+
+document.getElementById('connectYt').addEventListener('click', (e)=> connect('youtube', e.target));
+document.getElementById('connectTt').addEventListener('click', (e)=> connect('tiktok', e.target));
+document.getElementById('logoutBtn').addEventListener('click', async ()=>{
+  await api('/api/logout', { method:'POST' });
+  window.location.href = '/index.html';
+});
+
+loadMe();
+loadClips();
+</script>
+
+</body>
+</html>

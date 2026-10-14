@@ -63,4 +63,22 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// Renouvelle le token JWT à partir du cookie httpOnly.
+// Utilisé par le frontend quand sv_backend_token est absent de localStorage
+// (ex : nouvelle session navigateur après un OAuth redirect).
+router.get('/refresh', async (req, res) => {
+  try {
+    const token = req.cookies?.scalevid_token;
+    if (!token) return res.status(401).json({ error: 'Aucun cookie de session.' });
+    const payload = jwt.verify(token, config.jwtSecret);
+    const user = await prisma.user.findUnique({ where: { id: payload.sub } });
+    if (!user) return res.status(401).json({ error: 'Utilisateur introuvable.' });
+    const newToken = signToken(user);
+    setAuthCookie(res, newToken);
+    res.json({ token: newToken });
+  } catch (e) {
+    res.status(401).json({ error: 'Session expirée ou invalide.' });
+  }
+});
+
 module.exports = router;

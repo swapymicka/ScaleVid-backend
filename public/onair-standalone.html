@@ -1060,10 +1060,35 @@ footer{
           <button class="btn btn-primary checkout-btn" style="width:100%;" data-plan="creator">Commencer — <span class="total">7,99€</span>/mois</button>
         </div>
 
-        <div class="price__card is-pro" data-plan="agency">
+        <div class="price__card is-pro" data-plan="creator_pro">
+          <div class="price__top">
+            <div class="price__plan">Créateur Pro</div>
+            <div class="price__tag" style="border-color:var(--pink);color:var(--pink);">2 comptes</div>
+          </div>
+          <p class="price__desc">Pour les créateurs actifs sur deux plateformes — YouTube et TikTok en simultané.</p>
+          <div class="price__amount">
+            <span class="orig" style="display:none;"></span>
+            <span class="num"><span class="cur">€</span><span class="amount">14,99</span></span>
+            <span class="per">/ mois</span>
+            <span class="save-badge" style="display:none;">-17%</span>
+          </div>
+          <div class="price__tiernote tiernote">2 comptes simultanés · YouTube &amp; TikTok</div>
+          <ul class="price__features">
+            <li>2 comptes connectés simultanément (YouTube et/ou TikTok)</li>
+            <li>Tout le plan Créateur appliqué à chaque compte</li>
+            <li>Tableau de bord unifié pour vos 2 comptes</li>
+            <li>Statistiques de performance par compte</li>
+            <li>Export CSV de vos publications</li>
+            <li>File de rendu prioritaire</li>
+            <li>Support prioritaire par email</li>
+          </ul>
+          <button class="btn btn-primary checkout-btn" style="width:100%;" data-plan="creator_pro">Commencer — <span class="total">14,99€</span>/mois</button>
+        </div>
+
+        <div class="price__card" data-plan="agency">
           <div class="price__top">
             <div class="price__plan">Agence</div>
-            <div class="price__tag" style="border-color:var(--pink);color:var(--pink);">4 comptes</div>
+            <div class="price__tag">4 comptes</div>
           </div>
           <p class="price__desc">Pour gérer jusqu'à 4 comptes simultanément — YouTube et TikTok en même temps. Idéal pour les agences et créateurs multi-plateformes.</p>
           <div class="price__amount">
@@ -1075,14 +1100,11 @@ footer{
           <div class="price__tiernote tiernote">4 comptes simultanés · YouTube &amp; TikTok</div>
           <ul class="price__features">
             <li>4 comptes connectés simultanément (YouTube et/ou TikTok)</li>
-            <li>Tout le plan Créateur appliqué à chaque compte</li>
-            <li>Sièges d'équipe illimités : toute l'agence sur le même tableau de bord</li>
-            <li>Rapports clients en marque blanche, sans logo ScaleVid</li>
-            <li>File de rendu prioritaire pour vos exports</li>
-            <li>Rôles &amp; permissions par membre de l'équipe</li>
+            <li>Tout le plan Créateur Pro appliqué à chaque compte</li>
             <li>Tableau de bord multi-comptes avec vue d'ensemble</li>
             <li>Rapports de performance consolidés &amp; export PDF/CSV</li>
-            <li>API &amp; webhooks</li>
+            <li>Rapports clients en marque blanche, sans logo ScaleVid</li>
+            <li>File de rendu ultra-prioritaire</li>
             <li>Support prioritaire dédié, réponse sous 2h</li>
           </ul>
           <button class="btn btn-primary checkout-btn" style="width:100%;" data-plan="agency">Commencer — <span class="total">28,99€</span>/mois</button>
@@ -2089,8 +2111,9 @@ async function apiConnect(platform){
 // Deux plans fixes — pas de comptes supplémentaires à la carte.
 // Créateur solo : 1 compte (YouTube OU TikTok). Agence : 4 comptes simultanés.
 const TIERS = {
-  creator: { base: 7.99,  annualBase: 79.99,  accounts: 1 },
-  agency:  { base: 28.99, annualBase: 289.99, accounts: 4 },
+  creator:     { base: 7.99,  annualBase: 79.99,  accounts: 1 },
+  creator_pro: { base: 14.99, annualBase: 149.99, accounts: 2 },
+  agency:      { base: 28.99, annualBase: 289.99, accounts: 4 },
 };
 function totalFor(plan, n, periodVal){
   const t = TIERS[plan];
@@ -2213,8 +2236,9 @@ document.querySelectorAll('.faq__item .faq__q').forEach(btn=>{
 /* ===================== pricing logic ===================== */
 // URLs PayHip réelles — une URL par plan (mensuel + annuel sur la même page PayHip)
 const PAYHIP_URLS = {
-  creator: 'https://payhip.com/b/nFreq',
-  agency:  'https://payhip.com/b/x4Zqa',
+  creator:     'https://payhip.com/b/nFreq',
+  creator_pro: 'https://payhip.com/b/5yXCj',
+  agency:      'https://payhip.com/b/x4Zqa',
 };
 
 let period = 'monthly';
@@ -2254,10 +2278,10 @@ document.querySelectorAll('.toggle button').forEach(btn=>{
     document.querySelectorAll('.toggle button').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
     period = btn.dataset.period;
-    renderCard('creator'); renderCard('agency');
+    renderCard('creator'); renderCard('creator_pro'); renderCard('agency');
   });
 });
-renderCard('creator'); renderCard('agency');
+renderCard('creator'); renderCard('creator_pro'); renderCard('agency');
 
 /* ===================== AUTH MODAL WIRING ===================== */
 let currentUser = getSession();

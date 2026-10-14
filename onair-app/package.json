@@ -1,0 +1,15 @@
+{
+  "name": "onair-app",
+  "version": "1.0.0",
+  "description": "Onair - demo backend (auth, mock paiement, mock connexions YouTube/TikTok, mock IA). Zero dependency npm — utilise uniquement les modules natifs de Node.js (http, crypto, node:sqlite).",
+  "main": "server.js",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {}
+}

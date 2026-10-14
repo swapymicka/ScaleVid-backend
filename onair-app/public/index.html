@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Onair — Automatisez vos publications YouTube & TikTok</title>
+<meta name="description" content="Onair repère vos meilleurs moments, les reformate et les publie automatiquement sur YouTube et TikTok. Conçu pour les créateurs et les agences.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+/* ============ TOKENS ============ */
+:root{
+  --bg:#0A0D12;
+  --surface:#12161D;
+  --surface-2:#171C24;
+  --line:#232A35;
+  --text:#F4F1EA;
+  --muted:#8D94A3;
+  --pink:#FF3B5C;
+  --amber:#FFC247;
+  --pink-dim: rgba(255,59,92,.14);
+  --amber-dim: rgba(255,194,71,.14);
+  --radius:16px;
+  --display:'Bricolage Grotesque', sans-serif;
+  --body:'Space Grotesk', sans-serif;
+  --mono:'IBM Plex Mono', monospace;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--body);
+  font-size:16px;
+  line-height:1.5;
+  overflow-x:hidden;
+  position:relative;
+}
+
+/* film grain overlay */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  pointer-events:none;
+  opacity:.035;
+  mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+a{color:inherit;text-decoration:none;}
+ul{list-style:none;}
+img{max-width:100%;display:block;}
+button{font-family:inherit;cursor:pointer;}
+.container{max-width:1180px;margin:0 auto;padding:0 28px;}
+.eyebrow{
+  font-family:var(--mono);
+  font-size:12px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--pink);
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
+.eyebrow .dot{
+  width:6px;height:6px;border-radius:50%;background:var(--pink);
+  box-shadow:0 0 0 0 var(--pink-dim);
+  animation:pulse 1.8s infinite;
+}
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(255,59,92,.5);}
+  70%{box-shadow:0 0 0 8px rgba(255,59,92,0);}
+  100%{box-shadow:0 0 0 0 rgba(255,59,92,0);}
+}
+
+h1,h2,h3{font-family:var(--display);font-weight:700;letter-spacing:-.01em;}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px 24px;border-radius:10px;
+  font-family:var(--body);font-weight:600;font-size:15px;
+  border:1px solid transparent;
+  transition:transform .25s var(--ease), background .25s, border-color .25s;
+}
+.btn:active{transform:scale(.97);}
+.btn-primary{
+  background:linear-gradient(135deg, var(--pink), #ff6b4e);
+  color:#100406;
+}
+.btn-primary:hover{transform:translateY(-2px);}
+.btn-ghost{
+  background:transparent;
+  border-color:var(--line);
+  color:var(--text);
+}
+.btn-ghost:hover{border-color:var(--pink);}
+.btn[disabled]{opacity:.55;cursor:not-allowed;transform:none !important;}
+
+/* ============ SCROLL TIMELINE BAR ============ */
+#scrub{
+  position:fixed;top:0;left:0;right:0;height:3px;
+  background:var(--surface-2);z-index:1000;
+}
+#scrub-fill{
+  height:100%;width:0%;
+  background:linear-gradient(90deg, var(--pink), var(--amber));
+}
+#scrub-time{
+  position:fixed;top:8px;right:18px;z-index:1000;
+  font-family:var(--mono);font-size:11px;color:var(--muted);
+  background:rgba(10,13,18,.7);padding:3px 8px;border-radius:6px;
+  border:1px solid var(--line);
+  letter-spacing:.04em;
+}
+@media (max-width:720px){#scrub-time{display:none;}}
+
+/* ============ NAV ============ */
+header{
+  position:sticky;top:0;z-index:500;
+  background:rgba(10,13,18,.78);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 28px;max-width:1180px;margin:0 auto;
+}
+.nav__logo{
+  display:flex;align-items:center;gap:8px;
+  font-family:var(--display);font-weight:800;font-size:18px;
+  letter-spacing:.02em;
+}
+.nav__logo .rec{
+  width:8px;height:8px;border-radius:50%;background:var(--pink);
+  animation:pulse 1.8s infinite;
+}
+.nav__links{display:flex;gap:32px;font-size:14px;color:var(--muted);}
+.nav__links a:hover{color:var(--text);}
+.nav__cta{display:flex;align-items:center;gap:14px;}
+.nav__burger{display:none;flex-direction:column;gap:4px;background:none;border:none;}
+.nav__burger span{width:22px;height:2px;background:var(--text);}
+.nav__user{display:flex;align-items:center;gap:10px;font-size:14px;}
+.nav__user .name{color:var(--text);font-weight:600;}
+
+@media (max-width:860px){
+  .nav__links{
+    position:absolute;top:100%;left:0;right:0;
+    background:var(--surface);border-bottom:1px solid var(--line);
+    flex-direction:column;padding:18px 28px;gap:18px;
+    display:none;
+  }
+  .nav__links.open{display:flex;}
+  .nav__burger{display:flex;}
+  .nav__cta .btn-ghost{display:none;}
+}
+
+/* ============ HERO ============ */
+.hero{
+  padding:90px 0 60px;
+  position:relative;
+}
+.hero__grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;
+}
+@media (max-width:980px){.hero__grid{grid-template-columns:1fr;gap:48px;}}
+
+.hero__ticker{margin-bottom:22px;}
+.hero h1{
+  font-size:clamp(34px,5vw,58px);
+  line-height:1.04;
+  margin-bottom:20px;
+}
+.hero h1 .hl{
+  background:linear-gradient(135deg,var(--pink),var(--amber));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero p.sub{
+  color:var(--muted);font-size:17px;max-width:480px;margin-bottom:32px;
+}
+.hero__ctas{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:36px;}
+.hero__meta{
+  display:flex;gap:24px;color:var(--muted);font-size:13px;font-family:var(--mono);
+}
+.hero__meta span{color:var(--text);}
+
+/* hero visual */
+.hero__visual{position:relative;}
+.timeline-card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:18px;margin-bottom:22px;
+}
+.timeline-card__top{
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:12px;
+}
+.timeline-card__top b{color:var(--text);}
+.waveform{display:flex;align-items:flex-end;gap:3px;height:46px;}
+.waveform i{
+  flex:1;background:var(--line);border-radius:2px;
+}
+.waveform i.lit{background:linear-gradient(180deg,var(--pink),var(--amber));}
+.playhead{
+  margin-top:10px;height:2px;background:var(--surface-2);border-radius:2px;position:relative;
+}
+.playhead::after{
+  content:"";position:absolute;left:38%;top:-3px;width:8px;height:8px;border-radius:50%;
+  background:var(--pink);box-shadow:0 0 0 4px var(--pink-dim);
+}
+
+.branch-label{
+  text-align:center;font-family:var(--mono);font-size:11px;color:var(--muted);
+  letter-spacing:.08em;text-transform:uppercase;margin:-2px 0 18px;
+}
+
+.phones{display:flex;gap:18px;justify-content:center;}
+.phone{
+  width:140px;border-radius:20px;border:1px solid var(--line);
+  background:var(--surface-2);padding:8px;position:relative;
+  box-shadow:0 20px 40px -20px rgba(0,0,0,.6);
+}
+.phone__screen{
+  border-radius:13px;height:230px;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:flex-end;
+}
+.phone--yt .phone__screen{background:linear-gradient(160deg,#1b1410,#3a1a14 60%,#0d0a08);}
+.phone--tt .phone__screen{background:linear-gradient(160deg,#150b16,#391c3a 60%,#0a070a);}
+.phone__icon{
+  position:absolute;top:12px;left:10px;
+  width:26px;height:26px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.08);
+}
+.phone__chip{
+  margin:0 10px 10px;padding:6px 8px;border-radius:8px;
+  background:rgba(0,0,0,.45);backdrop-filter:blur(4px);
+  font-family:var(--mono);font-size:10px;color:var(--text);
+  display:flex;justify-content:space-between;
+}
+.phone__label{
+  text-align:center;font-size:12px;color:var(--muted);margin-top:8px;font-family:var(--mono);
+}
+.toast{
+  position:absolute;background:var(--surface);border:1px solid var(--line);
+  border-radius:8px;padding:6px 10px;font-family:var(--mono);font-size:10px;
+  display:flex;align-items:center;gap:6px;color:var(--text);
+  animation:float 3s ease-in-out infinite;
+}
+.toast .ok{color:var(--amber);}
+.toast--1{top:-10px;right:-14px;}
+.toast--2{bottom:30px;left:-22px;animation-delay:.6s;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+
+@media (max-width:520px){
+  .phones{gap:10px;}
+  .phone{width:48%;}
+}
+
+/* ============ PROOF BAR ============ */
+.proof{
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  padding:26px 0;
+}
+.proof__row{
+  display:flex;justify-content:center;align-items:center;gap:52px;flex-wrap:wrap;
+  font-family:var(--display);font-weight:700;font-size:18px;color:var(--muted);
+  letter-spacing:.03em;opacity:.7;
+}
+
+/* ============ SECTION SHELL ============ */
+section{padding:90px 0;}
+.section__head{max-width:620px;margin-bottom:54px;}
+.section__head h2{font-size:clamp(28px,3.6vw,40px);margin:14px 0 14px;line-height:1.1;}
+.section__head p{color:var(--muted);font-size:16px;}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease), transform .7s var(--ease);}
+.reveal.is-visible{opacity:1;transform:translateY(0);}
+
+/* ============ TESTIMONIALS ============ */
+.testi__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+@media (max-width:920px){.testi__grid{grid-template-columns:1fr;}}
+.testi__card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:26px;display:flex;flex-direction:column;gap:18px;
+}
+.testi__card p{font-size:15px;color:#D8D5CD;}
+.testi__person{display:flex;align-items:center;gap:12px;margin-top:auto;}
+.avatar{
+  width:38px;height:38px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--display);font-weight:700;font-size:14px;color:#100406;
+}
+.testi__person div b{display:block;font-size:14px;}
+.testi__person div span{font-size:12px;color:var(--muted);}
+
+/* ============ STEPS (how it works) ============ */
+.steps{display:flex;flex-direction:column;}
+.step{
+  display:grid;grid-template-columns:130px 1fr;gap:28px;
+  padding:30px 0;border-top:1px solid var(--line);
+  align-items:start;
+}
+.step:last-child{border-bottom:1px solid var(--line);}
+.step__time{font-family:var(--mono);color:var(--amber);font-size:14px;padding-top:4px;}
+.step h3{font-size:21px;margin-bottom:8px;}
+.step p{color:var(--muted);font-size:15px;max-width:560px;}
+@media (max-width:680px){.step{grid-template-columns:1fr;gap:8px;}}
+
+/* ============ FEATURES ============ */
+.feat__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+@media (max-width:980px){.feat__grid{grid-template-columns:repeat(2,1fr);}}
+@media (max-width:640px){.feat__grid{grid-template-columns:1fr;}}
+.feat__card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:26px;transition:border-color .25s, transform .25s;
+}
+.feat__card:hover{border-color:var(--pink);transform:translateY(-4px);}
+.feat__icon{
+  width:38px;height:38px;border-radius:10px;background:var(--pink-dim);
+  display:flex;align-items:center;justify-content:center;color:var(--pink);margin-bottom:18px;
+}
+.feat__card .eyebrow{font-size:11px;margin-bottom:10px;}
+.feat__card h3{font-size:18px;margin-bottom:8px;}
+.feat__card p{color:var(--muted);font-size:14px;}
+.feat__card--wide{grid-column:span 1;}
+.feat__card.is-amber .feat__icon{background:var(--amber-dim);color:var(--amber);}
+.feat__card.is-amber .eyebrow{color:var(--amber);}
+.feat__card.is-amber .eyebrow .dot{background:var(--amber);}
+
+/* ============ PRICING ============ */
+.toggle{
+  display:inline-flex;background:var(--surface);border:1px solid var(--line);
+  border-radius:30px;padding:4px;margin-bottom:48px;
+}
+.toggle button{
+  border:none;background:none;color:var(--muted);padding:9px 20px;border-radius:24px;
+  font-size:14px;font-weight:600;font-family:var(--body);position:relative;
+}
+.toggle button.active{background:var(--text);color:#0A0D12;}
+.toggle .save{
+  font-family:var(--mono);font-size:10px;color:var(--amber);margin-left:6px;
+}
+
+.price__grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;}
+@media (max-width:880px){.price__grid{grid-template-columns:1fr;}}
+.price__card{
+  background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:32px;
+}
+.price__card.is-pro{border-color:var(--pink);background:linear-gradient(160deg,var(--surface),#1a1118);}
+.price__top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;}
+.price__plan{font-family:var(--display);font-size:20px;font-weight:700;}
+.price__tag{
+  font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;
+  background:var(--surface-2);border:1px solid var(--line);border-radius:20px;padding:4px 10px;color:var(--muted);
+}
+.price__desc{color:var(--muted);font-size:14px;margin-bottom:24px;}
+
+.price__amount{display:flex;align-items:baseline;gap:6px;margin-bottom:4px;}
+.price__amount .num{font-family:var(--display);font-size:42px;font-weight:800;}
+.price__amount .per{color:var(--muted);font-size:14px;}
+.price__tiernote{font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:22px;}
+
+.stepper{
+  display:flex;align-items:center;gap:14px;background:var(--surface-2);
+  border:1px solid var(--line);border-radius:12px;padding:10px 16px;margin-bottom:24px;
+}
+.stepper button{
+  width:28px;height:28px;border-radius:8px;border:1px solid var(--line);background:var(--surface);
+  color:var(--text);font-size:16px;display:flex;align-items:center;justify-content:center;
+}
+.stepper button:hover{border-color:var(--pink);}
+.stepper__count{font-family:var(--mono);font-size:14px;min-width:30px;text-align:center;}
+.stepper__label{font-size:13px;color:var(--muted);margin-left:auto;}
+
+.price__features{margin-bottom:26px;display:flex;flex-direction:column;gap:11px;}
+.price__features li{
+  display:flex;gap:10px;font-size:14px;color:#D8D5CD;align-items:flex-start;
+}
+.price__features li::before{content:"✓";color:var(--amber);font-family:var(--mono);}
+
+/* ============ FOUNDER QUOTE ============ */
+.quote{
+  background:var(--surface);border:1px solid var(--line);border-radius:24px;
+  padding:54px;display:grid;grid-template-columns:auto 1fr;gap:32px;align-items:center;
+}
+@media (max-width:720px){.quote{grid-template-columns:1fr;text-align:center;padding:36px;}}
+.quote__mark{font-family:var(--display);font-size:50px;color:var(--pink);line-height:1;}
+.quote p{font-size:19px;line-height:1.5;margin-bottom:20px;}
+.quote__person{display:flex;align-items:center;gap:12px;}
+@media (max-width:720px){.quote__person{justify-content:center;}}
+.quote .avatar{width:46px;height:46px;font-size:16px;}
+
+/* ============ FINAL CTA ============ */
+.final{text-align:center;}
+.final h2{font-size:clamp(30px,4.4vw,46px);margin-bottom:16px;}
+.final p{color:var(--muted);margin-bottom:32px;}
+.final .hero__ctas{justify-content:center;}
+
+/* ============ FOOTER ============ */
+footer{border-top:1px solid var(--line);padding:50px 0 30px;}
+.foot__top{
+  display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:30px;
+  margin-bottom:36px;
+}
+.foot__links{display:flex;gap:28px;font-size:14px;color:var(--muted);flex-wrap:wrap;}
+.foot__links a:hover{color:var(--text);}
+.foot__bottom{
+  display:flex;justify-content:space-between;color:var(--muted);font-size:12px;
+  border-top:1px solid var(--line);padding-top:22px;flex-wrap:wrap;gap:10px;
+  font-family:var(--mono);
+}
+
+/* ============ AUTH MODAL ============ */
+.modal-overlay{
+  position:fixed;inset:0;z-index:2000;background:rgba(6,8,11,.72);
+  backdrop-filter:blur(4px);
+  display:none;align-items:center;justify-content:center;padding:20px;
+}
+.modal-overlay.open{display:flex;}
+.modal{
+  width:100%;max-width:420px;background:var(--surface);border:1px solid var(--line);
+  border-radius:20px;padding:32px;position:relative;
+}
+.modal__close{
+  position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);
+  font-size:20px;line-height:1;
+}
+.modal__close:hover{color:var(--text);}
+.modal h3{font-size:22px;margin-bottom:6px;}
+.modal .sub{color:var(--muted);font-size:14px;margin-bottom:24px;}
+.field{margin-bottom:16px;}
+.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;}
+.field input{
+  width:100%;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;
+  padding:11px 14px;color:var(--text);font-family:var(--body);font-size:14px;
+}
+.field input:focus{outline:none;border-color:var(--pink);}
+.modal__error{
+  background:var(--pink-dim);color:#ffb3c0;border:1px solid rgba(255,59,92,.4);
+  border-radius:8px;padding:10px 12px;font-size:13px;margin-bottom:16px;display:none;
+}
+.modal__error.show{display:block;}
+.modal__note{
+  font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:18px;line-height:1.5;
+}
+.modal__switch{text-align:center;font-size:13px;color:var(--muted);margin-top:18px;}
+.modal__switch button{background:none;border:none;color:var(--pink);font-weight:600;font-size:13px;}
+
+.spinner{
+  width:14px;height:14px;border-radius:50%;border:2px solid rgba(0,0,0,.25);
+  border-top-color:#100406;animation:spin .7s linear infinite;display:inline-block;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* toast notifications (top-right) */
+#toast-stack{position:fixed;top:70px;right:18px;z-index:3000;display:flex;flex-direction:column;gap:10px;}
+.app-toast{
+  background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:12px 16px;font-size:13px;max-width:320px;
+  box-shadow:0 12px 30px -10px rgba(0,0,0,.6);
+  display:flex;gap:10px;align-items:flex-start;
+  animation:toast-in .25s var(--ease);
+}
+.app-toast.err{border-color:rgba(255,59,92,.5);}
+.app-toast .icon{font-family:var(--mono);}
+@keyframes toast-in{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation:none !important;transition:none !important;}
+}
+</style>
+</head>
+<body>
+
+<div id="scrub"><div id="scrub-fill"></div></div>
+<div id="scrub-time">00:00:00:00</div>
+<div id="toast-stack"></div>
+
+<header>
+  <nav class="nav">
+    <div class="nav__logo"><span class="rec"></span>ON AIR</div>
+    <ul class="nav__links" id="navLinks">
+      <li><a href="#demo">Démo</a></li>
+      <li><a href="#fonctionnalites">Fonctionnalités</a></li>
+      <li><a href="#temoignages">Témoignages</a></li>
+      <li><a href="#tarifs">Tarifs</a></li>
+    </ul>
+    <div class="nav__cta" id="navCta">
+      <a href="#" class="btn btn-ghost" data-auth="login">Se connecter</a>
+      <a href="#" class="btn btn-primary" data-auth="signup">Essayer gratuitement</a>
+      <button class="nav__burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero" id="demo">
+    <div class="container hero__grid">
+      <div>
+        <div class="hero__ticker eyebrow"><span class="dot"></span>00:00:00:00 — EN DIRECT</div>
+        <h1>Une vidéo.<br>Deux plateformes.<br><span class="hl">Zéro effort.</span></h1>
+        <p class="sub">Onair repère vos meilleurs moments, les reformate automatiquement et les publie sur YouTube et TikTok. Conçu pour les créateurs et les agences qui gèrent plusieurs comptes.</p>
+        <div class="hero__ctas">
+          <a href="#" class="btn btn-primary" data-auth="signup">Essayer gratuitement →</a>
+          <a href="#fonctionnalites" class="btn btn-ghost">Voir comment ça marche</a>
+        </div>
+        <div class="hero__meta">
+          <div><span>+4 200</span> créateurs</div>
+          <div><span>2,3M</span> clips publiés</div>
+          <div><span>0</span> montage manuel</div>
+        </div>
+      </div>
+
+      <div class="hero__visual">
+        <div class="timeline-card">
+          <div class="timeline-card__top"><span>VIDÉO SOURCE</span><b>00:12:34</b></div>
+          <div class="waveform" id="waveform"></div>
+          <div class="playhead"></div>
+        </div>
+        <div class="branch-label">↓ Découpe &amp; reformatage automatique par IA ↓</div>
+        <div class="phones">
+          <div class="phone phone--yt">
+            <div class="phone__screen">
+              <div class="phone__icon">▶</div>
+              <div class="phone__chip"><span>1,2M vues</span><span>9:16</span></div>
+              <div class="toast toast--1"><span class="ok">✓</span> Publié</div>
+            </div>
+            <div class="phone__label">YouTube Shorts</div>
+          </div>
+          <div class="phone phone--tt">
+            <div class="phone__screen">
+              <div class="phone__icon">♪</div>
+              <div class="phone__chip"><span>842K vues</span><span>9:16</span></div>
+              <div class="toast toast--2"><span class="ok">✓</span> Programmé</div>
+            </div>
+            <div class="phone__label">TikTok</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROOF -->
+  <section class="proof" style="padding:26px 0;">
+    <div class="container proof__row">
+      <span>NOVA STUDIO</span><span>KIWI MEDIA</span><span>PULSE AGENCY</span><span>FRAME&amp;CO</span><span>STUDIO LUNE</span>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="temoignages">
+    <div class="container">
+      <div class="section__head reveal">
+        <div class="eyebrow"><span class="dot"></span>Témoignages</div>
+        <h2>Ils ont arrêté de publier à la main.</h2>
+        <p>Des créateurs et des agences qui géraient leurs comptes manuellement utilisent désormais Onair pour tout automatiser.</p>
+      </div>
+      <div class="testi__grid">
+        <div class="testi__card reveal">
+          <p>"On gérait 6 comptes TikTok à la main, c'était l'enfer. Onair a tout changé en une semaine."</p>
+          <div class="testi__person">
+            <div class="avatar" style="background:var(--pink);">LF</div>
+            <div><b>Léa Fontaine</b><span>Social Media Manager</span></div>
+          </div>
+        </div>
+        <div class="testi__card reveal">
+          <p>"Le recadrage automatique pour chaque format est bluffant. On n'a plus besoin de monteur dédié juste pour ça."</p>
+          <div class="testi__person">
+            <div class="avatar" style="background:var(--amber);">KB</div>
+            <div><b>Karim Belhadj</b><span>Créateur de contenu</span></div>
+          </div>
+        </div>
+        <div class="testi__card reveal">
+          <p>"On a testé plusieurs outils de repurpose et de planification. Aucun n'arrive à la cheville d'Onair pour le multi-comptes."</p>
+          <div class="testi__person">
+            <div class="avatar" style="background:#ff6b4e;">SL</div>
+            <div><b>Sarah Lemoine</b><span>Agence de gestion de créateurs</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section>
+    <div class="container">
+      <div class="section__head reveal">
+        <div class="eyebrow"><span class="dot"></span>Le pipeline</div>
+        <h2>Comment ça marche</h2>
+        <p>Quatre étapes, et votre vidéo voyage seule jusqu'à vos audiences.</p>
+      </div>
+      <div class="steps">
+        <div class="step reveal">
+          <div class="step__time">00:01</div>
+          <div><h3>Connectez vos comptes</h3><p>Reliez un nombre illimité de comptes YouTube et TikTok à votre espace Onair, en un clic.</p></div>
+        </div>
+        <div class="step reveal">
+          <div class="step__time">00:02</div>
+          <div><h3>L'IA détecte vos meilleurs moments</h3><p>Notre modèle analyse vos vidéos longues et repère automatiquement les passages à fort potentiel viral.</p></div>
+        </div>
+        <div class="step reveal">
+          <div class="step__time">00:03</div>
+          <div><h3>Reformatage automatique</h3><p>Recadrage vertical, sous-titres animés et habillage sur-mesure, générés pour chaque plateforme.</p></div>
+        </div>
+        <div class="step reveal">
+          <div class="step__time">00:04</div>
+          <div><h3>Publication &amp; programmation</h3><p>Vos clips sont publiés ou programmés automatiquement, aux horaires où votre audience est la plus active.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="fonctionnalites">
+    <div class="container">
+      <div class="section__head reveal">
+        <div class="eyebrow"><span class="dot"></span>Fonctionnalités</div>
+        <h2>Publiez plus, gérez moins.</h2>
+        <p>Laissez l'IA s'occuper de la découpe, du sous-titrage et de la diffusion sur YouTube et TikTok.</p>
+      </div>
+      <div class="feat__grid">
+        <div class="feat__card reveal">
+          <div class="feat__icon">◎</div>
+          <div class="eyebrow"><span class="dot"></span>Détection IA</div>
+          <h3>Trouvez vos meilleurs extraits automatiquement</h3>
+          <p>L'IA analyse vos vidéos longues et repère les moments à fort potentiel viral, sans visionnage manuel.</p>
+        </div>
+        <div class="feat__card is-amber reveal">
+          <div class="feat__icon">▤</div>
+          <div class="eyebrow"><span class="dot"></span>Multi-comptes</div>
+          <h3>Gérez toutes vos chaînes au même endroit</h3>
+          <p>Connectez un nombre illimité de comptes YouTube et TikTok et passez de l'un à l'autre sans friction.</p>
+        </div>
+        <div class="feat__card reveal">
+          <div class="feat__icon">▢</div>
+          <div class="eyebrow"><span class="dot"></span>Reformatage auto</div>
+          <h3>Un format adapté à chaque plateforme</h3>
+          <p>Recadrage vertical, sous-titres animés et habillage automatique, optimisés pour Shorts et TikTok.</p>
+        </div>
+        <div class="feat__card is-amber reveal">
+          <div class="feat__icon">▦</div>
+          <div class="eyebrow"><span class="dot"></span>Programmation</div>
+          <h3>Publiez au meilleur moment, sans y penser</h3>
+          <p>Le calendrier intelligent programme vos publications aux horaires où votre audience est la plus active.</p>
+        </div>
+        <div class="feat__card reveal">
+          <div class="feat__icon">▥</div>
+          <div class="eyebrow"><span class="dot"></span>Analytics unifiés</div>
+          <h3>Toutes vos statistiques, une seule vue</h3>
+          <p>Suivez vues, likes et rétention sur YouTube et TikTok depuis un tableau de bord unique.</p>
+        </div>
+        <div class="feat__card is-amber reveal">
+          <div class="feat__icon">✎</div>
+          <div class="eyebrow"><span class="dot"></span>Sous-titres</div>
+          <h3>Des sous-titres animés générés pour vous</h3>
+          <p>Transcription automatique et habillage dynamique, prêts à l'emploi sur chaque clip exporté.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="tarifs">
+    <div class="container">
+      <div class="section__head reveal">
+        <div class="eyebrow"><span class="dot"></span>Tarifs</div>
+        <h2>Plus de comptes, moins cher.</h2>
+        <p>Vous payez uniquement pour les comptes connectés. Le reste — IA, reformatage, programmation — est illimité.</p>
+      </div>
+
+      <div class="toggle reveal">
+        <button class="active" data-period="monthly">Mensuel</button>
+        <button data-period="annual">Annuel <span class="save">-20%</span></button>
+      </div>
+
+      <div class="price__grid reveal">
+
+        <!-- Plan Créateur -->
+        <div class="price__card" data-plan="creator">
+          <div class="price__top">
+            <div class="price__plan">Créateur solo</div>
+            <div class="price__tag">1 utilisateur</div>
+          </div>
+          <p class="price__desc">Pour les créateurs qui veulent automatiser leurs comptes sans embaucher de monteur.</p>
+
+          <div class="price__amount">
+            <span class="num"><span class="cur">€</span><span class="amount">19</span></span>
+            <span class="per">/ mois / compte</span>
+          </div>
+          <div class="price__tiernote tiernote">1-2 comptes — 19€ · 3-5 comptes — 15€ · 6+ comptes — 12€</div>
+
+          <div class="stepper">
+            <button class="step-minus" aria-label="Moins">−</button>
+            <span class="stepper__count">1</span>
+            <button class="step-plus" aria-label="Plus">+</button>
+            <span class="stepper__label">comptes connectés</span>
+          </div>
+
+          <ul class="price__features">
+            <li>Détection IA illimitée</li>
+            <li>Reformatage YouTube + TikTok illimité</li>
+            <li>Sous-titres automatiques inclus</li>
+            <li>Programmation intelligente</li>
+            <li>Support par email</li>
+          </ul>
+          <button class="btn btn-ghost checkout-btn" style="width:100%;" data-plan="creator">Commencer — <span class="total">19€</span>/mois</button>
+        </div>
+
+        <!-- Plan Agence -->
+        <div class="price__card is-pro" data-plan="agency">
+          <div class="price__top">
+            <div class="price__plan">Agence</div>
+            <div class="price__tag" style="border-color:var(--pink);color:var(--pink);">Populaire</div>
+          </div>
+          <p class="price__desc">Pour les agences qui gèrent les comptes YouTube et TikTok de plusieurs clients.</p>
+
+          <div class="price__amount">
+            <span class="num"><span class="cur">€</span><span class="amount">39</span></span>
+            <span class="per">/ mois / compte</span>
+          </div>
+          <div class="price__tiernote tiernote">1-2 comptes — 39€ · 3-5 comptes — 29€ · 6+ comptes — 19€</div>
+
+          <div class="stepper">
+            <button class="step-minus" aria-label="Moins">−</button>
+            <span class="stepper__count">3</span>
+            <button class="step-plus" aria-label="Plus">+</button>
+            <span class="stepper__label">comptes connectés</span>
+          </div>
+
+          <ul class="price__features">
+            <li>Tout le plan Créateur, en illimité</li>
+            <li>Utilisateurs &amp; clients illimités</li>
+            <li>Tableau de bord multi-clients</li>
+            <li>API &amp; webhooks</li>
+            <li>Support prioritaire</li>
+          </ul>
+          <button class="btn btn-primary checkout-btn" style="width:100%;" data-plan="agency">Commencer — <span class="total">117€</span>/mois</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOUNDER QUOTE -->
+  <section>
+    <div class="container">
+      <div class="quote reveal">
+        <div class="quote__mark">"</div>
+        <div>
+          <p>On a créé Onair pour que les créateurs et les agences arrêtent de perdre des heures à recadrer et publier manuellement sur chaque plateforme. Une vidéo, partout, automatiquement.</p>
+          <div class="quote__person">
+            <div class="avatar" style="background:var(--pink);">MR</div>
+            <div><b>Maxence Roy</b><br><span style="color:var(--muted);font-size:13px;">Fondateur @ Onair</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="final">
+    <div class="container">
+      <div class="reveal">
+        <div class="eyebrow" style="justify-content:center;"><span class="dot"></span>Prêt à passer à l'automatique ?</div>
+        <h2>Arrêtez de publier à la main.</h2>
+        <p>Connectez vos comptes en 2 minutes. Aucune carte bancaire requise pour démarrer.</p>
+        <div class="hero__ctas">
+          <a href="#" class="btn btn-primary" data-auth="signup">Essayer gratuitement →</a>
+          <a href="#demo" class="btn btn-ghost">Réserver une démo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <div class="foot__top">
+      <div class="nav__logo"><span class="rec"></span>ON AIR</div>
+      <ul class="foot__links">
+        <li><a href="#demo">Démo</a></li>
+        <li><a href="#fonctionnalites">Fonctionnalités</a></li>
+        <li><a href="#temoignages">Témoignages</a></li>
+        <li><a href="#tarifs">Tarifs</a></li>
+        <li><a href="#">Confidentialité</a></li>
+        <li><a href="#">CGU</a></li>
+      </ul>
+    </div>
+    <div class="foot__bottom">
+      <span>© 2026 Onair. Tous droits réservés.</span>
+      <span>Conçu pour les créateurs et les agences.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ AUTH MODAL ============ -->
+<div class="modal-overlay" id="authOverlay">
+  <div class="modal">
+    <button class="modal__close" id="authClose" aria-label="Fermer">×</button>
+
+    <div id="loginView">
+      <h3>Connexion</h3>
+      <p class="sub">Accédez à votre espace Onair.</p>
+      <div class="modal__error" id="loginError"></div>
+      <form id="loginForm">
+        <div class="field"><label>Email</label><input type="email" name="email" required autocomplete="email"></div>
+        <div class="field"><label>Mot de passe</label><input type="password" name="password" required autocomplete="current-password"></div>
+        <button type="submit" class="btn btn-primary" style="width:100%;" id="loginSubmit">Se connecter</button>
+      </form>
+      <div class="modal__switch">Pas encore de compte ? <button id="goSignup">Créer un compte</button></div>
+    </div>
+
+    <div id="signupView" style="display:none;">
+      <h3>Créer un compte</h3>
+      <p class="sub">Essai gratuit, aucune carte requise.</p>
+      <div class="modal__error" id="signupError"></div>
+      <form id="signupForm">
+        <div class="field"><label>Nom</label><input type="text" name="name" required autocomplete="name"></div>
+        <div class="field"><label>Email</label><input type="email" name="email" required autocomplete="email"></div>
+        <div class="field"><label>Mot de passe</label><input type="password" name="password" required minlength="6" autocomplete="new-password"></div>
+        <button type="submit" class="btn btn-primary" style="width:100%;" id="signupSubmit">Créer mon compte</button>
+      </form>
+      <div class="modal__switch">Déjà un compte ? <button id="goLogin">Se connecter</button></div>
+    </div>
+
+    <div class="modal__note">Démo : authentification réelle (compte stocké en base), mais les connexions YouTube/TikTok et le paiement sont simulés (mock) pour cette démonstration.</div>
+  </div>
+</div>
+
+<script>
+const API = '';
+
+// ---- toasts ----
+function showToast(msg, isErr=false){
+  const stack = document.getElementById('toast-stack');
+  const el = document.createElement('div');
+  el.className = 'app-toast' + (isErr ? ' err' : '');
+  el.innerHTML = `<span class="icon">${isErr ? '✕' : '✓'}</span><span>${msg}</span>`;
+  stack.appendChild(el);
+  setTimeout(()=>{ el.remove(); }, 5000);
+}
+
+// ---- waveform bars ----
+const wf = document.getElementById('waveform');
+for(let i=0;i<48;i++){
+  const bar=document.createElement('i');
+  const h = 8 + Math.random()*38;
+  bar.style.height = h+'px';
+  if(i/48 < 0.38) bar.classList.add('lit');
+  wf.appendChild(bar);
+}
+
+// ---- scroll timeline bar + timecode ----
+const fill = document.getElementById('scrub-fill');
+const timeLabel = document.getElementById('scrub-time');
+function fmt(t){
+  const m = Math.floor(t/60).toString().padStart(2,'0');
+  const s = Math.floor(t%60).toString().padStart(2,'0');
+  const f = Math.floor((t*24)%24).toString().padStart(2,'0');
+  return `00:${m}:${s}:${f}`;
+}
+function onScroll(){
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = max > 0 ? window.scrollY / max : 0;
+  fill.style.width = (pct*100)+'%';
+  timeLabel.textContent = fmt(pct*90);
+}
+window.addEventListener('scroll', onScroll);
+onScroll();
+
+// ---- mobile nav ----
+document.getElementById('burger').addEventListener('click', ()=>{
+  document.getElementById('navLinks').classList.toggle('open');
+});
+document.querySelectorAll('.nav__links a').forEach(a=>{
+  a.addEventListener('click', ()=> document.getElementById('navLinks').classList.remove('open'));
+});
+
+// ---- reveal on scroll ----
+const obs = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('is-visible'); });
+},{threshold:.15});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// ---- pricing logic ----
+const tiers = {
+  creator: [{max:2,price:19},{max:5,price:15},{max:Infinity,price:12}],
+  agency:  [{max:2,price:39},{max:5,price:29},{max:Infinity,price:19}]
+};
+let period = 'monthly';
+const counts = {creator:1, agency:3};
+
+function priceFor(plan, n){
+  const t = tiers[plan].find(t=>n<=t.max);
+  let unit = t.price;
+  if(period==='annual') unit = Math.round(unit*0.8);
+  return unit;
+}
+
+function renderCard(plan){
+  const card = document.querySelector(`.price__card[data-plan="${plan}"]`);
+  const n = counts[plan];
+  const unit = priceFor(plan, n);
+  card.querySelector('.amount').textContent = unit;
+  card.querySelector('.stepper__count').textContent = n;
+  card.querySelector('.total').textContent = (unit*n) + '€';
+  card.querySelector('.per').textContent = `/ mois / compte${period==='annual' ? ' (facturé annuellement)' : ''}`;
+}
+
+document.querySelectorAll('.price__card').forEach(card=>{
+  const plan = card.dataset.plan;
+  card.querySelector('.step-plus').addEventListener('click', ()=>{
+    counts[plan] = Math.min(50, counts[plan]+1);
+    renderCard(plan);
+  });
+  card.querySelector('.step-minus').addEventListener('click', ()=>{
+    counts[plan] = Math.max(1, counts[plan]-1);
+    renderCard(plan);
+  });
+});
+
+document.querySelectorAll('.toggle button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.toggle button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    period = btn.dataset.period;
+    renderCard('creator'); renderCard('agency');
+  });
+});
+
+renderCard('creator'); renderCard('agency');
+
+// ================= AUTH + BACKEND WIRING =================
+let currentUser = null;
+let pendingCheckout = null; // {plan, period, accountCount} when signup/login triggered from a pricing button
+
+const overlay = document.getElementById('authOverlay');
+const loginView = document.getElementById('loginView');
+const signupView = document.getElementById('signupView');
+
+function openModal(view){
+  overlay.classList.add('open');
+  loginView.style.display = view === 'login' ? 'block' : 'none';
+  signupView.style.display = view === 'signup' ? 'block' : 'none';
+  document.getElementById('loginError').classList.remove('show');
+  document.getElementById('signupError').classList.remove('show');
+}
+function closeModal(){ overlay.classList.remove('open'); pendingCheckout = null; }
+
+document.getElementById('authClose').addEventListener('click', closeModal);
+overlay.addEventListener('click', (e)=>{ if(e.target === overlay) closeModal(); });
+document.getElementById('goSignup').addEventListener('click', ()=> openModal('signup'));
+document.getElementById('goLogin').addEventListener('click', ()=> openModal('login'));
+
+document.querySelectorAll('[data-auth]').forEach(el=>{
+  el.addEventListener('click', (e)=>{
+    e.preventDefault();
+    if (currentUser) { window.location.href = '/dashboard.html'; return; }
+    openModal(el.dataset.auth);
+  });
+});
+
+async function api(path, opts={}){
+  const res = await fetch(API + path, {
+    method: opts.method || 'GET',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: opts.body ? JSON.stringify(opts.body) : undefined,
+  });
+  const data = await res.json().catch(()=>({}));
+  if (!res.ok) throw new Error(data.error || 'Une erreur est survenue.');
+  return data;
+}
+
+function setBusy(btn, busy, label){
+  if (busy) { btn.dataset.label = btn.innerHTML; btn.innerHTML = '<span class="spinner"></span> ' + (label||'Patientez…'); btn.disabled = true; }
+  else { btn.innerHTML = btn.dataset.label || label; btn.disabled = false; }
+}
+
+async function refreshSession(){
+  try {
+    const data = await api('/api/me');
+    currentUser = data.user;
+    renderNavUser();
+  } catch (e) {
+    currentUser = null;
+    renderNavUser();
+  }
+}
+
+function renderNavUser(){
+  const cta = document.getElementById('navCta');
+  if (currentUser) {
+    cta.querySelectorAll('[data-auth]').forEach(el=>el.style.display='none');
+    if (!document.getElementById('navUserBlock')) {
+      const block = document.createElement('div');
+      block.id = 'navUserBlock';
+      block.className = 'nav__user';
+      block.innerHTML = `<span class="name">${currentUser.name.split(' ')[0]}</span>
+        <a href="/dashboard.html" class="btn btn-ghost">Tableau de bord</a>
+        <button class="btn btn-primary" id="logoutBtn">Déconnexion</button>`;
+      cta.insertBefore(block, cta.querySelector('.nav__burger'));
+      document.getElementById('logoutBtn').addEventListener('click', async ()=>{
+        await api('/api/logout', { method:'POST' });
+        currentUser = null;
+        document.getElementById('navUserBlock').remove();
+        cta.querySelectorAll('[data-auth]').forEach(el=>el.style.display='inline-flex');
+        showToast('Déconnecté.');
+      });
+    }
+  }
+}
+
+document.getElementById('loginForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const form = e.target;
+  const btn = document.getElementById('loginSubmit');
+  const errBox = document.getElementById('loginError');
+  errBox.classList.remove('show');
+  setBusy(btn, true, 'Connexion…');
+  try {
+    const body = { email: form.email.value.trim(), password: form.password.value };
+    const data = await api('/api/login', { method:'POST', body });
+    currentUser = data.user;
+    closeModal();
+    renderNavUser();
+    showToast(`Bienvenue, ${data.user.name.split(' ')[0]} !`);
+    await afterAuthRedirect();
+  } catch (err) {
+    errBox.textContent = err.message;
+    errBox.classList.add('show');
+  } finally {
+    setBusy(btn, false, 'Se connecter');
+  }
+});
+
+document.getElementById('signupForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const form = e.target;
+  const btn = document.getElementById('signupSubmit');
+  const errBox = document.getElementById('signupError');
+  errBox.classList.remove('show');
+  setBusy(btn, true, 'Création…');
+  try {
+    const body = { name: form.name.value.trim(), email: form.email.value.trim(), password: form.password.value };
+    const data = await api('/api/signup', { method:'POST', body });
+    currentUser = data.user;
+    closeModal();
+    renderNavUser();
+    showToast(`Compte créé, bienvenue ${data.user.name.split(' ')[0]} !`);
+    await afterAuthRedirect();
+  } catch (err) {
+    errBox.textContent = err.message;
+    errBox.classList.add('show');
+  } finally {
+    setBusy(btn, false, 'Créer mon compte');
+  }
+});
+
+async function afterAuthRedirect(){
+  if (pendingCheckout) {
+    const { plan, accountCount, period } = pendingCheckout;
+    pendingCheckout = null;
+    await runCheckout(plan, accountCount, period);
+  }
+}
+
+async function runCheckout(plan, accountCount, periodVal){
+  try {
+    showToast('Redirection vers le paiement (mode test)…');
+    const data = await api('/api/checkout', { method:'POST', body: { plan, accountCount, period: periodVal } });
+    showToast(`Paiement test réussi — ${data.total_price}€/mois. Redirection vers le tableau de bord…`);
+    setTimeout(()=>{ window.location.href = '/dashboard.html'; }, 900);
+  } catch (err) {
+    showToast(err.message, true);
+  }
+}
+
+document.querySelectorAll('.checkout-btn').forEach(btn=>{
+  btn.addEventListener('click', async ()=>{
+    const plan = btn.dataset.plan;
+    const accountCount = counts[plan];
+    setBusy(btn, true, 'Préparation…');
+    try {
+      if (!currentUser) {
+        pendingCheckout = { plan, accountCount, period };
+        openModal('signup');
+      } else {
+        await runCheckout(plan, accountCount, period);
+      }
+    } finally {
+      setBusy(btn, false, btn.dataset.label);
+    }
+  });
+});
+
+refreshSession();
+</script>
+
+</body>
+</html>

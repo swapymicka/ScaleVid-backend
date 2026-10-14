@@ -77,10 +77,20 @@ router.post('/shorts/schedule', requireAuth, upload.single('video'), async (req,
       return res.status(400).json({ error: 'socialAccountId et scheduledAt sont requis.' });
     }
 
+    console.log('[schedule] socialAccountId:', socialAccountId, '| req.userId:', req.userId);
     const account = await prisma.socialAccount.findFirst({
       where: { id: socialAccountId, userId: req.userId },
     });
-    if (!account) return res.status(404).json({ error: 'Compte introuvable.' });
+    if (!account) {
+      // Diagnostic : vérifier si le compte existe mais appartient à un autre userId
+      const anyAccount = await prisma.socialAccount.findUnique({ where: { id: socialAccountId } });
+      if (anyAccount) {
+        console.error('[schedule] MISMATCH userId! Compte trouvé avec userId:', anyAccount.userId, '| JWT userId:', req.userId);
+        return res.status(403).json({ error: 'Ce compte appartient à un autre utilisateur.' });
+      }
+      console.error('[schedule] Compte introuvable — id:', socialAccountId, 'n\'existe pas en DB');
+      return res.status(404).json({ error: 'Compte introuvable.' });
+    }
 
     // Créer un enregistrement Clip directement (sans passer par le pipeline IA)
     const clip = await prisma.clip.create({
@@ -193,8 +203,16 @@ async function publishScheduledPost(postId) {
 
   try {
     const accessToken = tokenCrypto.decrypt(post.socialAccount.accessToken);
-    const refreshToken = tokenCrypto.decrypt(post.socialAccount.refreshToken);
+    // refreshToken peut être null (TikTok sandbox) — ne pas planter si absent
+    const refreshToken = post.socialAccount.refreshToken
+      ? tokenCrypto.decrypt(post.socialAccount.refreshToken)
+      : null;
     let result;
+
+    // Vérifier que le fichier existe encore (stockage éphémère Railway)
+    if (!post.clip.outputPath || !fs.existsSync(post.clip.outputPath)) {
+      throw new Error(`Fichier vidéo introuvable sur le serveur : ${post.clip.outputPath}. Reprogrammez la publication.`);
+    }
 
     if (post.socialAccount.provider === 'youtube') {
       console.log('[Publish] Début upload YouTube, fichier:', post.clip.outputPath);
@@ -208,11 +226,35 @@ async function publishScheduledPost(postId) {
       });
       console.log('[Publish] Upload réussi, videoId YouTube:', result.platformPostId);
     } else if (post.socialAccount.provider === 'tiktok') {
+      console.log('[Publish] Début upload TikTok (mode sandbox = brouillon), fichier:', post.clip.outputPath);
+      // Rafraîchir le token TikTok si un refresh_token est disponible
+      let tiktokAccessToken = accessToken;
+      if (refreshToken) {
+        try {
+          console.log('[Publish] Rafraîchissement du token TikTok...');
+          const refreshed = await tiktokService.refreshAccessToken(refreshToken);
+          tiktokAccessToken = refreshed.access_token;
+          // Mettre à jour le token en base
+          const tokenCryptoModule = require('../services/tokenCrypto');
+          await prisma.socialAccount.update({
+            where: { id: post.socialAccountId },
+            data: {
+              accessToken: tokenCryptoModule.encrypt(refreshed.access_token),
+              refreshToken: refreshed.refresh_token ? tokenCryptoModule.encrypt(refreshed.refresh_token) : undefined,
+              tokenExpiresAt: refreshed.expires_in ? new Date(Date.now() + refreshed.expires_in * 1000) : undefined,
+            },
+          });
+          console.log('[Publish] Token TikTok rafraîchi avec succès.');
+        } catch (refreshErr) {
+          console.warn('[Publish] Impossible de rafraîchir le token TikTok:', refreshErr.message, '— tentative avec le token actuel.');
+        }
+      }
       result = await tiktokService.uploadVideo({
-        accessToken,
+        accessToken: tiktokAccessToken,
         filePath: post.clip.outputPath,
         title: post.clip.title,
       });
+      console.log('[Publish] Upload TikTok réussi, publish_id:', result.platformPostId);
     } else {
       throw new Error('Plateforme inconnue : ' + post.socialAccount.provider);
     }

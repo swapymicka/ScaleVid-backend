@@ -8,7 +8,7 @@ const USERINFO_URL = 'https://open.tiktokapis.com/v2/user/info/';
 const POST_INIT_URL = 'https://open.tiktokapis.com/v2/post/publish/video/init/';
 const POST_STATUS_URL = 'https://open.tiktokapis.com/v2/post/publish/status/fetch/';
 
-const SCOPES = ['user.info.basic', 'video.publish', 'video.upload'];
+const SCOPES = ['user.info.basic', 'video.publish'];
 
 // Étape 1 : URL d'autorisation TikTok (Login Kit).
 function getAuthUrl(state) {
@@ -24,17 +24,22 @@ function getAuthUrl(state) {
 
 // Étape 2 : échange le code contre un access_token + refresh_token.
 async function exchangeCodeForTokens(code) {
-  const res = await axios.post(
-    TOKEN_URL,
-    new URLSearchParams({
-      client_key: config.tiktok.clientKey,
-      client_secret: config.tiktok.clientSecret,
-      code,
-      grant_type: 'authorization_code',
-      redirect_uri: config.tiktok.redirectUri,
-    }),
-    { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
-  );
+  console.log('[TikTok] token exchange — client_key:', config.tiktok.clientKey, '| redirect_uri:', config.tiktok.redirectUri, '| code (5 premiers chars):', code?.slice(0, 5));
+  const params = new URLSearchParams({
+    client_key: config.tiktok.clientKey,
+    client_secret: config.tiktok.clientSecret,
+    code,
+    grant_type: 'authorization_code',
+    redirect_uri: config.tiktok.redirectUri,
+  });
+  const res = await axios.post(TOKEN_URL, params, {
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+  });
+  console.log('[TikTok] token response:', JSON.stringify(res.data));
+  // TikTok peut renvoyer une erreur JSON sans code HTTP d'erreur
+  if (res.data.error) {
+    throw new Error(`TikTok token error: ${res.data.error} — ${res.data.error_description || JSON.stringify(res.data)}`);
+  }
   // res.data = { access_token, refresh_token, expires_in, open_id, scope, ... }
   return res.data;
 }
@@ -59,22 +64,35 @@ async function uploadVideo({ accessToken, filePath, title }) {
 
   // 1) Initialiser l'upload : on déclare la taille du fichier, TikTok renvoie
   //    une URL d'upload + un publish_id.
-  const initRes = await axios.post(
-    POST_INIT_URL,
-    {
-      post_info: {
-        title,
-        privacy_level: 'SELF_ONLY', // passe à "PUBLIC_TO_EVERYONE" une fois l'app validée
+  let initRes;
+  try {
+    initRes = await axios.post(
+      POST_INIT_URL,
+      {
+        post_info: {
+          title,
+          privacy_level: 'SELF_ONLY', // passe à "PUBLIC_TO_EVERYONE" une fois l'app validée
+        },
+        source_info: {
+          source: 'FILE_UPLOAD',
+          video_size: stat.size,
+          chunk_size: stat.size,
+          total_chunk_count: 1,
+        },
       },
-      source_info: {
-        source: 'FILE_UPLOAD',
-        video_size: stat.size,
-        chunk_size: stat.size,
-        total_chunk_count: 1,
-      },
-    },
-    { headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' } }
-  );
+      { headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' } }
+    );
+  } catch (initErr) {
+    const status = initErr.response?.status;
+    const tiktokBody = initErr.response?.data;
+    console.error('[TikTok] ERREUR init upload — HTTP', status, '| body complet:', JSON.stringify(tiktokBody));
+    throw new Error(`TikTok init HTTP ${status}: ${JSON.stringify(tiktokBody)}`);
+  }
+
+  if (!initRes.data?.data?.publish_id) {
+    console.error('[TikTok] Réponse init inattendue:', JSON.stringify(initRes.data));
+    throw new Error(`TikTok init réponse invalide: ${JSON.stringify(initRes.data)}`);
+  }
 
   const { publish_id, upload_url } = initRes.data.data;
 
@@ -100,4 +118,21 @@ async function getPublishStatus(accessToken, publishId) {
   return res.data.data; // { status: "PROCESSING_DOWNLOAD" | "PUBLISH_COMPLETE" | "FAILED", ... }
 }
 
-module.exports = { getAuthUrl, exchangeCodeForTokens, getUserInfo, uploadVideo, getPublishStatus };
+// Rafraîchit l'access_token TikTok à partir du refresh_token.
+async function refreshAccessToken(refreshToken) {
+  const params = new URLSearchParams({
+    client_key: config.tiktok.clientKey,
+    client_secret: config.tiktok.clientSecret,
+    grant_type: 'refresh_token',
+    refresh_token: refreshToken,
+  });
+  const res = await axios.post(TOKEN_URL, params, {
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+  });
+  if (res.data.error) {
+    throw new Error(`TikTok refresh error: ${res.data.error} — ${res.data.error_description || ''}`);
+  }
+  return res.data; // { access_token, refresh_token, expires_in, ... }
+}
+
+module.exports = { getAuthUrl, exchangeCodeForTokens, getUserInfo, uploadVideo, getPublishStatus, refreshAccessToken };

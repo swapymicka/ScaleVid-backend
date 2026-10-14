@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 600" width="1400" height="600">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0d0d1a"/>
+      <stop offset="100%" style="stop-color:#1a0a14"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff3b5c"/>
+      <stop offset="100%" style="stop-color:#ff6b35"/>
+    </linearGradient>
+    <linearGradient id="card1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e1e32"/>
+      <stop offset="100%" style="stop-color:#151528"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softglow">
+      <feGaussianBlur stdDeviation="20" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Fond -->
+  <rect width="1400" height="600" fill="url(#bg)"/>
+
+  <!-- Halo rose gauche -->
+  <ellipse cx="200" cy="300" rx="300" ry="200" fill="#ff3b5c" fill-opacity="0.06"/>
+  <!-- Halo orange droit -->
+  <ellipse cx="1200" cy="200" rx="250" ry="180" fill="#ff6b35" fill-opacity="0.05"/>
+
+  <!-- Grille décorative -->
+  <g stroke="#ffffff" stroke-opacity="0.03" stroke-width="1">
+    <line x1="0" y1="100" x2="1400" y2="100"/>
+    <line x1="0" y1="200" x2="1400" y2="200"/>
+    <line x1="0" y1="300" x2="1400" y2="300"/>
+    <line x1="0" y1="400" x2="1400" y2="400"/>
+    <line x1="0" y1="500" x2="1400" y2="500"/>
+    <line x1="200" y1="0" x2="200" y2="600"/>
+    <line x1="400" y1="0" x2="400" y2="600"/>
+    <line x1="600" y1="0" x2="600" y2="600"/>
+    <line x1="800" y1="0" x2="800" y2="600"/>
+    <line x1="1000" y1="0" x2="1000" y2="600"/>
+    <line x1="1200" y1="0" x2="1200" y2="600"/>
+  </g>
+
+  <!-- Logo ScaleVid -->
+  <rect x="70" y="52" width="48" height="48" rx="12" fill="url(#accent)"/>
+  <text x="94" y="85" font-family="Arial Black, sans-serif" font-size="26" font-weight="900" fill="#1a0a00" text-anchor="middle">S</text>
+  <text x="132" y="84" font-family="Arial Black, sans-serif" font-size="20" font-weight="800" fill="#ffffff" letter-spacing="-0.5">Scale<tspan fill="#ff3b5c">Vid</tspan></text>
+
+  <!-- Badge plan -->
+  <rect x="70" y="130" width="130" height="28" rx="14" fill="#ff3b5c" fill-opacity="0.15" stroke="#ff3b5c" stroke-opacity="0.4" stroke-width="1"/>
+  <text x="135" y="149" font-family="Arial, sans-serif" font-size="11" font-weight="700" fill="#ff6b80" text-anchor="middle" letter-spacing="1.5">PLAN CRÉATEUR</text>
+
+  <!-- Titre principal -->
+  <text x="70" y="240" font-family="Arial Black, sans-serif" font-size="58" font-weight="900" fill="#ffffff" letter-spacing="-2">Automatise ta</text>
+  <text x="70" y="310" font-family="Arial Black, sans-serif" font-size="58" font-weight="900" fill="url(#accent)" letter-spacing="-2">croissance vidéo</text>
+  <text x="70" y="380" font-family="Arial Black, sans-serif" font-size="44" font-weight="900" fill="#ffffff" letter-spacing="-1.5" fill-opacity="0.9">en pilote automatique.</text>
+
+  <!-- Sous-titre -->
+  <text x="70" y="440" font-family="Arial, sans-serif" font-size="18" fill="#9999bb" letter-spacing="0.2">Publie des shorts viraux sur YouTube &amp; TikTok — sans effort manuel.</text>
+
+  <!-- Prix -->
+  <text x="70" y="520" font-family="Arial Black, sans-serif" font-size="42" font-weight="900" fill="#ffffff">7,99€<tspan font-size="18" fill="#666688" font-weight="400"> / mois</tspan></text>
+
+  <!-- Séparateur vertical -->
+  <line x1="720" y1="80" x2="720" y2="520" stroke="#ffffff" stroke-opacity="0.06" stroke-width="1"/>
+
+  <!-- Cards de features (droite) -->
+  <!-- Card 1 -->
+  <rect x="760" y="80" width="280" height="110" rx="16" fill="#1e1e32" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1"/>
+  <text x="800" y="122" font-family="Arial, sans-serif" font-size="28">🎬</text>
+  <text x="840" y="118" font-family="Arial Black, sans-serif" font-size="14" font-weight="800" fill="#ffffff">Découpage IA</text>
+  <text x="840" y="138" font-family="Arial, sans-serif" font-size="12" fill="#777799">Tes meilleurs moments</text>
+  <text x="840" y="155" font-family="Arial, sans-serif" font-size="12" fill="#777799">extraits automatiquement.</text>
+  <circle cx="793" cy="170" r="3" fill="#ff3b5c"/>
+  <circle cx="803" cy="170" r="3" fill="#ff3b5c" fill-opacity="0.4"/>
+  <circle cx="813" cy="170" r="3" fill="#ff3b5c" fill-opacity="0.2"/>
+
+  <!-- Card 2 -->
+  <rect x="1060" y="80" width="280" height="110" rx="16" fill="#1e1e32" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1"/>
+  <text x="1100" y="122" font-family="Arial, sans-serif" font-size="28">⏰</text>
+  <text x="1140" y="118" font-family="Arial Black, sans-serif" font-size="14" font-weight="800" fill="#ffffff">Publication auto</text>
+  <text x="1140" y="138" font-family="Arial, sans-serif" font-size="12" fill="#777799">Programmée à l'heure</text>
+  <text x="1140" y="155" font-family="Arial, sans-serif" font-size="12" fill="#777799">optimale pour toi.</text>
+
+  <!-- Card 3 -->
+  <rect x="760" y="210" width="280" height="110" rx="16" fill="#1e1e32" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1"/>
+  <text x="800" y="252" font-family="Arial, sans-serif" font-size="28">✍️</text>
+  <text x="840" y="248" font-family="Arial Black, sans-serif" font-size="14" font-weight="800" fill="#ffffff">Titres &amp; hashtags IA</text>
+  <text x="840" y="268" font-family="Arial, sans-serif" font-size="12" fill="#777799">Générés et optimisés</text>
+  <text x="840" y="285" font-family="Arial, sans-serif" font-size="12" fill="#777799">pour chaque vidéo.</text>
+
+  <!-- Card 4 -->
+  <rect x="1060" y="210" width="280" height="110" rx="16" fill="#1e1e32" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1"/>
+  <text x="1100" y="252" font-family="Arial, sans-serif" font-size="28">📈</text>
+  <text x="1140" y="248" font-family="Arial Black, sans-serif" font-size="14" font-weight="800" fill="#ffffff">Score viral</text>
+  <text x="1140" y="268" font-family="Arial, sans-serif" font-size="12" fill="#777799">Chaque clip scoré</text>
+  <text x="1140" y="285" font-family="Arial, sans-serif" font-size="12" fill="#777799">avec conseils d'amélioration.</text>
+
+  <!-- Barre de score décorative -->
+  <rect x="760" y="345" width="580" height="5" rx="3" fill="#1e1e32"/>
+  <rect x="760" y="345" width="420" height="5" rx="3" fill="url(#accent)"/>
+  <text x="760" y="370" font-family="Arial, sans-serif" font-size="11" fill="#555577">Score viral moyen</text>
+  <text x="1340" y="370" font-family="Arial Black, sans-serif" font-size="13" fill="#ff3b5c" text-anchor="end">87/100</text>
+
+  <!-- Stats -->
+  <rect x="760" y="395" width="175" height="80" rx="12" fill="#ff3b5c" fill-opacity="0.1" stroke="#ff3b5c" stroke-opacity="0.3" stroke-width="1"/>
+  <text x="847" y="432" font-family="Arial Black, sans-serif" font-size="28" font-weight="900" fill="#ff6b80" text-anchor="middle">1</text>
+  <text x="847" y="452" font-family="Arial, sans-serif" font-size="11" fill="#777799" text-anchor="middle">compte connecté</text>
+  <text x="847" y="466" font-family="Arial, sans-serif" font-size="11" fill="#777799" text-anchor="middle">YouTube ou TikTok</text>
+
+  <rect x="950" y="395" width="175" height="80" rx="12" fill="#1e1e32" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1"/>
+  <text x="1037" y="432" font-family="Arial Black, sans-serif" font-size="28" font-weight="900" fill="#ffffff" text-anchor="middle">∞</text>
+  <text x="1037" y="452" font-family="Arial, sans-serif" font-size="11" fill="#777799" text-anchor="middle">publications</text>
+  <text x="1037" y="466" font-family="Arial, sans-serif" font-size="11" fill="#777799" text-anchor="middle">par mois</text>
+
+  <rect x="1140" y="395" width="200" height="80" rx="12" fill="#1e1e32" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1"/>
+  <text x="1240" y="432" font-family="Arial Black, sans-serif" font-size="22" font-weight="900" fill="#ffffff" text-anchor="middle">YouTube</text>
+  <text x="1240" y="452" font-family="Arial, sans-serif" font-size="11" fill="#777799" text-anchor="middle">&amp;</text>
+  <text x="1240" y="466" font-family="Arial, sans-serif" font-size="11" fill="#777799" text-anchor="middle">TikTok supportés</text>
+
+  <!-- Footer line -->
+  <line x1="70" y1="570" x2="1330" y2="570" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+  <text x="70" y="590" font-family="Arial, sans-serif" font-size="12" fill="#444466">scalevid.app</text>
+  <text x="1330" y="590" font-family="Arial, sans-serif" font-size="12" fill="#444466" text-anchor="end">Essai gratuit inclus · Sans engagement</text>
+</svg>

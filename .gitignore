@@ -4,3 +4,5 @@ node_modules/
 storage/uploads/
 *.mp4
 *.log
+prisma/dev.db
+prisma/dev.db-journal

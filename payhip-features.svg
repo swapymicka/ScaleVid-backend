@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" width="1200" height="500">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0d0d1a"/>
+      <stop offset="100%" style="stop-color:#12101f"/>
+    </linearGradient>
+    <linearGradient id="pill" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff3b5c"/>
+      <stop offset="100%" style="stop-color:#ff6b35"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="500" fill="url(#bg)"/>
+  <!-- halos -->
+  <ellipse cx="600" cy="250" rx="500" ry="200" fill="#ff3b5c" fill-opacity="0.03"/>
+
+  <!-- Titre section -->
+  <text x="600" y="70" font-family="Arial Black, sans-serif" font-size="32" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="-1">Ce que tu obtiens avec ScaleVid</text>
+  <text x="600" y="100" font-family="Arial, sans-serif" font-size="16" fill="#666688" text-anchor="middle">Tout ce dont tu as besoin pour dominer les short-form sur YouTube &amp; TikTok.</text>
+
+  <!-- Feature 1 -->
+  <rect x="60" y="140" width="220" height="280" rx="18" fill="#13132a" stroke="#ff3b5c" stroke-opacity="0.2" stroke-width="1"/>
+  <rect x="60" y="140" width="220" height="4" rx="2" fill="url(#pill)"/>
+  <text x="170" y="210" font-family="Arial, sans-serif" font-size="42" text-anchor="middle">🎬</text>
+  <text x="170" y="248" font-family="Arial Black, sans-serif" font-size="15" font-weight="800" fill="#ffffff" text-anchor="middle">Découpage IA</text>
+  <text x="170" y="272" font-family="Arial, sans-serif" font-size="12" fill="#666688" text-anchor="middle">ScaleVid analyse ta</text>
+  <text x="170" y="290" font-family="Arial, sans-serif" font-size="12" fill="#666688" text-anchor="middle">vidéo et extrait les</text>
+  <text x="170" y="308" font-family="Arial, sans-serif" font-size="12" fill="#666688" text-anchor="middle">moments les plus viraux.</text>
+  <!-- Score bar -->
+  <rect x="90" y="340" width="160" height="6" rx="3" fill="#1e1e3a"/>
+  <rect x="90" y="340" width="138" height="6" rx="3" fill="url(#pill)"/>
+  <text x="90" y="368" font-family="Arial, sans-serif" font-size="11" fill="#444466">Efficacité</text>
+  <text x="250" y="368" font-family="Arial Black, sans-serif" font-size="11" fill="#ff6b80" text-anchor="end">86%</text>
+  <text x="90" y="398" font-family="Arial, sans-serif" font-size="11" fill="#ff3b5c">✓ Zéro montage manuel</text>
+
+  <!-- Feature 2 -->
+  <rect x="320" y="140" width="220" height="280" rx="18" fill="#13132a" stroke="#ffffff" stroke-opacity="0.07" stroke-width="1"/>
+  <rect x="320" y="140" width="220" height="4" rx="2" fill="url(#pill)"/>
+  <text x="430" y="210" font-family="Arial, sans-serif" font-size="42" text-anchor="middle">⏰</text>
+  <text x="430" y="248" font-family="Arial Black, sans-serif" font-size="15" font-weight="800" fill="#ffffff" text-anchor="middle">Publication auto</text>
+  <text x="430" y="272" font-family="Arial, sans-serif" font-size="12" fill="#666688" text-anchor="middle">Tes shorts publiés à</text>
+  <text x="430" y="290" font-family="Arial, sans-serif" font-size="12" fill="#666688" text-anchor="middle">l'heure optimale sur</text>
+  <text x="430" y="308" font-family="Arial, sans-serif" font-size="12" fill="#666688" text-anchor="middle">YouTube &amp; TikTok.</text>
+  <rect x="350" y="340" width="160" height="6" rx="3" fill="#1e1e3a"/>
+  <rect x="350" y="340" width="148" height="6" rx="3" fill="url(#pill)"/>
+  <text x="350" y="368" font-family="Arial, sans-serif" font-size="11" fill="#444466">Gain de temps</text>
+  <text x="510" y="368" font-family="Arial Black, sans-serif" font-size="11" fill="#ff6b80" text-anchor="end">92%</text>
+  <text x="350" y="398" font-family="Arial, sans-serif" font-size="11" fill="#ff3b5c">✓ Planifié à l'avance</text>
+
+  <!-- Feature 3 -->
+  <rect x="580" y="140" width="220" height="280" rx="18" fill="#13132a" stroke="#ffffff" stroke-opacity="0.07" stroke-width="1"/>
+  <rect x="580" y="140" width="220" height="4" rx="2" fill="url(#pill)"/>
+  <text x="690" y="210" font-family="Arial, sans-serif" font-size="42" text-anchor="middle">✍️</text>
+  <text x="690" y="248" font-family="Arial Black, sans-serif" font-size="15" font-weight="800" fill="#ffffff" text-anchor="middle">Titres &amp; hashtags IA</text>
+  <text x="690" y="272" font-family="Arial, sans-serif" font-size="12" fill="#666688" text-anchor="middle">Titres accrocheurs et</text>
+  <text x="690" y="290" font-family="Arial, sans-serif" font-size="12" fill="#666688" text-anchor="middle">hashtags optimisés</text>
+  <text x="690" y="308" font-family="Arial, sans-serif" font-size="12" fill="#666688" text-anchor="middle">générés par IA.</text>
+  <rect x="610" y="340" width="160" height="6" rx="3" fill="#1e1e3a"/>
+  <rect x="610" y="340" width="144" height="6" rx="3" fill="url(#pill)"/>
+  <text x="610" y="368" font-family="Arial, sans-serif" font-size="11" fill="#444466">Engagement</text>
+  <text x="770" y="368" font-family="Arial Black, sans-serif" font-size="11" fill="#ff6b80" text-anchor="end">90%</text>
+  <text x="610" y="398" font-family="Arial, sans-serif" font-size="11" fill="#ff3b5c">✓ +100 chars optimisés</text>
+
+  <!-- Feature 4 -->
+  <rect x="840" y="140" width="220" height="280" rx="18" fill="#13132a" stroke="#ffffff" stroke-opacity="0.07" stroke-width="1"/>
+  <rect x="840" y="140" width="220" height="4" rx="2" fill="url(#pill)"/>
+  <text x="950" y="210" font-family="Arial, sans-serif" font-size="42" text-anchor="middle">📈</text>
+  <text x="950" y="248" font-family="Arial Black, sans-serif" font-size="15" font-weight="800" fill="#ffffff" text-anchor="middle">Score viral</text>
+  <text x="950" y="272" font-family="Arial, sans-serif" font-size="12" fill="#666688" text-anchor="middle">Chaque clip reçoit</text>
+  <text x="950" y="290" font-family="Arial, sans-serif" font-size="12" fill="#666688" text-anchor="middle">un score et des conseils</text>
+  <text x="950" y="308" font-family="Arial, sans-serif" font-size="12" fill="#666688" text-anchor="middle">pour maximiser les vues.</text>
+  <rect x="870" y="340" width="160" height="6" rx="3" fill="#1e1e3a"/>
+  <rect x="870" y="340" width="130" height="6" rx="3" fill="url(#pill)"/>
+  <text x="870" y="368" font-family="Arial, sans-serif" font-size="11" fill="#444466">Précision</text>
+  <text x="1030" y="368" font-family="Arial Black, sans-serif" font-size="11" fill="#ff6b80" text-anchor="end">81%</text>
+  <text x="870" y="398" font-family="Arial, sans-serif" font-size="11" fill="#ff3b5c">✓ Conseils personnalisés</text>
+
+  <!-- Footer -->
+  <text x="600" y="468" font-family="Arial, sans-serif" font-size="13" fill="#333355" text-anchor="middle">scalevid.app · Essai gratuit inclus · Sans engagement · Résiliation à tout moment</text>
+</svg>
