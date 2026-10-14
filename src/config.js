@@ -40,4 +40,14 @@ module.exports = {
     appPassword: process.env.GMAIL_APP_PASSWORD,
     fromName: process.env.EMAIL_FROM_NAME || 'ScaleVid',
   },
+
+  payhip: {
+    secretKey: process.env.PAYHIP_WEBHOOK_SECRET || '',
+    // Mapping lien Payhip → plan interne
+    productPlans: {
+      'nFreq':  { plan: 'creator',     accounts: 1 },
+      '5yXCj':  { plan: 'creator_pro', accounts: 2 },
+      'x4Zqa':  { plan: 'agency',      accounts: 4 },
+    },
+  },
 };

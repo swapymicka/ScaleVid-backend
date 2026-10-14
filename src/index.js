@@ -9,6 +9,7 @@ const socialRoutes = require('./routes/social');
 const videoRoutes = require('./routes/videos');
 const aiRoutes = require('./routes/ai');
 const reportsRoutes = require('./routes/reports');
+const webhookRoutes = require('./routes/webhook');
 const { startScheduledPostChecker } = require('./services/scheduler');
 
 const app = express();
@@ -46,7 +47,8 @@ app.use('/auth', authRoutes);
 app.use('/', socialRoutes);       // expose /auth/youtube, /auth/tiktok, /accounts
 app.use('/', videoRoutes);        // expose /videos, /clips/:id/schedule
 app.use('/', aiRoutes);           // expose /ai/suggest-title
-app.use('/reports', reportsRoutes); // expose /reports/performance, /reports/export
+app.use('/reports', reportsRoutes);   // expose /reports/performance, /reports/export
+app.use('/webhook', webhookRoutes);   // expose /webhook/payhip
 
 app.use((err, _req, res, _next) => {
   console.error(err);
