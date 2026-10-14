@@ -1391,6 +1391,33 @@ footer{
         </div>
       </div>
 
+      <!-- ── 05 · RAPPORTS ─────────────────────────────────────── -->
+      <div class="dash-step" id="panel-reports" data-panel="reports">
+        <div class="dash-step__head">
+          <div class="dash-step__badge">05</div>
+          <div class="dash-step__meta">
+            <h2>Rapports de performance</h2>
+            <p>Vue d'ensemble de tous vos comptes connectés et historique de publications.</p>
+          </div>
+        </div>
+        <div class="dash-step__body">
+          <div id="reportsWrap">
+            <div style="color:var(--muted);font-size:14px;padding:16px 0;">Chargement des statistiques…</div>
+          </div>
+          <div id="reportsExport" style="display:none;margin-top:24px;">
+            <div style="font-size:13px;font-weight:600;margin-bottom:12px;color:var(--muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;">Exporter le rapport</div>
+            <div style="display:flex;gap:12px;flex-wrap:wrap;">
+              <button class="btn btn-ghost" id="exportCsvBtn" style="font-size:13px;">⬇ CSV</button>
+              <button class="btn btn-ghost" id="exportPdfBtn" style="font-size:13px;">⬇ PDF</button>
+              <button class="btn btn-ghost" id="exportWhitelabelBtn" style="font-size:13px;display:none;">⬇ PDF marque blanche (Agence)</button>
+            </div>
+          </div>
+          <div id="reportsUpgrade" style="display:none;margin-top:16px;padding:16px;background:var(--surface-2);border-radius:var(--radius);border:1px solid var(--line);">
+            <p style="font-size:14px;color:var(--muted);">📊 Les exports PDF/CSV et les rapports marque blanche sont disponibles dès le plan <strong style="color:var(--text);">Créateur Pro</strong>.</p>
+          </div>
+        </div>
+      </div>
+
     </div>
   </main>
 </div><!-- /#page-dashboard -->
@@ -1944,7 +1971,11 @@ function checkOAuthCallback() {
     showToast('✓ TikTok connecté avec succès !');
   } else if (connect === 'error') {
     const msg = params.get('msg');
-    showToast('Erreur TikTok : ' + (msg || 'vérifiez les logs Railway.'), true);
+    if (msg === 'limit_reached') {
+      showToast('Limite de comptes atteinte. Passez à un plan supérieur pour en ajouter d\'autres.', true);
+    } else {
+      showToast('Erreur de connexion : ' + (msg || 'vérifiez les logs Railway.'), true);
+    }
   }
 }
 
@@ -2579,7 +2610,8 @@ async function loadDashboard(){
   renderAccounts(user.accounts || []);
   if (user.subscription) {
     const s = user.subscription;
-    document.getElementById('subPlan').textContent = s.plan === 'agency' ? 'Agence' : 'Créateur solo';
+    const planLabels = { creator: 'Créateur solo', creator_pro: 'Créateur Pro', agency: 'Agence' };
+    document.getElementById('subPlan').textContent = planLabels[s.plan] || s.plan;
     document.getElementById('subDetail').textContent = s.period === 'annual'
       ? `${s.account_count} compte(s) · ${s.total_price}€/an · facturé annuellement (-20%)`
       : `${s.account_count} compte(s) · ${s.total_price}€/mois`;
@@ -2597,7 +2629,123 @@ async function loadDashboard(){
   await tryRefreshToken();
   // Charger les comptes OAuth réels
   renderRealAccounts();
+  // Charger les rapports
+  loadReports();
 }
+
+/* ── RAPPORTS DE PERFORMANCE ─────────────────────────────────────────── */
+async function loadReports() {
+  const wrap = document.getElementById('reportsWrap');
+  const exportSection = document.getElementById('reportsExport');
+  const upgradeSection = document.getElementById('reportsUpgrade');
+  if (!wrap) return;
+
+  const user = currentDbUser();
+  const plan = user?.subscription?.plan || 'free';
+  const canExport = ['creator_pro', 'agency'].includes(plan);
+  const isAgency  = plan === 'agency';
+
+  // Afficher/masquer les sections export
+  if (canExport) {
+    exportSection.style.display = 'block';
+    document.getElementById('exportWhitelabelBtn').style.display = isAgency ? 'inline-flex' : 'none';
+    upgradeSection.style.display = 'none';
+  } else {
+    exportSection.style.display = 'none';
+    upgradeSection.style.display = 'block';
+  }
+
+  // Charger les stats depuis le backend
+  try {
+    const token = localStorage.getItem('scalevid_token') || sessionStorage.getItem('scalevid_token');
+    if (!token) {
+      wrap.innerHTML = '<p style="color:var(--muted);font-size:14px;">Connectez-vous pour voir vos statistiques.</p>';
+      return;
+    }
+    const res = await fetch(BACKEND + '/reports/performance', {
+      credentials: 'include',
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    if (!res.ok) throw new Error('Erreur serveur');
+    const data = await res.json();
+
+    if (!data.accounts || data.accounts.length === 0) {
+      wrap.innerHTML = '<p style="color:var(--muted);font-size:14px;">Aucun compte connecté. Connectez YouTube ou TikTok pour voir vos statistiques.</p>';
+      return;
+    }
+
+    const platIcon = p => p === 'youtube' ? '▶' : '♪';
+    const platColor = p => p === 'youtube' ? '#FF0000' : '#000';
+
+    let html = '<div style="display:grid;gap:16px;">';
+    for (const a of data.accounts) {
+      const rate = a.stats.successRate;
+      const rateColor = rate >= 80 ? '#22c55e' : rate >= 50 ? '#FFC247' : '#FF3B5C';
+      html += `
+        <div style="background:var(--surface-2);border:1px solid var(--line);border-radius:var(--radius);padding:20px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+            <span style="background:var(--surface);border-radius:8px;padding:6px 10px;font-size:18px;">${platIcon(a.provider)}</span>
+            <div>
+              <div style="font-weight:700;font-size:15px;">${a.handle}</div>
+              <div style="font-size:12px;color:var(--muted);text-transform:capitalize;">${a.provider}</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:12px;">
+            <div style="text-align:center;padding:12px;background:var(--surface);border-radius:10px;">
+              <div style="font-size:22px;font-weight:800;font-family:var(--display);">${a.stats.total}</div>
+              <div style="font-size:11px;color:var(--muted);">Total</div>
+            </div>
+            <div style="text-align:center;padding:12px;background:var(--surface);border-radius:10px;">
+              <div style="font-size:22px;font-weight:800;font-family:var(--display);color:#22c55e;">${a.stats.published}</div>
+              <div style="font-size:11px;color:var(--muted);">Publiées</div>
+            </div>
+            <div style="text-align:center;padding:12px;background:var(--surface);border-radius:10px;">
+              <div style="font-size:22px;font-weight:800;font-family:var(--display);color:var(--pink);">${a.stats.failed}</div>
+              <div style="font-size:11px;color:var(--muted);">Échecs</div>
+            </div>
+            <div style="text-align:center;padding:12px;background:var(--surface);border-radius:10px;">
+              <div style="font-size:22px;font-weight:800;font-family:var(--display);color:${rateColor};">${rate}%</div>
+              <div style="font-size:11px;color:var(--muted);">Taux réussite</div>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    // Totaux si plusieurs comptes
+    if (data.accounts.length > 1) {
+      const t = data.totals;
+      html += `
+        <div style="background:var(--surface);border:1px solid var(--pink);border-radius:var(--radius);padding:20px;">
+          <div style="font-size:13px;font-weight:600;color:var(--muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px;">Vue d'ensemble — tous comptes</div>
+          <div style="display:flex;gap:24px;flex-wrap:wrap;">
+            <span><b style="font-size:20px;font-family:var(--display);">${t.total}</b> <span style="color:var(--muted);font-size:13px;">publications</span></span>
+            <span><b style="font-size:20px;font-family:var(--display);color:#22c55e;">${t.published}</b> <span style="color:var(--muted);font-size:13px;">publiées</span></span>
+            <span><b style="font-size:20px;font-family:var(--display);color:var(--pink);">${t.failed}</b> <span style="color:var(--muted);font-size:13px;">échecs</span></span>
+            <span><b style="font-size:20px;font-family:var(--display);">${t.successRate}%</b> <span style="color:var(--muted);font-size:13px;">taux global</span></span>
+          </div>
+        </div>`;
+    }
+    html += '</div>';
+    wrap.innerHTML = html;
+  } catch (e) {
+    wrap.innerHTML = `<p style="color:var(--muted);font-size:14px;">Impossible de charger les statistiques.</p>`;
+  }
+}
+
+// Boutons export
+document.addEventListener('DOMContentLoaded', () => {
+  const token = () => localStorage.getItem('scalevid_token') || sessionStorage.getItem('scalevid_token');
+  const dlReport = (format, whitelabel) => {
+    const wl = whitelabel ? '&whitelabel=1' : '';
+    window.open(BACKEND + `/reports/export?format=${format}${wl}`, '_blank');
+  };
+  const csvBtn = document.getElementById('exportCsvBtn');
+  const pdfBtn = document.getElementById('exportPdfBtn');
+  const wlBtn  = document.getElementById('exportWhitelabelBtn');
+  if (csvBtn) csvBtn.addEventListener('click', () => dlReport('csv', false));
+  if (pdfBtn) pdfBtn.addEventListener('click', () => dlReport('pdf', false));
+  if (wlBtn)  wlBtn.addEventListener('click',  () => dlReport('pdf', true));
+});
 
 // --- Connexion OAuth réelle via le backend ---
 document.getElementById('connectYt').addEventListener('click', () => connectOAuth('youtube'));

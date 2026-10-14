@@ -8,6 +8,7 @@ const authRoutes = require('./routes/auth');
 const socialRoutes = require('./routes/social');
 const videoRoutes = require('./routes/videos');
 const aiRoutes = require('./routes/ai');
+const reportsRoutes = require('./routes/reports');
 const { startScheduledPostChecker } = require('./services/scheduler');
 
 const app = express();
@@ -42,9 +43,10 @@ app.get('/cookie-policy', (_req, res) => res.sendFile(path.join(__dirname, '../p
 app.get('/mentions-legales', (_req, res) => res.sendFile(path.join(__dirname, '../public/mentions-legales.html')));
 app.get('/sitemap.xml', (_req, res) => res.sendFile(path.join(__dirname, '../public/sitemap.xml')));
 app.use('/auth', authRoutes);
-app.use('/', socialRoutes); // expose /auth/youtube, /auth/tiktok, /accounts
-app.use('/', videoRoutes); // expose /videos, /clips/:id/schedule
-app.use('/', aiRoutes);    // expose /ai/suggest-title
+app.use('/', socialRoutes);       // expose /auth/youtube, /auth/tiktok, /accounts
+app.use('/', videoRoutes);        // expose /videos, /clips/:id/schedule
+app.use('/', aiRoutes);           // expose /ai/suggest-title
+app.use('/reports', reportsRoutes); // expose /reports/performance, /reports/export
 
 app.use((err, _req, res, _next) => {
   console.error(err);

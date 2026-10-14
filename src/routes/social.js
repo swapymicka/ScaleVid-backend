@@ -21,6 +21,18 @@ function readState(state) {
   const { uid } = jwt.verify(state, config.jwtSecret);
   return uid;
 }
+// Génère un JWT d'authentification classique pour l'utilisateur.
+function signUserToken(user) {
+  return jwt.sign({ sub: user.id, email: user.email }, config.jwtSecret, { expiresIn: '30d' });
+}
+// Pose le JWT dans un cookie httpOnly (pour les redirects navigateur).
+function setAuthCookie(res, token) {
+  res.cookie('scalevid_token', token, {
+    httpOnly: true,
+    sameSite: 'lax',
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+  });
+}
 
 /* ---------------------- RECHERCHE DE CHAÎNES (publique) ---------------------- */
 
@@ -64,6 +76,20 @@ router.get('/search/youtube', async (req, res) => {
   }
 });
 
+/* ----------- HELPER : vérification limite de comptes par plan ----------- */
+
+const PLAN_LIMITS = { creator: 1, creator_pro: 2, agency: 4 };
+
+async function checkAccountSlot(userId, redirectBase) {
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  const limit = PLAN_LIMITS[user.plan] ?? user.accountSlots ?? 1;
+  const count = await prisma.socialAccount.count({ where: { userId } });
+  if (count >= limit) {
+    return `${redirectBase}/onair-standalone.html?connect=error&msg=limit_reached`;
+  }
+  return null; // pas de problème
+}
+
 /* ------------------------------- YOUTUBE ------------------------------- */
 
 // Démarre le flux : le front redirige le navigateur vers cette route,
@@ -80,6 +106,11 @@ router.get('/auth/youtube/callback', async (req, res) => {
     if (error) return res.redirect(`${config.frontendUrl}/onair-standalone.html?connect=error`);
 
     const userId = readState(state);
+
+    // Vérifier la limite de comptes AVANT de stocker
+    const limitError = await checkAccountSlot(userId, config.frontendUrl);
+    if (limitError) return res.redirect(limitError);
+
     const tokens = await youtubeService.exchangeCodeForTokens(code);
     const channel = await youtubeService.getChannelInfo(tokens.access_token, tokens.refresh_token);
 
@@ -103,7 +134,10 @@ router.get('/auth/youtube/callback', async (req, res) => {
       },
     });
 
-    res.redirect(`${config.frontendUrl}/onair-standalone.html?connect=youtube_ok`);
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    const authToken = signUserToken(user);
+    setAuthCookie(res, authToken);
+    res.redirect(`${config.frontendUrl}/onair-standalone.html?connect=youtube_ok&bt=${authToken}`);
   } catch (e) {
     console.error('YouTube OAuth callback error:', e);
     res.redirect(`${config.frontendUrl}/onair-standalone.html?connect=error`);
@@ -112,17 +146,74 @@ router.get('/auth/youtube/callback', async (req, res) => {
 
 /* -------------------------------- TIKTOK -------------------------------- */
 
+// Endpoint sans session ni mot de passe : reçoit juste l'email, trouve ou crée
+// l'utilisateur, et renvoie l'URL OAuth. TikTok/Google authentifient eux-mêmes.
+router.post('/auth/tiktok-start', async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ error: 'Email requis.' });
+
+    const emailNorm = email.toLowerCase().trim();
+    let user = await prisma.user.findUnique({ where: { email: emailNorm } });
+    if (!user) {
+      user = await prisma.user.create({
+        data: { name: emailNorm.split('@')[0], email: emailNorm, passwordHash: 'oauth-only' },
+      });
+    }
+
+    const url = tiktokService.getAuthUrl(buildState(user.id));
+    res.json({ url });
+  } catch (e) {
+    console.error('/auth/tiktok-start error:', e);
+    res.status(500).json({ error: 'Erreur serveur.' });
+  }
+});
+
+// Même chose pour YouTube
+router.post('/auth/youtube-start', async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ error: 'Email requis.' });
+
+    const emailNorm = email.toLowerCase().trim();
+    let user = await prisma.user.findUnique({ where: { email: emailNorm } });
+    if (!user) {
+      user = await prisma.user.create({
+        data: { name: emailNorm.split('@')[0], email: emailNorm, passwordHash: 'oauth-only' },
+      });
+    }
+
+    const youtubeService = require('../services/youtubeService');
+    const url = youtubeService.getAuthUrl(buildState(user.id));
+    res.json({ url });
+  } catch (e) {
+    console.error('/auth/youtube-start error:', e);
+    res.status(500).json({ error: 'Erreur serveur.' });
+  }
+});
+
 router.get('/auth/tiktok', requireAuth, (req, res) => {
   const url = tiktokService.getAuthUrl(buildState(req.userId));
   res.redirect(url);
 });
 
 router.get('/auth/tiktok/callback', async (req, res) => {
+  // URL de base : toujours l'URL de ce backend (qui sert aussi le frontend)
+  const base = config.appBaseUrl || config.frontendUrl;
   try {
     const { code, state, error } = req.query;
-    if (error) return res.redirect(`${config.frontendUrl}/onair-standalone.html?connect=error`);
+    if (error) {
+      console.error('TikTok callback — erreur TikTok:', error);
+      return res.redirect(`${base}/onair-standalone.html?connect=error`);
+    }
 
     const userId = readState(state);
+
+    // Vérifier la limite de comptes AVANT de stocker
+    const base2 = config.appBaseUrl || config.frontendUrl;
+    const limitError2 = await checkAccountSlot(userId, base2);
+    if (limitError2) return res.redirect(limitError2);
+
     const tokens = await tiktokService.exchangeCodeForTokens(code);
     const profile = await tiktokService.getUserInfo(tokens.access_token);
 
@@ -132,8 +223,8 @@ router.get('/auth/tiktok/callback', async (req, res) => {
         userId,
         handle: profile.handle,
         accessToken: tokenCrypto.encrypt(tokens.access_token),
-        refreshToken: tokenCrypto.encrypt(tokens.refresh_token),
-        tokenExpiresAt: new Date(Date.now() + tokens.expires_in * 1000),
+        refreshToken: tokens.refresh_token ? tokenCrypto.encrypt(tokens.refresh_token) : null,
+        tokenExpiresAt: tokens.expires_in ? new Date(Date.now() + tokens.expires_in * 1000) : null,
       },
       create: {
         userId,
@@ -141,15 +232,20 @@ router.get('/auth/tiktok/callback', async (req, res) => {
         externalId: profile.externalId,
         handle: profile.handle,
         accessToken: tokenCrypto.encrypt(tokens.access_token),
-        refreshToken: tokenCrypto.encrypt(tokens.refresh_token),
-        tokenExpiresAt: new Date(Date.now() + tokens.expires_in * 1000),
+        refreshToken: tokens.refresh_token ? tokenCrypto.encrypt(tokens.refresh_token) : null,
+        tokenExpiresAt: tokens.expires_in ? new Date(Date.now() + tokens.expires_in * 1000) : null,
       },
     });
 
-    res.redirect(`${config.frontendUrl}/onair-standalone.html?connect=tiktok_ok`);
+    // Signer un JWT pour l'utilisateur et le passer au frontend via l'URL
+    // (le frontend le stocke en localStorage pour les prochains appels).
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    const authToken = signUserToken(user);
+    setAuthCookie(res, authToken);
+    res.redirect(`${base}/onair-standalone.html?connect=tiktok_ok&bt=${authToken}`);
   } catch (e) {
-    console.error('TikTok OAuth callback error:', e);
-    res.redirect(`${config.frontendUrl}/onair-standalone.html?connect=error`);
+    console.error('TikTok OAuth callback error:', e.message);
+    res.redirect(`${base}/onair-standalone.html?connect=error&msg=${encodeURIComponent(e.message)}`);
   }
 });
 
