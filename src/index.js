@@ -16,6 +16,11 @@ const app = express();
 
 app.use(cors({ origin: config.frontendUrl, credentials: true }));
 app.use(cookieParser());
+
+// ⚠️ Le webhook Stripe doit être monté AVANT express.json()
+// car Stripe a besoin du raw body (Buffer) pour vérifier la signature HMAC.
+app.use('/webhook', webhookRoutes);
+
 app.use(express.json());
 
 // Page de test minimale (public/test.html) pour vérifier le flux OAuth dans
@@ -48,7 +53,7 @@ app.use('/', socialRoutes);       // expose /auth/youtube, /auth/tiktok, /accoun
 app.use('/', videoRoutes);        // expose /videos, /clips/:id/schedule
 app.use('/', aiRoutes);           // expose /ai/suggest-title
 app.use('/reports', reportsRoutes);   // expose /reports/performance, /reports/export
-app.use('/webhook', webhookRoutes);   // expose /webhook/payhip
+// (webhook déjà monté avant express.json() — voir plus haut)
 
 app.use((err, _req, res, _next) => {
   console.error(err);

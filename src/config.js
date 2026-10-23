@@ -41,13 +41,8 @@ module.exports = {
     fromName: process.env.EMAIL_FROM_NAME || 'ScaleVid',
   },
 
-  payhip: {
-    secretKey: process.env.PAYHIP_WEBHOOK_SECRET || '',
-    // Mapping lien Payhip → plan interne
-    productPlans: {
-      'nFreq':  { plan: 'creator',     accounts: 1 },
-      '5yXCj':  { plan: 'creator_pro', accounts: 2 },
-      'x4Zqa':  { plan: 'agency',      accounts: 4 },
-    },
+  stripe: {
+    secretKey:     process.env.STRIPE_SECRET_KEY || '',
+    webhookSecret: process.env.STRIPE_WEBHOOK_SECRET || '',
   },
 };

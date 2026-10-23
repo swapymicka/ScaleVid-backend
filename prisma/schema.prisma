@@ -12,14 +12,15 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(uuid())
-  name         String
-  email        String   @unique
-  passwordHash String
-  plan         String   @default("creator") // "creator" | "agency"
-  period       String   @default("monthly") // "monthly" | "annual"
-  accountSlots Int      @default(1)          // nombre de comptes payés dans l'abonnement
-  createdAt    DateTime @default(now())
+  id               String   @id @default(uuid())
+  name             String
+  email            String   @unique
+  passwordHash     String
+  plan             String   @default("creator") // "creator" | "creator_pro" | "agency"
+  period           String   @default("monthly") // "monthly" | "annual"
+  accountSlots     Int      @default(1)          // nombre de comptes payés dans l'abonnement
+  stripeCustomerId String?  @unique              // ID client Stripe (cus_...)
+  createdAt        DateTime @default(now())
 
   socialAccounts SocialAccount[]
   videos         Video[]
