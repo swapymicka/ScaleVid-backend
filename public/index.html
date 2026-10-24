@@ -1088,7 +1088,7 @@ footer{
             <li>File de rendu prioritaire</li>
             <li>Support prioritaire par email</li>
           </ul>
-          <button class="btn btn-primary checkout-btn" style="width:100%;" data-plan="creator_pro">Commencer — <span class="total">14,99€</span>/mois</button>
+          <button class="btn btn-primary checkout-btn" style="width:100%;" data-plan="creator_pro">Commencer — <span class="total">13,99€</span>/mois</button>
         </div>
 
         <div class="price__card" data-plan="agency">
@@ -1453,7 +1453,7 @@ footer{
       <div class="modal__switch">Déjà un compte ? <button id="goLogin">Se connecter</button></div>
     </div>
 
-    <div class="modal__note">Votre compte est créé localement. Le paiement est sécurisé via PayHip — vous serez redirigé après inscription.</div>
+    <div class="modal__note">Votre compte est créé localement. Le paiement est sécurisé via Stripe — vous serez redirigé après inscription.</div>
   </div>
 </div>
 
@@ -1516,7 +1516,7 @@ footer{
           <li>✅ Titres & hashtags IA</li>
           <li>✅ Planification automatique</li>
         </ul>
-        <a href="https://payhip.com/b/nFreq" target="_blank" class="btn btn-primary" style="display:block;text-align:center;width:100%;box-sizing:border-box;text-decoration:none;background:var(--pink);">Choisir ce plan</a>
+        <a href="https://buy.stripe.com/9B69ATd3YaB01Dd9vm93y00" target="_blank" class="btn btn-primary" style="display:block;text-align:center;width:100%;box-sizing:border-box;text-decoration:none;background:var(--pink);">Choisir ce plan</a>
       </div>
       <!-- Agence -->
       <div style="background:var(--surface-2);border:2px solid var(--pink);border-radius:14px;padding:16px;position:relative;">
@@ -1529,7 +1529,7 @@ footer{
           <li>✅ Titres & hashtags IA</li>
           <li>✅ Dashboard multi-comptes</li>
         </ul>
-        <a href="https://payhip.com/b/x4Zqa" target="_blank" class="btn btn-primary" style="display:block;text-align:center;width:100%;box-sizing:border-box;text-decoration:none;">Choisir ce plan</a>
+        <a href="https://buy.stripe.com/dRm00j8NIbF481BePG93y04" target="_blank" class="btn btn-primary" style="display:block;text-align:center;width:100%;box-sizing:border-box;text-decoration:none;">Choisir ce plan</a>
       </div>
     </div>
     <button class="btn btn-ghost" style="font-size:12px;" id="trialEndedClose">Continuer en lecture seule</button>
@@ -2084,7 +2084,7 @@ async function apiConnect(platform){
 // Créateur solo : 1 compte (YouTube OU TikTok). Agence : 4 comptes simultanés.
 const TIERS = {
   creator:     { base: 7.99,  annualBase: 79.99,  accounts: 1 },
-  creator_pro: { base: 14.99, annualBase: 149.99, accounts: 2 },
+  creator_pro: { base: 13.99, annualBase: 139.00, accounts: 2 },
   agency:      { base: 28.99, annualBase: 289.99, accounts: 4 },
 };
 function totalFor(plan, n, periodVal){
@@ -2206,11 +2206,10 @@ document.querySelectorAll('.faq__item .faq__q').forEach(btn=>{
 });
 
 /* ===================== pricing logic ===================== */
-// URLs PayHip réelles — une URL par plan (mensuel + annuel sur la même page PayHip)
-const PAYHIP_URLS = {
-  creator:     'https://payhip.com/b/nFreq',
-  creator_pro: 'https://payhip.com/b/5yXCj',
-  agency:      'https://payhip.com/b/x4Zqa',
+const STRIPE_URLS = {
+  creator:     { monthly: 'https://buy.stripe.com/9B69ATd3YaB01Dd9vm93y00', annual: 'https://buy.stripe.com/eVqfZh7JE38y95FdLC93y01' },
+  creator_pro: { monthly: 'https://buy.stripe.com/9B6bJ11lg5gG3Ll4b293y06', annual: 'https://buy.stripe.com/fZudR95Bw8sS5Tt9vm93y03' },
+  agency:      { monthly: 'https://buy.stripe.com/dRm00j8NIbF481BePG93y04', annual: 'https://buy.stripe.com/9B6bJ13tofVkdlVcHy93y05' },
 };
 
 let period = 'monthly';
@@ -2372,9 +2371,10 @@ function afterAuth(){
 }
 
 function runCheckout(plan, accountCount, periodVal){
-  const url = PAYHIP_URLS[plan];
-  if (!url) { showToast('Plan inconnu.', true); return; }
-  showToast('Redirection vers PayHip pour finaliser votre abonnement…');
+  const planUrls = STRIPE_URLS[plan];
+  if (!planUrls) { showToast('Plan inconnu.', true); return; }
+  const url = planUrls[period] || planUrls['monthly'];
+  showToast('Redirection vers Stripe pour finaliser votre abonnement…');
   window.open(url, '_blank');
 }
 
