@@ -82,6 +82,8 @@ const PLAN_LIMITS = { creator: 1, creator_pro: 2, agency: 4 };
 
 async function checkAccountSlot(userId, redirectBase) {
   const user = await prisma.user.findUnique({ where: { id: userId } });
+  // L'admin a toujours accès illimité
+  if (process.env.ADMIN_EMAIL && user.email === process.env.ADMIN_EMAIL) return null;
   const limit = PLAN_LIMITS[user.plan] ?? user.accountSlots ?? 1;
   const count = await prisma.socialAccount.count({ where: { userId } });
   if (count >= limit) {
