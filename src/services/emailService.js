@@ -21,9 +21,10 @@ async function sendWelcomeEmail(user) {
   }
 
   const firstName = (user.name || '').split(' ')[0] || 'là';
-  const creatorUrl = 'https://payhip.com/b/nFreq';
-  const agencyUrl  = 'https://payhip.com/b/x4Zqa';
-  const appUrl     = config.appBaseUrl || 'http://localhost:4000';
+  const creatorUrl    = 'https://buy.stripe.com/9B69ATd3YaB01Dd9vm93y00'; // Créateur mensuel
+  const creatorProUrl = 'https://buy.stripe.com/9B6bJ11lg5gG3Ll4b293y06'; // Créateur Pro mensuel
+  const agencyUrl     = 'https://buy.stripe.com/dRm00j8NIbF481BePG93y04'; // Agence mensuel
+  const appUrl        = config.appBaseUrl || 'http://localhost:4000';
 
   const html = `
 <!DOCTYPE html>
@@ -70,35 +71,37 @@ async function sendWelcomeEmail(user) {
 
       <!-- Plans -->
       <h2 style="font-size:17px;color:#0d0d1a;margin:0 0 16px;">Nos abonnements</h2>
-      <div style="display:flex;gap:12px;margin-bottom:32px;">
+      <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:32px;">
 
         <!-- Créateur -->
-        <div style="flex:1;border:1px solid #e5e5e5;border-radius:12px;padding:20px;text-align:center;">
-          <div style="font-size:12px;color:#888;font-family:monospace;text-transform:uppercase;margin-bottom:8px;">Créateur solo</div>
-          <div style="font-size:28px;font-weight:800;color:#0d0d1a;">7,99€<span style="font-size:13px;color:#888;font-weight:400;">/mois</span></div>
-          <ul style="text-align:left;list-style:none;padding:0;margin:16px 0;color:#555;font-size:13px;line-height:2;">
-            <li>✅ 1 compte YouTube ou TikTok</li>
-            <li>✅ Publications illimitées</li>
-            <li>✅ Titres & hashtags IA</li>
-            <li>✅ Planification automatique</li>
-            <li>✅ Score viral par clip</li>
-          </ul>
-          <a href="${creatorUrl}" style="display:block;background:#0d0d1a;color:#ffffff;padding:11px 16px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600;">Démarrer →</a>
+        <div style="border:1px solid #e5e5e5;border-radius:12px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:12px;color:#888;font-family:monospace;text-transform:uppercase;margin-bottom:4px;">Créateur solo</div>
+            <div style="font-size:22px;font-weight:800;color:#0d0d1a;">7,99€<span style="font-size:12px;color:#888;font-weight:400;">/mois</span></div>
+            <div style="color:#555;font-size:12px;margin-top:4px;">1 compte · Publications illimitées · Score viral</div>
+          </div>
+          <a href="${creatorUrl}" style="background:#0d0d1a;color:#ffffff;padding:10px 18px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap;">Choisir →</a>
+        </div>
+
+        <!-- Créateur Pro -->
+        <div style="border:2px solid #7c3aed;border-radius:12px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;position:relative;">
+          <div style="position:absolute;top:-10px;left:16px;background:#7c3aed;color:#fff;font-size:10px;font-family:monospace;padding:2px 10px;border-radius:20px;">⭐ Recommandé</div>
+          <div>
+            <div style="font-size:12px;color:#888;font-family:monospace;text-transform:uppercase;margin-bottom:4px;">Créateur Pro</div>
+            <div style="font-size:22px;font-weight:800;color:#0d0d1a;">13,99€<span style="font-size:12px;color:#888;font-weight:400;">/mois</span></div>
+            <div style="color:#555;font-size:12px;margin-top:4px;">2 comptes · YouTube + TikTok simultanés</div>
+          </div>
+          <a href="${creatorProUrl}" style="background:#7c3aed;color:#ffffff;padding:10px 18px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap;">Choisir →</a>
         </div>
 
         <!-- Agence -->
-        <div style="flex:1;border:2px solid #ff3b5c;border-radius:12px;padding:20px;text-align:center;position:relative;">
-          <div style="position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:#ff3b5c;color:#fff;font-size:10px;font-family:monospace;padding:3px 12px;border-radius:20px;white-space:nowrap;">⭐ Populaire</div>
-          <div style="font-size:12px;color:#888;font-family:monospace;text-transform:uppercase;margin-bottom:8px;">Agence</div>
-          <div style="font-size:28px;font-weight:800;color:#0d0d1a;">28,99€<span style="font-size:13px;color:#888;font-weight:400;">/mois</span></div>
-          <ul style="text-align:left;list-style:none;padding:0;margin:16px 0;color:#555;font-size:13px;line-height:2;">
-            <li>✅ 4 comptes simultanés</li>
-            <li>✅ Publications illimitées</li>
-            <li>✅ Titres & hashtags IA</li>
-            <li>✅ Dashboard multi-clients</li>
-            <li>✅ Support prioritaire</li>
-          </ul>
-          <a href="${agencyUrl}" style="display:block;background:#ff3b5c;color:#ffffff;padding:11px 16px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600;">Démarrer →</a>
+        <div style="border:2px solid #ff3b5c;border-radius:12px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:12px;color:#888;font-family:monospace;text-transform:uppercase;margin-bottom:4px;">Agence</div>
+            <div style="font-size:22px;font-weight:800;color:#0d0d1a;">28,99€<span style="font-size:12px;color:#888;font-weight:400;">/mois</span></div>
+            <div style="color:#555;font-size:12px;margin-top:4px;">4 comptes · Dashboard multi-clients · Support prioritaire</div>
+          </div>
+          <a href="${agencyUrl}" style="background:#ff3b5c;color:#ffffff;padding:10px 18px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap;">Choisir →</a>
         </div>
 
       </div>
