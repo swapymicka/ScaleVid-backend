@@ -81,9 +81,16 @@ router.get('/search/youtube', async (req, res) => {
 const PLAN_LIMITS = { creator: 1, creator_pro: 2, agency: 4 };
 
 async function checkAccountSlot(userId, redirectBase) {
+  // Mode test : désactive complètement la limite
+  if (process.env.DISABLE_SLOT_LIMIT === 'true') return null;
+
   const user = await prisma.user.findUnique({ where: { id: userId } });
-  // L'admin a toujours accès illimité
-  if (process.env.ADMIN_EMAIL && user.email === process.env.ADMIN_EMAIL) return null;
+  if (!user) return null;
+
+  // L'admin a toujours accès illimité (comparaison insensible à la casse)
+  const adminEmail = (process.env.ADMIN_EMAIL || '').toLowerCase().trim();
+  if (adminEmail && user.email.toLowerCase().trim() === adminEmail) return null;
+
   const limit = PLAN_LIMITS[user.plan] ?? user.accountSlots ?? 1;
   const count = await prisma.socialAccount.count({ where: { userId } });
   if (count >= limit) {
