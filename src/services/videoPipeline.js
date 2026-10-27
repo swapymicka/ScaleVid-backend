@@ -67,9 +67,15 @@ async function processVideo(videoId, { numClips = 4, targetLenSec = 30 } = {}) {
     }
 
     await prisma.video.update({ where: { id: videoId }, data: { status: 'done' } });
+
+    // Supprimer la vidéo source après traitement — les clips sont dans /clips/
+    try { fs.unlinkSync(video.sourcePath); } catch {}
+    console.log('[Pipeline] Vidéo source supprimée:', video.sourcePath);
   } catch (e) {
     console.error('Pipeline error for video', videoId, e);
     await prisma.video.update({ where: { id: videoId }, data: { status: 'failed', error: String(e.message || e) } });
+    // Supprimer aussi en cas d'échec pour ne pas accumuler les fichiers
+    try { fs.unlinkSync(video.sourcePath); } catch {}
     throw e;
   }
 }

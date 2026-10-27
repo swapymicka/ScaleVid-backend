@@ -13,6 +13,12 @@ const tiktokService = require('../services/tiktokService');
 
 const router = express.Router();
 
+// Supprime un fichier sans planter si absent
+function deleteFileSafe(filePath) {
+  if (!filePath) return;
+  try { fs.unlinkSync(filePath); } catch {}
+}
+
 const uploadDir = path.join(config.storageDir, 'uploads');
 fs.mkdirSync(uploadDir, { recursive: true });
 
@@ -21,7 +27,7 @@ const upload = multer({
     destination: (_req, _file, cb) => cb(null, uploadDir),
     filename: (_req, file, cb) => cb(null, `${uuid()}${path.extname(file.originalname)}`),
   }),
-  limits: { fileSize: 2 * 1024 * 1024 * 1024 }, // 2 Go, à adapter
+  limits: { fileSize: 500 * 1024 * 1024 }, // 500 Mo max par fichier
 });
 
 // Upload d'une vidéo source + lancement (sync ou async) du pipeline IA.
@@ -263,6 +269,10 @@ async function publishScheduledPost(postId) {
       where: { id: postId },
       data: { status: 'published', platformPostId: result.platformPostId },
     });
+
+    // Supprimer le fichier vidéo local après publication — inutile de le garder
+    deleteFileSafe(post.clip.outputPath);
+    console.log('[Publish] Fichier supprimé du stockage:', post.clip.outputPath);
   } catch (e) {
     console.error('Échec publication', postId, e);
     await prisma.scheduledPost.update({
